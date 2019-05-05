@@ -25,6 +25,9 @@ class ViewController: UIViewController {
     @IBOutlet var plr2pit5: UIButton!
     @IBOutlet var plr2pit6: UIButton!
     @IBOutlet var plr2BASE: UIButton!
+    
+    @IBOutlet var playerTurnTextView: UITextView!
+    @IBOutlet var gameInfoTextView: UITextView!
 
     var pitButtons: [UIButton]!
     
@@ -38,8 +41,8 @@ class ViewController: UIViewController {
     let buttonCircList = CircularLinkedList<UIButton>()
     var selectedIndex = 6
     var updateButtonImages = -1
-    
-    @IBOutlet var moveTextField: UITextField!
+    var playerTurnText = ""
+    var gameText = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,11 +52,14 @@ class ViewController: UIViewController {
         buildButtonCircList(pitButtons)
         activePlayer = player1
         buildGameboard(gameboard)
-        updatePitsFrom(startPit: selectedIndex, with: activePlayer.findPit(String(selectedIndex), gameboard), fullBoard: true, capture: false)
+        updatePitsFrom(startPit: selectedIndex, with: activePlayer.findPit(String(selectedIndex), gameboard), fullBoard: true)
         printBoard(gameboard)
-        print("Player  \(playerTurn) 's turn. Choose a pit # 1-6 \n" )
-        print("Chose a pit from your side that is not empty \n")
-    
+        playerTurnText += "Player \(playerTurn) 's turn. Choose a pit # 1-6 \r"
+        playerTurnText += "Chose a pit from your side that is not empty "
+        print(playerTurnText)
+        playerTurnTextView.text = playerTurnText
+        //set bonus tturn text field nil
+        playerTurnText = ""
     }
     
     
@@ -69,16 +75,24 @@ class ViewController: UIViewController {
         if player != activePlayer.player || pit == "BASE" {
             return
         }
-        
+        //activePlayer.copyBoard(from: gameboard)     TEST
         updateButtonImages = activePlayer.fillHoles(pit, gameboard)
+        gameInfoTextView.text = nil
+        gameInfoTextView.text = activePlayer.gameInfoText
+        
         if -1 == updateButtonImages {
             //break if empty chosen pits
             return
         } else {
             if 0 >= activePlayer.captured {
-                updatePitsFrom(startPit: selectedIndex, with: activePlayer.findPit(pit, gameboard), fullBoard: false, capture: false)
-            } else {
-                updatePitsFrom(startPit: selectedIndex, with: activePlayer.findPit(pit, gameboard), fullBoard: false, capture: true)
+                gameInfoTextView.text = nil
+                gameInfoTextView.text = activePlayer.gameInfoText
+                updatePitsFrom(startPit: selectedIndex, with: activePlayer.findPit(pit, gameboard), fullBoard: false)
+            } else if let preCapPit = activePlayer.preCapturePit, let preCapBoard = activePlayer.preCaptureBoard  {
+                updateButtonImages -= 1
+                updatePitsFrom(startPit: selectedIndex, with: activePlayer.findPit(pit, preCapBoard), fullBoard: false)
+                
+                animateCaptureFrom(preCapPit, with: activePlayer.findPit(preCapPit.name, gameboard))
             }
         }
         
@@ -98,12 +112,18 @@ class ViewController: UIViewController {
         print("Player 1 remaining = \(sum1) \nPlayer 2 remaining = \(sum2) \n \n")
         print("After fill holes \n\n")
         printBoard(gameboard)
-        
+//        if let preCapBoard = activePlayer.preCaptureBoard {
+//            print("\n preCapBoard \n")
+//            printBoard(preCapBoard)
+//        }
         if 0 == sum1 || 0 == sum2 {
             determineWinner(sum1, sum2)
         } else {
-            print("Player  \(playerTurn) 's turn. Choose a pit # 1-6 \n" )
-            print("Chose a pit from your side that is not empty \n")
+            playerTurnText = ""
+            playerTurnText += "Player  \(playerTurn) 's turn. Choose a pit # 1-6 \r"
+            playerTurnText += "Chose a pit from your side that is not empty \r"
+            print(playerTurnText)
+            playerTurnTextView.text = playerTurnText
         }
     
     }
@@ -197,7 +217,7 @@ class ViewController: UIViewController {
      must pass in board iterator from a MancalaPlayer
      pre-advanced to correct pit
      */
-    func updatePitsFrom(startPit: Int, with myBoardIter: LinkedListIterator<PitNode>, fullBoard: Bool, capture: Bool){
+    func updatePitsFrom(startPit: Int, with myBoardIter: LinkedListIterator<PitNode>, fullBoard: Bool){
         let myButtonIter = findButtonIn(buttonCircList, at: startPit)
        
         var inHand = updateButtonImages
@@ -233,46 +253,83 @@ class ViewController: UIViewController {
                 }
             i += 1
             }//end while
-        
-        if capture {//animate pit captured from
-            var iteratorStopped = 0
-            if let lastPit = *myBoardIter{
-                if lastPit.name == "BASE" {
-                    iteratorStopped = 7
-                } else {
-                    if let num = Int(lastPit.name) {
-                        iteratorStopped = num
-                    }
-                }
-            }
-            let captureIndex = -1*(iteratorStopped - 15)
-            
-            for _ in iteratorStopped...captureIndex - 1 {
-                ++myBoardIter
-                ++myButtonIter
-            }
-            
-            if let _pit = *myBoardIter, let button = *myButtonIter {
-                if let pitImage = getPitImageFor(_pit.beads) {
-                        animatePit(updateButtonImages+1, button, pitImage)
-                }
-            }
-            //animate base pit
-            let baseIter = activePlayer.findPit("BASE", gameboard)
-            let index = activePlayer.player == 1 ? 7 : 0
-            let buttonIterBase = findButtonIn(buttonCircList, at: index)
-            
-            if let _pit = *baseIter, let button = *buttonIterBase {
-                if let pitImage = getPitImageFor(_pit.beads) {
-                    animatePit(updateButtonImages+2, button, pitImage)
-                } else {
-                        button.setImage(nil, for: UIControl.State.normal)
-                        button.setTitle(String(_pit.beads), for: UIControl.State.normal)
-                    }
-            }
-        }//end capture
-        }
+    }
     
+    func animateCaptureFrom(_ pit: PitNode,  with myBoardIter: LinkedListIterator<PitNode>){
+        
+        guard var capturePit = Int(pit.name) else {
+            return
+        }
+        
+        let endingIndex = -1*(capturePit - 14)
+        let startIndex = capturePit
+        
+        if pit.player == 2 {
+            capturePit += 7
+        }
+        
+        let myButtonIter = findButtonIn(buttonCircList, at: capturePit)
+    
+        if let button = *myButtonIter, let pitImage = getPitImageFor(pit.beads)  {
+            animatePit(updateButtonImages+1, button, pitImage)
+        }
+        
+        for _ in startIndex...endingIndex - 1 {
+            ++myBoardIter
+            ++myButtonIter
+        }
+        
+        if updateButtonImages > 6 { //wrap-around capture
+            let delayInSeconds = Double(updateButtonImages)  * 0.2
+            delayed = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds) { [weak self] in
+                guard let self = self else {
+                    return
+                }
+                self.animateStealFromPit(with: myBoardIter, and: myButtonIter, delay: 1)
+                self.animateBasePit(delay: 2)
+            }
+        } else {
+            //normal capture
+            animateStealFromPit(with: myBoardIter, and: myButtonIter, delay: updateButtonImages+2)
+            animateBasePit(delay: updateButtonImages+3)
+        }
+        
+    }
+    var delayed = false
+    func animateStealFromPit(with myBoardIter: LinkedListIterator<PitNode>, and myButtonIter: LinkedListIterator<UIButton>, delay: Int){
+        if let stealFromPit = *myBoardIter, let button = *myButtonIter {
+            if let pitImage = getPitImageFor(stealFromPit.beads) {
+                animatePit(delay, button, pitImage)
+            }
+        }
+    }
+    
+    func animateBasePit(delay: Int){
+        
+        switchActivePlayer()
+        
+        let baseIter = activePlayer.findPit("BASE", gameboard)
+        let index = activePlayer.player == 1 ? 7 : 0
+        let buttonIterBase = findButtonIn(buttonCircList, at: index)
+        
+        if let base_pit = *baseIter, let button = *buttonIterBase {
+            if let pitImage = getPitImageFor(base_pit.beads) {
+                animatePit(delay, button, pitImage)
+            } else {
+                button.setImage(nil, for: UIControl.State.normal)
+                button.setTitle(String(base_pit.beads), for: UIControl.State.normal)
+            }
+        }
+        switchActivePlayer()
+        delayed = false
+    }
+    
+    func switchActivePlayer(){
+        if delayed == true {
+            activePlayer = activePlayer.player == 2 ? player1 : player2//change players
+        }
+    }
     
     func findButtonIn(_ buttonCircList: CircularLinkedList<UIButton>, at index: Int) -> LinkedListIterator<UIButton>{
         
@@ -307,6 +364,7 @@ class ViewController: UIViewController {
 
         return -1
     }
+    
     
     func getPitImageFor(_ beads: Int) -> UIImage? {
         
