@@ -43,7 +43,12 @@ class ViewController: UIViewController {
     var updateButtonImages = -1
     var playerTurnText = ""
     var gameText = ""
+    var delayed = false
+    var willOverlap = false
+    var overlapDifference = 0
+    var playerInitiated = 0
     
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -52,7 +57,7 @@ class ViewController: UIViewController {
         buildButtonCircList(pitButtons)
         activePlayer = player1
         buildGameboard(gameboard)
-        updatePitsFrom(startPit: selectedIndex, with: activePlayer.findPit(String(selectedIndex), gameboard), fullBoard: true)
+        updatePitsFrom(findButtonIn(buttonCircList, at: selectedIndex), with: activePlayer.findPit(String(selectedIndex), gameboard), fullBoard: true)
         printBoard(gameboard)
         playerTurnText += "Player \(playerTurn) 's turn. Choose a pit # 1-6 \r"
         playerTurnText += "Chose a pit from your side that is not empty "
@@ -62,7 +67,7 @@ class ViewController: UIViewController {
         playerTurnText = ""
     }
     
-    
+    // MARK: - play functions
     @IBAction func clickPit(_ sender: UIButton) {
         let player = sender.tag / 10
         let pit = sender.tag % 10
@@ -72,10 +77,13 @@ class ViewController: UIViewController {
     
     func play (_ player: Int,_ pit: String ){
         
+        willOverlap = false
+        overlapDifference = 0
+        
         if player != activePlayer.player || pit == "BASE" {
             return
         }
-        //activePlayer.copyBoard(from: gameboard)     TEST
+        
         updateButtonImages = activePlayer.fillHoles(pit, gameboard)
         gameInfoTextView.text = nil
         gameInfoTextView.text = activePlayer.gameInfoText
@@ -83,14 +91,26 @@ class ViewController: UIViewController {
         if -1 == updateButtonImages {
             //break if empty chosen pits
             return
-        } else {
-            if 0 >= activePlayer.captured {
+            
+        } else if updateButtonImages > 13 { //overlapping move
+            overlapDifference = updateButtonImages - 13
+            updateButtonImages = 12
+            playerInitiated = activePlayer.player
+            willOverlap = true
+            if let preOverlapBoard = activePlayer.copiedBoard {
+                updatePitsFrom(findButtonIn(buttonCircList, at: selectedIndex), with: activePlayer.findPit(pit, preOverlapBoard), fullBoard: false)
+            }
+            
+        } else{
+            if activePlayer.captured <= 0 {//normal move, no capture
                 gameInfoTextView.text = nil
                 gameInfoTextView.text = activePlayer.gameInfoText
-                updatePitsFrom(startPit: selectedIndex, with: activePlayer.findPit(pit, gameboard), fullBoard: false)
-            } else if let preCapPit = activePlayer.preCapturePit, let preCapBoard = activePlayer.preCaptureBoard  {
+                updatePitsFrom(findButtonIn(buttonCircList, at: selectedIndex), with: activePlayer.findPit(pit, gameboard), fullBoard: false)
+                
+                // animate capture
+            } else if let preCapPit = activePlayer.preCapturePit, let preCapBoard = activePlayer.copiedBoard  {
                 updateButtonImages -= 1
-                updatePitsFrom(startPit: selectedIndex, with: activePlayer.findPit(pit, preCapBoard), fullBoard: false)
+                updatePitsFrom(findButtonIn(buttonCircList, at: selectedIndex), with: activePlayer.findPit(pit, preCapBoard), fullBoard: false)
                 
                 animateCaptureFrom(preCapPit, with: activePlayer.findPit(preCapPit.name, gameboard))
             }
@@ -112,7 +132,7 @@ class ViewController: UIViewController {
         print("Player 1 remaining = \(sum1) \nPlayer 2 remaining = \(sum2) \n \n")
         print("After fill holes \n\n")
         printBoard(gameboard)
-//        if let preCapBoard = activePlayer.preCaptureBoard {
+//        if let preCapBoard = activePlayer.copiedBoard {
 //            print("\n preCapBoard \n")
 //            printBoard(preCapBoard)
 //        }
@@ -213,13 +233,13 @@ class ViewController: UIViewController {
         print("")
     }
     
+    // MARK: - animation functions
     /*
      must pass in board iterator from a MancalaPlayer
      pre-advanced to correct pit
      */
-    func updatePitsFrom(startPit: Int, with myBoardIter: LinkedListIterator<PitNode>, fullBoard: Bool){
-        let myButtonIter = findButtonIn(buttonCircList, at: startPit)
-       
+    func updatePitsFrom(_ myButtonIter: LinkedListIterator<UIButton>, with myBoardIter: LinkedListIterator<PitNode>, fullBoard: Bool){
+        
         var inHand = updateButtonImages
         
         if fullBoard {
@@ -229,6 +249,8 @@ class ViewController: UIViewController {
         var i = 0
         while i <= inHand {
             if let _pit = *myBoardIter, let button = *myButtonIter {
+                
+
                 //skip opponent's base
                 if _pit.player != activePlayer.player && _pit.name == "BASE" && !fullBoard{
                     
@@ -253,6 +275,39 @@ class ViewController: UIViewController {
                 }
             i += 1
             }//end while
+        
+        
+        if willOverlap {
+            willOverlap = false
+            updateButtonImages = overlapDifference
+            
+            if let overlapPit = *myBoardIter {
+                let currentBoardIter = activePlayer.findPit(overlapPit.name, gameboard)
+                let delayInSec = (11 + overlapDifference)
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + Double(delayInSec) * 0.2) { [weak self] in
+                    guard let self = self else {
+                        return
+                    }
+                    /*
+                     We are recursively calling update pits because we overlapped, so play has moved to the next player, but our animation was delayed by DispatchQueue. Therefore, we have to temporarily switch players or the animation will skip the initiating player's base. If the overlapping move resulted in a bonus turn, then it is still the initiating player's turn and we don't want to switch
+                     */
+                    var switchBack = false
+                    if self.activePlayer.player != self.playerInitiated {
+                        self.switchActivePlayer()
+                        switchBack = true
+                    }
+                    
+                    self.updatePitsFrom(myButtonIter, with: currentBoardIter, fullBoard: false)
+                    
+                    //switch back players if needed
+                    if switchBack {
+                        self.switchActivePlayer()
+                    }
+
+                }
+            }
+        }
     }
     
     func animateCaptureFrom(_ pit: PitNode,  with myBoardIter: LinkedListIterator<PitNode>){
@@ -280,35 +335,39 @@ class ViewController: UIViewController {
         }
         
         if updateButtonImages > 6 { //wrap-around capture
-            let delayInSeconds = Double(updateButtonImages)  * 0.2
+            let delayInSeconds = Double(updateButtonImages+1)  * 0.2
             delayed = true
             DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds) { [weak self] in
                 guard let self = self else {
                     return
                 }
-                self.animateStealFromPit(with: myBoardIter, and: myButtonIter, delay: 1)
-                self.animateBasePit(delay: 2)
+                self.animateStealFromPit(with: myBoardIter, and: myButtonIter, delay: 1){_ in
+                    self.animateBasePit(delay: 2)
+                }
             }
         } else {
-            //normal capture
-            animateStealFromPit(with: myBoardIter, and: myButtonIter, delay: updateButtonImages+2)
-            animateBasePit(delay: updateButtonImages+3)
+                //    normal capture
+                animateStealFromPit(with: myBoardIter, and: myButtonIter, delay: updateButtonImages+2) {_ in
+                animateBasePit(delay: updateButtonImages+3)
+            }
         }
         
     }
-    var delayed = false
-    func animateStealFromPit(with myBoardIter: LinkedListIterator<PitNode>, and myButtonIter: LinkedListIterator<UIButton>, delay: Int){
+    
+    func animateStealFromPit(with myBoardIter: LinkedListIterator<PitNode>, and myButtonIter: LinkedListIterator<UIButton>, delay: Int, completion: (_ delay: Int) -> Void){
         if let stealFromPit = *myBoardIter, let button = *myButtonIter {
             if let pitImage = getPitImageFor(stealFromPit.beads) {
                 animatePit(delay, button, pitImage)
             }
         }
+        completion(delay)
     }
     
     func animateBasePit(delay: Int){
         
-        switchActivePlayer()
-        
+        if delayed == true {
+            switchActivePlayer()
+        }
         let baseIter = activePlayer.findPit("BASE", gameboard)
         let index = activePlayer.player == 1 ? 7 : 0
         let buttonIterBase = findButtonIn(buttonCircList, at: index)
@@ -321,15 +380,17 @@ class ViewController: UIViewController {
                 button.setTitle(String(base_pit.beads), for: UIControl.State.normal)
             }
         }
-        switchActivePlayer()
-        delayed = false
+        if delayed == true {
+            switchActivePlayer()
+            delayed = false
+        }
     }
     
     func switchActivePlayer(){
-        if delayed == true {
-            activePlayer = activePlayer.player == 2 ? player1 : player2//change players
-        }
+
+        activePlayer = activePlayer.player == 2 ? player1 : player2//change players
     }
+    
     
     func findButtonIn(_ buttonCircList: CircularLinkedList<UIButton>, at index: Int) -> LinkedListIterator<UIButton>{
         
