@@ -29,7 +29,7 @@ public class CircularLinkedList<Elem: Codable>: NSObject, NSCoding {
     }
     
     
-    private var last: NodeType<Elem>?
+    var last: NodeType<Elem>?
     public var length = 0
     
     public var isEmpty: Bool {
@@ -46,9 +46,7 @@ public class CircularLinkedList<Elem: Codable>: NSObject, NSCoding {
         last = nil
     }
     
-    public func advanceLast() {
-        last = last?.link
-    }
+    
     
     public func enqueue(_ q: Elem) {
         
@@ -73,17 +71,16 @@ public class CircularLinkedList<Elem: Codable>: NSObject, NSCoding {
             return nil
         }
         
-        var node = last          // set ptr to last node
-        let x = node?.info       // set return value
+        var node = last       // set ptr to last node
+        let x = node?.info        // set return value
         
-        if last?.link === last  {// if single node
-            last = nil           // set list to empty
-            return nil
+        if node === last  {        // if single node
+            last = nil      //  set list to empty
+            
         } else {
-            last = last?.link    // advance last to next node
+            last = last?.link   //  advance last to next node
         }
-        node?.link = nil
-        node = nil               // delete node
+        node = nil                  // delete node
         
         length -= 1
         return x
@@ -114,3 +111,52 @@ public class CircularLinkedList<Elem: Codable>: NSObject, NSCoding {
     }
     
 }//EoC
+
+public class CircularLinkedList_PN: CircularLinkedList<PitNode> {
+    
+    public var tail: NodeTypePitNode{
+        return (last as? NodeTypePitNode? ?? nil)!
+    }
+    
+    public override func encode(with aCoder: NSCoder) {
+        aCoder.encode(tail, forKey: Keys.last)
+        aCoder.encode(length, forKey: Keys.length)
+        
+    }
+    
+    public required init?(coder aDecoder: NSCoder) {
+        super.init()
+        last = aDecoder.decodeObject(forKey: Keys.last) as! NodeTypePitNode
+        length = aDecoder.decodeInteger(forKey: Keys.length)
+    }
+    
+    public override init () {
+        super.init()
+    }
+    
+    public override var circIter: LinkedListIterator_PN {
+        let temp = LinkedListIterator_PN(tail)
+        return temp
+    }
+    
+    
+    
+    public override func enqueue(_ q: PitNode) {
+        
+        let newNode = NodeTypePitNode(q)      // new node
+        
+        if last == nil {               // if empty list
+            last = newNode            //  create single node list
+            newNode.link = newNode
+            
+        } else {
+            newNode.link = last?.link as? NodeTypePitNode   //  append node to end list
+            last?.link = newNode
+            last = newNode
+        }
+        
+        length += 1
+    }
+
+    
+}

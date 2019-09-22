@@ -1,11 +1,17 @@
 //
 //  NodeType.swift
+//  MancalaPrototype2
 //
-//
-//  Created by Alexander Scott Beaty on 1/6/19.
+//  Created by Alexander Scott Beaty on 7/30/19.
+//  Copyright © 2019 Alexander Scott Beaty. All rights reserved.
 //
 
 import Foundation
+
+private struct NodeTypeKeys {
+    static let info = "info"
+    static let link = "link"
+}
 
 public class NodeType<Element> {
     
@@ -16,6 +22,4 @@ public class NodeType<Element> {
         self.info = info
     }
     
-    
-}
-
+}//EoC

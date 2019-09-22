@@ -19,17 +19,19 @@ public class MancalaPlayer {
     public var basePitAfterCapture: PitNode?
     public var captureText: String?
     public var bonusTurnText: String?
+    public var copiedBoard: CircularLinkedList_PN?
     
     //default constructor
     public init (player: Int) {
         self.player = player
     }
     
-    public func fillHoles(_ choice: String, _ gameboard: CircularLinkedList<PitNode>) -> Int {
+    public func fillHoles(_ choice: String, _ gameboard: CircularLinkedList_PN) -> Int {
         
         let iter_pit = findPit(choice, gameboard)
         var inHand = 0
         captured = 0
+        copiedBoard = nil
         bonusTurnText = nil
         captureText = nil
         
@@ -69,7 +71,7 @@ public class MancalaPlayer {
                      In this scenario we save the board at the point just before the initiating is filled.
                      This way we can animate up to that point then animate from the initiating pit instead of  showing post-move board's pit-bead values too early
                      */
-                    //copyBoard(from: gameboard)
+                    copyBoard(from: gameboard)
                 }
                 
                 if 1 == inHand {
@@ -86,16 +88,12 @@ public class MancalaPlayer {
                      */
                     if 0 == pit2.beads && pit2.name != "BASE" && pit2.player == player {
                         preCaptureFromPit = pit2.copyPit()
-                        //copyBoard(from: gameboard)
+                        copyBoard(from: gameboard)
                         captured = capture(fromPit: pit2, gameboard)
                         captured -= 1
                         
                         if captured > 0 {
-                            if captured == 1 {
-                                captureText = "Player  \(player) captured  \(captured) bead!\r"
-                            } else {
-                                captureText = "Player  \(player) captured  \(captured) beads!\r"
-                            }
+                            captureText = "Player  \(player) captured  \(captured) beads!\r"
                         }
                         print(captureText ?? "")
                     }
@@ -117,7 +115,7 @@ public class MancalaPlayer {
         return updateButtonImages
     }
     
-    public func sumPlayerSide(_ gameboard: CircularLinkedList<PitNode>) -> Int {
+    public func sumPlayerSide(_ gameboard: CircularLinkedList_PN) -> Int {
         
         let iter_pit = findPit("1", gameboard)
         var beads = 0
@@ -149,7 +147,7 @@ public class MancalaPlayer {
         return sum
     }
     
-    public func findPit(_ pit: String, _ gameboard: CircularLinkedList<PitNode>) -> LinkedListIterator<PitNode> {
+    public func findPit(_ pit: String, _ gameboard: CircularLinkedList_PN) -> LinkedListIterator<PitNode> {
         
         let myIter = gameboard.circIter
         
@@ -171,7 +169,7 @@ public class MancalaPlayer {
         return myIter
     }
     
-    public func capture(fromPit: PitNode?, _ gameboard: CircularLinkedList<PitNode>) -> Int {
+    public func capture(fromPit: PitNode?, _ gameboard: CircularLinkedList_PN) -> Int {
         
         var captured = 0
         if let yourPit = fromPit {//need else to handle nil
@@ -246,22 +244,19 @@ public class MancalaPlayer {
         return captured
     }
     
-    public func copyBoard(from originalBoard: CircularLinkedList<PitNode>) -> CircularLinkedList<PitNode> {
+    public func copyBoard(from originalBoard: CircularLinkedList_PN){
         
         let myIter = originalBoard.circIter
         ++myIter
-        let copyBoard = CircularLinkedList<PitNode>()
+        copiedBoard = CircularLinkedList_PN()
         
         for _ in 1...originalBoard.length {
             if let pit = *myIter {
                 let newPit = pit.copyPit()
-                
-                copyBoard.enqueue(newPit)
+                copiedBoard?.enqueue(newPit)
                 ++myIter
             }
         }
-        
-        return copyBoard
     }
     
     

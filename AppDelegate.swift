@@ -1,21 +1,26 @@
 //
 //  AppDelegate.swift
-//  MancalaPrototype
+//  MancalaPrototype2
 //
-//  Created by Alexander Scott Beaty on 3/14/19.
+//  Created by Alexander Scott Beaty on 7/30/19.
 //  Copyright © 2019 Alexander Scott Beaty. All rights reserved.
 //
 
 import UIKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
-
+ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
-
-
+    let gameModel = GameModel(savedGame: true)
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        window = UIWindow(frame: UIScreen.main.bounds)
+        
+        window?.rootViewController = GameViewController()
+        let gameViewController = window!.rootViewController as! GameViewController
+        gameViewController.gameModel = gameModel
+        window?.makeKeyAndVisible()
+        
         return true
     }
 
@@ -27,6 +32,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        let success = gameModel.saveChanges()
+        if success {
+            print("saved game data") 
+            } else {
+                print("could not save game data")
+            }
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {

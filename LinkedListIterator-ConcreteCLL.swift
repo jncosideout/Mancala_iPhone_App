@@ -89,3 +89,39 @@ extension LinkedListIterator: Equatable {
     //    }
     
 }//EoE
+
+public class LinkedListIterator_PN: LinkedListIterator<PitNode> {
+    
+    //pointer to point to the current
+    //node in the linked list
+    var current_: NodeTypePitNode? {return current as! NodeTypePitNode?}
+
+    //Default constructor
+    //Postcondition: current = nil
+    public override init () {
+        super.init()
+    }
+    
+    //Constructor with a parameter.
+    //Postcondition: current = ptr;
+    public init (_ ptr: NodeTypePitNode?) {
+        super.init()
+        current = ptr
+    }
+}
+
+extension LinkedListIterator_PN{
+    //Function to overload the dereferencing operator *.
+    //Postcondition: Returns the info contained in the node.
+    //if  myinfo is a value type (Struct) then myinfo should be a copy
+    //if myinfo is reference type (Class) then myinfo should be a ref to orig obj
+    public static prefix func * (rhs: LinkedListIterator_PN) -> PitNode? {
+        let myinfo = rhs.current_?.info 
+        return myinfo
+    }
+    
+    public static prefix func ++ (rhs: LinkedListIterator_PN) {
+        rhs.current = rhs.current_?.link
+    }
+    
+}//EoE
