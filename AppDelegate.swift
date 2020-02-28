@@ -1,21 +1,30 @@
 //
 //  AppDelegate.swift
-//  MancalaPrototype
+//  MancalaPrototype2
 //
-//  Created by Alexander Scott Beaty on 3/14/19.
+//  Created by Alexander Scott Beaty on 7/30/19.
 //  Copyright © 2019 Alexander Scott Beaty. All rights reserved.
 //
 
 import UIKit
+import UserNotifications
+import GameKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
-
+ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
-
-
+    let savedGamesStore = SavedGameStore()
+    var savedGameModels = [GameModel]()
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        window = UIWindow(frame: UIScreen.main.bounds)
+        savedGameModels = savedGamesStore.setupSavedGames()
+        window?.rootViewController = GameViewController()
+        let gameViewController = window!.rootViewController as! GameViewController
+        gameViewController.savedGameModels = savedGameModels
+        window?.makeKeyAndVisible()
+        configureUserNotifications()
+        
         return true
     }
 
@@ -27,6 +36,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        if let savedGames = SKScene.savedGameModels {
+            savedGameModels = savedGames
+        }
+        savedGamesStore.saveAllGames(savedGameModels)
+        
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -41,6 +55,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    func UIApplicationEndBackgroundTaskError() {
+        
+    }
 
 }
 
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    
+    private func configureUserNotifications() {
+        UNUserNotificationCenter.current().delegate = self
+        UserNotificationsHelper.declareNotificationTypesAndActions()
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler(.alert)
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        //get the match from the notification payload
+        let userInfo = response.notification.request.content.userInfo
+        let matchID = userInfo["MATCH_ID"] as! String
+        
+        switch response.actionIdentifier {
+        case "PLAY_TURN":
+            GKTurnBasedMatch.load(withID: matchID) { (match, error) in
+                if let match = match {
+                    NotificationCenter.default.post(name: .presentGame, object: match)
+                } else if let error = error {
+                    print(error.localizedDescription)
+                }
+            }
+            
+        case "IGNORE_TURN":
+            break
+        default:
+            break
+        }
+        completionHandler()
+    }
+}

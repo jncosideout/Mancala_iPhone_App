@@ -1,31 +1,34 @@
+//
+//  MancalaPlayer.swift
+//  MancalaPrototype2
+//
+//  Created by Alexander Scott Beaty on 7/30/19.
+//  Copyright © 2019 Alexander Scott Beaty. All rights reserved.
+//
 import Foundation
+import GameKit
 
+public class MancalaPlayer: NSObject, GKGameModelPlayer {
+    
+    //GKGameModel
+    public var playerId: Int
+    static var allPlayers = [MancalaPlayer(player: 1), MancalaPlayer(player: 2)]
 
-public class PitNode {
-    
-    public var name: String
-    public var player: Int
-    public var beads: Int
-    
-    public init (){
-        name = ""
-        player = 1
-        beads = 4
-    }
-}
-
-public class MancalaPlayer {
-    
     public var sum = 0
     public var bonusTurn = false
     public var player: Int
     public var winner = 0
-    var captured = 0
-
+    public var captured = 0
+    public var preCaptureFromPit: PitNode?
+    public var preStolenFromPit: PitNode?
+    public var basePitAfterCapture: PitNode?
+    public var captureText: String?
+    public var bonusTurnText: String?
+    
     //default constructor
     public init (player: Int) {
-        
         self.player = player
+        self.playerId = player
     }
     
     public func fillHoles(_ choice: String, _ gameboard: CircularLinkedList<PitNode>) -> Int {
@@ -33,6 +36,9 @@ public class MancalaPlayer {
         let iter_pit = findPit(choice, gameboard)
         var inHand = 0
         captured = 0
+        bonusTurnText = nil
+        captureText = nil
+        bonusTurn = false
         
         guard let pit = *iter_pit else {
             print("1st iter_pit returned nil")
@@ -44,28 +50,58 @@ public class MancalaPlayer {
             return -1
         }
         
-        bonusTurn = false
-        
         inHand = pit.beads
         let updateButtonImages = inHand
         pit.beads = 0
         
+        //check for overlapping move
+        var overlapDiff = 0
+        var didOverlap = false
+        if inHand > gameboard.length - 1 {
+            overlapDiff = inHand - gameboard.length - 2
+            didOverlap = true
+        }
+        
         while inHand > 0 {
-            
-            ++iter_pit        //move to next pit
+            //move to next pit
+            ++iter_pit
             
             // '*' is overloaded to dereference and give address if ref type
             if let pit2 = *iter_pit  { //optional binding, may return nil
                 
+                if didOverlap && overlapDiff == inHand {
+                    /*
+                     In this scenario we save the board at the point just before the initiating is filled.
+                     This way we can animate up to that point then animate from the initiating pit instead of  showing post-move board's pit-bead values too early
+                     */
+                    //copyBoard(from: gameboard)
+                }
+                
                 if 1 == inHand {
+                    // bonus turn conditions
                     if pit2.player == player && pit2.name == "BASE" {
                         bonusTurn = true
-                        print("Player  \(player)  gets a bonus turn! \n")
+                        bonusTurnText = "Player  \(player)  gets a bonus turn! \r"
+                        print(bonusTurnText ?? "")
                     }
+                    // capture conditions
+                    /*
+                     In this scenario we save the board at the point just before the capture pit is filled.
+                     This way we can animate up to that point then animate the capture instead of  showing post-capture pit-bead values too early
+                     */
                     if 0 == pit2.beads && pit2.name != "BASE" && pit2.player == player {
+                        preCaptureFromPit = pit2.copyPit()
                         captured = capture(fromPit: pit2, gameboard)
                         captured -= 1
-                        print("Player  \(player) captured  \(captured) beads from opposing pit!\n")
+                        
+                        if captured > 0 {
+                            if captured == 1 {
+                                captureText = "Player  \(player) captured  \(captured) bead!\r"
+                            } else {
+                                captureText = "Player  \(player) captured  \(captured) beads!\r"
+                            }
+                        }
+                        print(captureText ?? "")
                     }
                     
                 }
@@ -93,7 +129,7 @@ public class MancalaPlayer {
         
         var tSum = 0
         
-        for _ in 1...6 {//is this inclusive ... <= 6 ??? but we need exclusive .. < 6
+        for _ in 1...(gameboard.length - 2)/2 {
             
             if let pit = *iter_pit {
                 
@@ -123,7 +159,7 @@ public class MancalaPlayer {
         
         ++myIter//move to "first" pit (player 1, pit #1)
         
-        for _ in 1...14 {//  need < 14
+        for _ in 1...gameboard.length {
             
             if let tempPit = *myIter {
                 
@@ -156,12 +192,12 @@ public class MancalaPlayer {
                 print("yourPit.name: \(yourPit.name), is not a number")
                 return 0
             }
-            target = -1 * (target - 7)
+            target = -1 * (target - gameboard.length/2)
             targetStr = String(target)
             
             var tempPit = *iter_oppo
-                
-            findOppositePit: for _ in 1...14 {//same as findPit() except != player
+            
+            findOppositePit: for _ in 1...gameboard.length {//same as findPit() except != player
                 
                 guard tempPit != nil else {
                     print("tempPit was nil")
@@ -183,32 +219,64 @@ public class MancalaPlayer {
                     tempPit = *iter_oppo
                 }
             }//end findOppositePit
-
+            
+            
+            if let pit_oppo = *iter_oppo {//pit of opponent or opposite
+                preStolenFromPit = pit_oppo.copyPit()
+                captured = pit_oppo.beads
+                pit_oppo.beads = 0
+                captured = captured + 1 //the one bead that initiated capture gets added
+                yourPit.beads = yourPit.beads - 1//bc have not finished fillHoles, last bead will go here, but it was included in capture
                 
-                if let pit_oppo = *iter_oppo {//pit of opponent or opposite
-                    captured = pit_oppo.beads
-                    pit_oppo.beads = 0
-                    captured = captured + 1 //the one bead that initiated capture gets added
-                    yourPit.beads = yourPit.beads - 1//bc have not finished fillHoles, last bead will go here, but it was included in capture
-                    
-                    //add captured to our base
-                    let iter_myBase = findPit("BASE", gameboard)
-                    
-                    if let myBase = *iter_myBase {
-                        myBase.beads += captured
-                    } else {
-                        print("could not add captured beads to base")
-                    }
-                    
+                //add captured to our base
+                let iter_myBase = findPit("BASE", gameboard)
+                
+                if let myBase = *iter_myBase {
+                    myBase.beads += captured
+                    basePitAfterCapture = myBase.copyPit()
                 } else {
-                    print("pit_oppo was nil")
-                    return 0
+                    print("could not add captured beads to base")
                 }
- 
+                
+            } else {
+                print("pit_oppo was nil")
+                return 0
+            }
+            
         } else {
             print("fromPit was nil ")
             return 0
         }
         return captured
+    }
+    
+    public func copyBoard(from originalBoard: CircularLinkedList<PitNode>) -> CircularLinkedList<PitNode> {
+        
+        let myIter = originalBoard.circIter
+        ++myIter
+        let copyBoard = CircularLinkedList<PitNode>()
+        
+        for _ in 1...originalBoard.length {
+            if let pit = *myIter {
+                let newPit = pit.copyPit()
+                
+                copyBoard.enqueue(newPit)
+                ++myIter
+            }
+        }
+        
+        return copyBoard
+    }
+    
+    func resetPlayer() {
+        sum = 0
+        bonusTurn = false
+        winner = 0
+        captured = 0
+        preCaptureFromPit = nil
+        preStolenFromPit = nil
+        basePitAfterCapture = nil
+        captureText = nil
+        bonusTurnText = nil
     }
 }//EoC
