@@ -1,12 +1,17 @@
+//
+//  LinkedListIterator.swift
+//  MancalaPrototype2
+//
+//  Created by Alexander Scott Beaty on 7/30/19.
+//  Copyright © 2019 Alexander Scott Beaty. All rights reserved.
+//
 import Foundation
 
-
-
-public class LinkedListIterator<Type>
+public class LinkedListIterator<Type: Codable>
 {
     //pointer to point to the current
     //node in the linked list
-    private var current: NodeType<Type>?
+    fileprivate var current: NodeType<Type>?
     
     //Default constructor
     //Postcondition: current = nil

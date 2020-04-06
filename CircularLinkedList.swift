@@ -1,35 +1,54 @@
 //
 //  CircularLinkedList.swift
+//  MancalaPrototype2
 //
-//
-//  Created by Alexander Scott Beaty on 1/6/19.
+//  Created by Alexander Scott Beaty on 7/30/19.
+//  Copyright © 2019 Alexander Scott Beaty. All rights reserved.
 //
 
 import Foundation
 
-public class CircularLinkedList<Elem> {
+struct Keys {
+    static let last = "last"
+    static let length = "length"
+    
+}
+
+public class CircularLinkedList<Elem: Codable>: NSObject, NSCoding {
+    
+    
+    public func encode(with aCoder: NSCoder) {
+        aCoder.encode(last, forKey: Keys.last)
+        aCoder.encode(length, forKey: Keys.length)
+        
+    }
+    
+    public required init?(coder aDecoder: NSCoder) {
+        last = aDecoder.decodeObject(forKey: Keys.last) as! NodeType<Elem>?
+        length = aDecoder.decodeInteger(forKey: Keys.length)
+    }
+    
     
     private var last: NodeType<Elem>?
-    private var length = 0
+    public var length = 0
     
     public var isEmpty: Bool {
         return last == nil
     }
-    
-    public var tail: NodeType<Elem>{
-        return last!
-    }
+  
     
     public var circIter: LinkedListIterator<Elem> {
         let temp = LinkedListIterator<Elem>(last)
         return temp
     }
     
-    public init () {
+    public override init () {
         last = nil
     }
     
-    
+    public func advanceLast() {
+        last = last?.link
+    }
     
     public func enqueue(_ q: Elem) {
         
@@ -45,27 +64,27 @@ public class CircularLinkedList<Elem> {
             last = newNode
         }
         
-        // else
         length += 1
     }
     
     @discardableResult func dequeue() -> Elem?  {
         
         if isEmpty {
+            length = 0
             return nil
         }
         
-        var first = tail.link       // set ptr to first node
-        let x = first?.info
-        // set return value
+        var node = last          // set ptr to last node
+        let x = node?.info       // set return value
         
-        if first === tail  {        // if single node
-            last = nil      //  set list to empty
-            
+        if last?.link === last  {// if single node
+            last = nil           // set list to empty
+            return nil
         } else {
-            last?.link = first?.link   //  advance first to link node
+            last = last?.link    // advance last to next node
         }
-        first = nil                  // delete node
+        node?.link = nil
+        node = nil               // delete node
         
         length -= 1
         return x
@@ -80,11 +99,7 @@ public class CircularLinkedList<Elem> {
         }
     }
     
-}//EoC
-
-extension CircularLinkedList: CustomStringConvertible {
-    
-    public var description: String {
+    public override var description: String {
         
         var text = "["
         var node = last
@@ -98,4 +113,5 @@ extension CircularLinkedList: CustomStringConvertible {
         }
         return text + "]"
     }
-}
+    
+}//EoC
