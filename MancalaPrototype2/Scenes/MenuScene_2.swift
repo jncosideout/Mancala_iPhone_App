@@ -39,6 +39,7 @@ class MenuScene_2: MenuScene {
     override func didMove(to view: SKView) {
         setUpScene(in: view)
         addObserverForPresentGame()
+        addObserverForPresentSettings()
     }
     
     private func setUpScene(in view: SKView?) {
@@ -47,7 +48,7 @@ class MenuScene_2: MenuScene {
         }
         
         backgroundColor = .background
-        GradientNode.makeLinearNode(with: self, view: view!, linearGradientColors: GradientNode.billiardFelt, animate: false)
+        //GradientNode.makeLinearNode(with: self, view: view!, linearGradientColors: GradientNode.billiardFelt, animate: false)
         
         var runningYOffset = CGFloat(0.0)
         
@@ -58,21 +59,38 @@ class MenuScene_2: MenuScene {
         
         runningYOffset += safeAreaTopInset
         
+        //let logoNode = loadBackgroundNode(viewWidth, viewHeight)
         let logoNode = SKSpriteNode(imageNamed: "Mancala-logo")
-        let aspectRatio = logoNode.size.width / logoNode.size.height
-        var adjustedGroundWidth = view?.bounds.width ?? logoNode.size.width
-        adjustedGroundWidth *= 0.5
         logoNode.size = CGSize(
-            width: adjustedGroundWidth,
-            height: adjustedGroundWidth / aspectRatio
+            width: logoNode.size.width ,
+            height: logoNode.size.height
         )
+//        logoNode.size = CGSize(
+//            width: adjustedGroundWidth,
+//            height: adjustedGroundWidth / aspectRatio
+//        )
         logoNode.position = CGPoint(
             x: viewWidth / 2,
             y: viewHeight / 2
         )
+        logoNode.zPosition = GameScene.NodeLayer.background.rawValue
+
         addChild(logoNode)
+        
+        let billiardFelt = SKSpriteNode(imageNamed: "Mancala-billiard-felt-")
+        billiardFelt.size = CGSize(
+            width: billiardFelt.size.width,
+            height: billiardFelt.size.height
+        )
+        billiardFelt.position = CGPoint(
+            x: viewWidth / 2,
+            y: viewHeight / 2
+        )
+        billiardFelt.zPosition = GameScene.NodeLayer.background.rawValue - 1
+        addChild(billiardFelt)
+        
         //MARK: - Buttons
-        savedLocalButton = ButtonNode("Saved\nLocal Game", size: buttonSize) {
+        savedLocalButton = ButtonNode("Saved Game", size: buttonSize) {
             if self.vsComputer {
 
                 self.view?.presentScene(AI_GameScene(fromSavedGames: self.savedGameModels, gameType: .vsAI), transition: SKScene.self.transition)
@@ -82,7 +100,7 @@ class MenuScene_2: MenuScene {
             }
         }
         
-        newLocalButton = ButtonNode("New\nLocal Game", size: buttonSize) {
+        newLocalButton = ButtonNode("New Game", size: buttonSize) {
             var newGame: GameModel
             let newGameData = GameData()
             if self.vsComputer {
@@ -110,15 +128,35 @@ class MenuScene_2: MenuScene {
         
         runningYOffset += (buttonSize.height / 2)
         savedLocalButton.position = CGPoint(x: sceneMargin, y: runningYOffset)
+        savedLocalButton.zPosition = GameScene.NodeLayer.ui.rawValue
         addChild(savedLocalButton)
         
         newLocalButton.position = CGPoint(x: viewWidth / 2 - buttonSize.width / 2, y: runningYOffset)
+        newLocalButton.zPosition = GameScene.NodeLayer.ui.rawValue
         addChild(newLocalButton)
         
         backButton.position = CGPoint(x: viewWidth - sceneMargin  - buttonSize.width, y: runningYOffset)
+        backButton.zPosition = GameScene.NodeLayer.ui.rawValue
         addChild(backButton)
+        
+        if !UserDefaults.hasLaunchedFirstTime {
+            if var messages1 = walkthroughText {
+                if let messages2 = messages1.popLast() {
+                    addInstructionsNode(to: view ?? SKView(), [messages2])
+                    instructionsNode.isHidden = false
+                    instructionsNode.animatePopUpFadeIn()
+                    fadeAllButtonsAlpha(to: 0.25)
+                    UserDefaults.set(hasLaunchedFirstTime: true)
+                }
+            }
+        }
     }
 
+    override func fadeAllButtonsAlpha(to value: CGFloat) {
+        savedLocalButton.run(SKAction.fadeAlpha(to: value, duration: 1))
+        newLocalButton.run(SKAction.fadeAlpha(to: value, duration: 1))
+        backButton.run(SKAction.fadeAlpha(to: value, duration: 1))
+    }
     
     // MARK: - Helpers
     

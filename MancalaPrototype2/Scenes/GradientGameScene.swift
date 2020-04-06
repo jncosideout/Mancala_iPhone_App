@@ -33,7 +33,7 @@ final class GradientNode {
     
     static func makeLinearNode(with skscene: SKScene, view: SKView, linearGradientColors: [UIColor], animate: Bool) {
         
-        let linearGradientSize = CGSize(width: skscene.size.width * 1.5, height: skscene.size.height * 1.5)
+        let linearGradientSize = CGSize(width: skscene.size.width * 1, height: skscene.size.height * 1)
         
         let linearGradientLocations: [CGFloat] = [0, 0.5, 1]
         let textureCount = 8

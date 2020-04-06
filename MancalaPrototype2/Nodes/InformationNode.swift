@@ -17,29 +17,41 @@ public enum backgroundNodeAnimationColor {
 final class InformationNode: TouchNode {
     private let backgroundNode: BackgroundNode
     private let labelNode: SKLabelNode
+    private let originalSize: CGSize
     
-    var text: String? {
+    var text: String {
         get {
-            return labelNode.text
+            if let text = labelNode.attributedText?.string {
+                return text
+            } else {
+                return ""
+            }
         }
         set {
-            labelNode.text = newValue
+            if newValue != "" {
+                let nsAttrString = NSAttributedString(string: newValue,
+                                                attributes: [
+                                                    .font : UIFont.systemFont(ofSize: 18, weight: .semibold)
+                                                ])
+                
+                labelNode.attributedText = nsAttrString
+            }
         }
     }
     
     init(_ text: String, size: CGSize, actionBlock: ActionBlock? = nil, named: String?) {
+        originalSize = size
         backgroundNode = BackgroundNode(kind: .pill, size: size)
         backgroundNode.position = CGPoint(
             x: size.width / 2,
             y: size.height / 2
         )
         
-        let font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        let foregroundText = NSAttributedString(string: text, attributes: [
+                    .font : UIFont.systemFont(ofSize: 18, weight: .semibold)
+                    ])
         
-        labelNode = SKLabelNode(fontNamed: font.fontName)
-        labelNode.fontSize = font.pointSize
-        labelNode.fontColor = .black
-        labelNode.text = text
+        labelNode = SKLabelNode(attributedText: foregroundText)
         labelNode.position = CGPoint(
             x: size.width / 2,
             y: size.height / 2 - labelNode.frame.height / 2 + 2
@@ -67,8 +79,8 @@ final class InformationNode: TouchNode {
         return backgroundNode.changeColor(color: color, duration: duration)
     }
     
-    func animateInfoNode(textArray: [String], changeColorAction: SKAction?, duration: TimeInterval = 2) -> SKAction {
-        var actions = [SKAction]()
+    func animateInfoNode(text: String, changeColorAction: SKAction?, duration: TimeInterval = 2) -> SKAction {
+//        var actions = [SKAction]()
         guard let nodeName = backgroundNode.name else { return SKAction() }
 
         let backgroundAction: SKAction = {
@@ -79,15 +91,18 @@ final class InformationNode: TouchNode {
             return action
         }()
         
-        for text in textArray {
-            actions.append(
-                SKAction.sequence([
-                    SKAction.run{self.text = text},
-                    SKAction.run(backgroundAction, onChildWithName: nodeName),
-                    SKAction.wait(forDuration: duration)
-                ])
-            )
-        }
-        return SKAction.sequence(actions)
+//        for text in textArray {
+//        actions.append(
+        return SKAction.sequence([
+            SKAction.run(backgroundAction, onChildWithName: nodeName),
+            SKAction.run{self.text = text},
+            SKAction.wait(forDuration: duration)
+         ])
+//        )
+//        }
+//        return SKAction.sequence(actions)
     }
+    
+
+    
 }

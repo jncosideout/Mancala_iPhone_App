@@ -7,12 +7,17 @@
 //
 import Foundation
 import GameKit
-
+/**
+ The player's representative in the game.
+ This class is responsible for manipulating the gameboard during gameplay.
+ 
+ There should only ever be two (2) MancalaPlayers in a game, Player 1 and Player 2.
+ Once initialized as either Player 1 or 2, objects of this class can only manipulate their side of the board
+ */
 public class MancalaPlayer: NSObject, GKGameModelPlayer {
     
     //GKGameModel
     public var playerId: Int
-    static var allPlayers = [MancalaPlayer(player: 1), MancalaPlayer(player: 2)]
 
     public var sum = 0
     public var bonusTurn = false
@@ -25,135 +30,146 @@ public class MancalaPlayer: NSObject, GKGameModelPlayer {
     public var captureText: String?
     public var bonusTurnText: String?
     
-    //default constructor
+    ///default constructor
     public init (player: Int) {
         self.player = player
         self.playerId = player
     }
-    
+    /**
+     Primary method responsible for executing a player's turn
+     - Parameter choice: the name of the pit chosen by this player to begin his move. This method will only select from pits under the control of this MancalaPlayer
+     - Parameter gameboard: the gameboard of the GameModel the MancalaPlayer is playing on
+     - Returns: the number of beads picked up from the pit passed to the ```choice``` parameter before this method was called
+     */
     public func fillHoles(_ choice: String, _ gameboard: CircularLinkedList<PitNode>) -> Int {
-        
-        let iter_pit = findPit(choice, gameboard)
-        var inHand = 0
-        captured = 0
-        bonusTurnText = nil
-        captureText = nil
-        bonusTurn = false
-        
-        guard let pit = *iter_pit else {
-            print("1st iter_pit returned nil")
-            return -1
-        }
-        
-        guard 0 != pit.beads else {
-            print("Cannot choose pit that is empty")
-            return -1
-        }
-        
-        inHand = pit.beads
-        let updateButtonImages = inHand
-        pit.beads = 0
-        
-        //check for overlapping move
-        var overlapDiff = 0
-        var didOverlap = false
-        if inHand > gameboard.length - 1 {
-            overlapDiff = inHand - gameboard.length - 2
-            didOverlap = true
-        }
-        
-        while inHand > 0 {
-            //move to next pit
-            ++iter_pit
+        do {
+            let iter_pit = try findPit(choice, gameboard)
             
-            // '*' is overloaded to dereference and give address if ref type
-            if let pit2 = *iter_pit  { //optional binding, may return nil
-                
-                if didOverlap && overlapDiff == inHand {
-                    /*
-                     In this scenario we save the board at the point just before the initiating is filled.
-                     This way we can animate up to that point then animate from the initiating pit instead of  showing post-move board's pit-bead values too early
-                     */
-                    //copyBoard(from: gameboard)
-                }
-                
-                if 1 == inHand {
-                    // bonus turn conditions
-                    if pit2.player == player && pit2.name == "BASE" {
-                        bonusTurn = true
-                        bonusTurnText = "Player  \(player)  gets a bonus turn! \r"
-                        print(bonusTurnText ?? "")
-                    }
-                    // capture conditions
-                    /*
-                     In this scenario we save the board at the point just before the capture pit is filled.
-                     This way we can animate up to that point then animate the capture instead of  showing post-capture pit-bead values too early
-                     */
-                    if 0 == pit2.beads && pit2.name != "BASE" && pit2.player == player {
-                        preCaptureFromPit = pit2.copyPit()
-                        captured = capture(fromPit: pit2, gameboard)
-                        captured -= 1
-                        
-                        if captured > 0 {
-                            if captured == 1 {
-                                captureText = "Player  \(player) captured  \(captured) bead!\r"
-                            } else {
-                                captureText = "Player  \(player) captured  \(captured) beads!\r"
-                            }
-                        }
-                        print(captureText ?? "")
-                    }
-                    
-                }
-                
-                if pit2.player != player && pit2.name == "BASE" {
-                    //skip your opponent's base!
-                    continue
-                }
-                
-                pit2.beads += 1
-                inHand = inHand - 1
-            } else {
-                print("2nd iter_pit returned nil")
+            var inHand = 0
+            captured = 0
+            bonusTurnText = nil
+            captureText = nil
+            bonusTurn = false
+            
+            guard let pit = *iter_pit else {
+                print("1st iter_pit returned nil")
                 return -1
             }
-        }//end while
-        return updateButtonImages
-    }
-    
-    public func sumPlayerSide(_ gameboard: CircularLinkedList<PitNode>) -> Int {
-        
-        let iter_pit = findPit("1", gameboard)
-        var beads = 0
-        
-        
-        var tSum = 0
-        
-        for _ in 1...(gameboard.length - 2)/2 {
             
-            if let pit = *iter_pit {
-                
-                if pit.player != player || pit.name == "BASE" {
-                    print("sumPlayerSide found BASE")
-                    break
-                }
-                
-                beads = pit.beads
-                tSum = tSum + beads
-                
+            guard 0 != pit.beads else {
+                print("Cannot choose pit that is empty")
+                return -1
+            }
+            
+            inHand = pit.beads
+            let updateButtonImages = inHand
+            pit.beads = 0
+            
+            while inHand > 0 {
+                //move to next pit
                 ++iter_pit
                 
-            } else {//end conditional binding for '*iter_pit'
-                print("iter_pit returned nil")
-                return 0
-            }
+                // '*' is overloaded to dereference and give address if ref type
+                if let pit2 = *iter_pit  { //optional binding, may return nil
+
+                    
+                    if 1 == inHand {
+                        // bonus turn conditions
+                        if pit2.player == player && pit2.name == "BASE" {
+                            bonusTurn = true
+                            bonusTurnText = "Player \(player) gets a bonus turn! \r"
+                            print(bonusTurnText ?? "")
+                        }
+                        
+                        // capture conditions
+                        if 0 == pit2.beads && pit2.name != "BASE" && pit2.player == player {
+                            preCaptureFromPit = pit2.copyPit()
+                            do {
+                                captured = try capture(fromPit: pit2, gameboard)
+                            } catch let error {
+                                fatalError(error.localizedDescription)
+                            }
+                            captured -= 1
+                            
+                            if captured > 0 {
+                                if captured == 1 {
+                                    captureText = "Player \(player) captured \(captured) bead!\r"
+                                } else {
+                                    captureText = "Player \(player) captured \(captured) beads!\r"
+                                }
+                            }
+                            print(captureText ?? "")
+                        }
+                        
+                    }
+                    
+                    if pit2.player != player && pit2.name == "BASE" {
+                        //skip your opponent's base!
+                        continue
+                    }
+                    
+                    pit2.beads += 1
+                    inHand = inHand - 1
+                } else {
+                    print("2nd iter_pit returned nil")
+                    return -1
+                }
+            }//end while
+            return updateButtonImages
+            
+        } catch let error {
+            fatalError(error.localizedDescription)
         }
-        sum = tSum
+    }
+    /**
+     - Parameter gameboard: the gameboard of the GameModel the MancalaPlayer is playing on
+     - Returns: the total of all beads in pits on this player's side of the ```gameboard``` including pits # 1-6 but not this player's "BASE"
+     */
+    public func sumPlayerSide(_ gameboard: CircularLinkedList<PitNode>) -> Int {
+        do {
+            let iter_pit = try findPit("1", gameboard)
+            
+            var beads = 0
+            var tSum = 0
+            
+            for _ in 1...(gameboard.length - 2)/2 {
+                
+                if let pit = *iter_pit {
+                    
+                    if pit.player != player || pit.name == "BASE" {
+                        print("sumPlayerSide found unexpected pit:\n \(pit.description)")
+                        break
+                    }
+                    
+                    beads = pit.beads
+                    tSum = tSum + beads
+                    
+                    ++iter_pit
+                    
+                } else {//end conditional binding for '*iter_pit'
+                    print("iter_pit returned nil")
+                    return 0
+                }
+            }
+            sum = tSum
+            
+            return sum
         
-        return sum
+        } catch let error {
+            fatalError(error.localizedDescription)
+        }
     }
     
-    public func findPit(_ pit: String, _ gameboard: CircularLinkedList<PitNode>) -> LinkedListIterator<PitNode> {
+    /**
+     Searches the ```gameboard``` to find any pit controlled by this player
+     
+     - Parameters:
+        - pit: the name of this MancalaPlayer's pit to be found
+        - gameboard: the ```CircularLinkedList<PitNode>)``` that is the ```gameboard``` this MancalaPlayer is playing on
+     - Throws:pitNotFoundError
+     
+     */
+    public func findPit(_ pit: String, _ gameboard: CircularLinkedList<PitNode>) throws -> LinkedListIterator<PitNode> {
         
         let myIter = gameboard.circIter
         
@@ -171,11 +187,24 @@ public class MancalaPlayer: NSObject, GKGameModelPlayer {
             }
         }
         
-        print("failed to find pit")
-        return myIter
+        throw Error.pitNotFoundError("Failed to find pit.")
     }
     
-    public func capture(fromPit: PitNode?, _ gameboard: CircularLinkedList<PitNode>) -> Int {
+    /**
+     Executes the capturing gameplay mechanism
+    
+        Because the ```findPit(_:_)``` method only seeks pits belonging to this MancalaPlayer, we must search for the opponents pit to steal from using this method
+     
+     ## Steps:
+     1. Find the pit on the ```gameboard``` belonging to the opponent and sitting across the board from the capturing pit (```fromPit```).
+     2. Transfer the beads from the opponent's adjacent pit (and the single bead that would have landed in ```fromPit```) to this player's "BASE" pit
+    - Parameters:
+       - fromPit: the ```PitNode``` owned by this MancalaPlayer from which the capture is initiated. This should always be the pit that the last bead fell into, and must belong to the player who began this turn.
+       - gameboard: the ```CircularLinkedList<PitNode>)``` that is the ```gameboard``` this MancalaPlayer is playing on
+     - Throws: ```captureError``` usually result from not finding a pitNode
+     - Returns: the number of beads captured
+    */
+    public func capture(fromPit: PitNode?, _ gameboard: CircularLinkedList<PitNode>) throws -> Int {
         
         var captured = 0
         if let yourPit = fromPit {//need else to handle nil
@@ -189,8 +218,7 @@ public class MancalaPlayer: NSObject, GKGameModelPlayer {
             //to find the pit across the board from us...
             var targetStr = yourPit.name
             guard var target = Int(targetStr) else {
-                print("yourPit.name: \(yourPit.name), is not a number")
-                return 0
+                fatalError("yourPit.name: \(yourPit.name), is not a number")
             }
             target = -1 * (target - gameboard.length/2)
             targetStr = String(target)
@@ -200,8 +228,8 @@ public class MancalaPlayer: NSObject, GKGameModelPlayer {
             findOppositePit: for _ in 1...gameboard.length {//same as findPit() except != player
                 
                 guard tempPit != nil else {
-                    print("tempPit was nil")
-                    return 0
+                    let error = Error.captureError("Found nil while looking for opponent's pit to capture!")
+                    throw error
                 }
                 
                 if tempPit?.name == targetStr && tempPit?.player != player {
@@ -222,30 +250,34 @@ public class MancalaPlayer: NSObject, GKGameModelPlayer {
             
             
             if let pit_oppo = *iter_oppo {//pit of opponent or opposite
-                preStolenFromPit = pit_oppo.copyPit()
+                preStolenFromPit = pit_oppo.copyPit() //used by GameScene for animating the capture
                 captured = pit_oppo.beads
                 pit_oppo.beads = 0
                 captured = captured + 1 //the one bead that initiated capture gets added
                 yourPit.beads = yourPit.beads - 1//bc have not finished fillHoles, last bead will go here, but it was included in capture
                 
                 //add captured to our base
-                let iter_myBase = findPit("BASE", gameboard)
-                
-                if let myBase = *iter_myBase {
-                    myBase.beads += captured
-                    basePitAfterCapture = myBase.copyPit()
-                } else {
-                    print("could not add captured beads to base")
+                do {
+                    let iter_myBase = try findPit("BASE", gameboard)
+                    
+                    if let myBase = *iter_myBase {
+                        myBase.beads += captured
+                        basePitAfterCapture = myBase.copyPit()
+                    } else {
+                        let error = Error.pitNotFoundError("myBase pit not found.\n Could not add captured beads to base.")
+                        throw error
+                    }
+                } catch let error {
+                    fatalError(error.localizedDescription)
                 }
-                
             } else {
-                print("pit_oppo was nil")
-                return 0
+                let error = Error.captureError("pit_oppo was nil")
+                throw error
             }
             
         } else {
-            print("fromPit was nil ")
-            return 0
+            let error = Error.captureError("fromPit was nil ")
+            throw error
         }
         return captured
     }
@@ -278,5 +310,10 @@ public class MancalaPlayer: NSObject, GKGameModelPlayer {
         basePitAfterCapture = nil
         captureText = nil
         bonusTurnText = nil
+    }
+    
+    private enum Error: Swift.Error {
+        case captureError(String)
+        case pitNotFoundError(String)
     }
 }//EoC

@@ -19,10 +19,11 @@ class SavedGameStore: Codable {
             allSavedGames.append(GameData())
         }
     }
-    init(withUpdated gameModelArray: [GameModel]) {
+    
+    @discardableResult init(withUpdated gameModelArray: [GameModel]) {
         saveAllGames(gameModelArray)
     }
-    //MARK: archiving tools for courseStore
+    //MARK: archiving tools for store
     
     //storage path for archive
     let gameArchiveURL: URL = {
@@ -57,7 +58,7 @@ class SavedGameStore: Codable {
                 print("error loading gameData: \(error)")
             }
         } else {
-            print("no data in url")
+            print("no data in gameArchiveURL")
             return nil
         }
         return archivedGames

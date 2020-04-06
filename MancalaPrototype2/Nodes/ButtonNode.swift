@@ -11,15 +11,16 @@ import SpriteKit
 class ButtonNode: TouchNode {
     private let backgroundNode: BackgroundNode
     private let labelNode: SKLabelNode
+    private let shadowNode: SKLabelNode
     
     init(image: String, size: CGSize, actionBlock: ActionBlock?) {
-        //self.init(text, size: size, actionBlock: actionBlock)
         backgroundNode = BackgroundNode(kind: .recessed, size: size)
         backgroundNode.position = CGPoint(
             x: size.width / 2,
             y: size.height / 2
         )
         labelNode = SKLabelNode()
+        shadowNode = SKLabelNode()
         
         let buttonImageNode = SKSpriteNode(imageNamed: image)
         let aspectRatio = buttonImageNode.size.width / buttonImageNode.size.height
@@ -39,29 +40,37 @@ class ButtonNode: TouchNode {
         self.actionBlock = actionBlock
     }
     
-    init(_ text: String, size: CGSize, actionBlock: ActionBlock?) {
+    init(_ text: String, size: CGSize, aTextColor: UIColor? = nil, actionBlock: ActionBlock?) {
         backgroundNode = BackgroundNode(kind: .recessed, size: size)
         backgroundNode.position = CGPoint(
             x: size.width / 2,
             y: size.height / 2
         )
         
-        let buttonFont = UIFont.systemFont(ofSize: 24, weight: .semibold)
+        var textColor: UIColor
+        if let aColor = aTextColor {
+            textColor = aColor
+        } else {
+            textColor = UIColor.init(white: 1, alpha: 1)
+        }
         
-        labelNode = SKLabelNode(fontNamed: buttonFont.fontName)
-        labelNode.fontSize = buttonFont.pointSize
-        labelNode.fontColor = .white
-        labelNode.text = text
+        let foregroundText = NSAttributedString(string: text, attributes: [
+            .font : UIFont.systemFont(ofSize: 24, weight: .semibold),
+            .foregroundColor : textColor
+            ])
+        
+        let backgroundText = NSAttributedString(string: text, attributes: [
+        .font : UIFont.systemFont(ofSize: 24, weight: .semibold)
+        ])
+        
+        labelNode = SKLabelNode(attributedText: foregroundText)
         labelNode.numberOfLines = 0
         labelNode.position = CGPoint(
             x: size.width / 2,
             y: size.height / 2 - labelNode.frame.height / 2
         )
         
-        let shadowNode = SKLabelNode(fontNamed: buttonFont.fontName)
-        shadowNode.fontSize = buttonFont.pointSize
-        shadowNode.fontColor = .black
-        shadowNode.text = text
+        shadowNode = SKLabelNode(attributedText: backgroundText)
         shadowNode.numberOfLines = 0
         shadowNode.alpha = 0.5
         shadowNode.position = CGPoint(
@@ -100,5 +109,30 @@ class ButtonNode: TouchNode {
         }
         
         labelNode.run(SKAction.fadeAlpha(to: 1, duration: 0.2))
+    }
+    
+    var text: String {
+        get {
+            if let text = labelNode.attributedText?.string {
+                return text
+            } else {
+                return ""
+            }
+        }
+        set {
+            if newValue != "" {
+                let foregroundText = NSAttributedString(string: newValue, attributes: [
+                    .font : UIFont.systemFont(ofSize: 24, weight: .semibold),
+                    .foregroundColor : UIColor.init(white: 1, alpha: 1)
+                    ])
+                
+                let backgroundText = NSAttributedString(string: newValue, attributes: [
+                .font : UIFont.systemFont(ofSize: 24, weight: .semibold)
+                ])
+                
+                labelNode.attributedText = foregroundText
+                shadowNode.attributedText = backgroundText
+            }
+        }
     }
 }

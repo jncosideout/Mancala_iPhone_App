@@ -18,6 +18,9 @@ class AI_GameScene: GameScene {
     
     override init(model: GameModel) {
         super.init(model: model)
+        self.model.vsAI = true
+        thisGameType = .vsAI
+        self.model.allPlayers = [model.mancalaPlayer1,model.mancalaPlayer2]
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -68,8 +71,8 @@ class AI_GameScene: GameScene {
         
         let messageNodeName: String? = "messageNodeName"
         let messageNodeWidth = viewWidth - (sceneMargin * 2)
-        let openingMessage = model.messagesToDisplay.first
-        messageNode = InformationNode(openingMessage ?? "Welcome", size: CGSize(width: messageNodeWidth, height: 40), named: messageNodeName)
+        let openingMessage = model.messageToDisplay
+        messageNode = InformationNode(openingMessage, size: CGSize(width: messageNodeWidth, height: 40), named: messageNodeName)
         messageNode.zPosition = NodeLayer.ui.rawValue
         let messageNodeHeight = viewHeight - sceneMargin - 5
         messageNode.position = CGPoint(x: (viewWidth / 2) - messageNodeWidth / 2, y: messageNodeHeight)
@@ -85,7 +88,7 @@ class AI_GameScene: GameScene {
         addChild(aiProcessingMeter)
         
         //MARK: - Buttons
-        let buttonSize = CGSize(width: 125, height: 50)
+        let buttonSize = CGSize(width: 100, height: 50)
         let menuButton = ButtonNode("Menu", size: buttonSize) {
             self.returnToMenu()
         }
@@ -97,17 +100,18 @@ class AI_GameScene: GameScene {
         
         addChild(menuButton)
         
-        let playerWindowSize = CGSize(width: 75, height: 35)
-        let plyWinTopText = "AI"
-        let playerWindowTopRight = InformationNode(plyWinTopText, size: playerWindowSize, named: nil)
+        let computerWindowSize = CGSize(width: 100, height: 35)
+        let plyWinTopText = "Computer"
+        let playerWindowTopRight = InformationNode(plyWinTopText, size: computerWindowSize, named: nil)
         playerWindowTopRight.position = CGPoint(
-            x: viewWidth - sceneMargin / 3.0 - playerWindowSize.width,
-            y: runningYOffset + boardSideLength / 4 - playerWindowSize.height / 2
+            x: viewWidth - sceneMargin / 3.0 - computerWindowSize.width,
+            y: runningYOffset + boardSideLength / 4 - computerWindowSize.height / 2
         )
         playerWindowTopRight.zPosition = NodeLayer.ui.rawValue
         
         addChild(playerWindowTopRight)
         
+        let playerWindowSize = CGSize(width: 75, height: 35)
         let plyWinBottomText = "You"
         let playerWindowBottomLeft = InformationNode(plyWinBottomText, size: playerWindowSize, named: nil)
         playerWindowBottomLeft.position = CGPoint(
@@ -144,8 +148,8 @@ class AI_GameScene: GameScene {
             let aiTimeCeiling = 0.75
             let aiDelay = max(delta, aiTimeCeiling)
             
-            let aiMessage = "AI is thinking"
-            self.messageNode.run(self.messageNode.animateInfoNode(textArray: [aiMessage], changeColorAction: nil))
+            let aiMessage = "Computer is thinking"
+            self.messageNode.run(self.messageNode.animateInfoNode(text: aiMessage, changeColorAction: nil))
             aiMeterAction = self.aiProcessingMeter.growWidth(over: aiDelay)
             self.aiProcessingMeter.run(aiMeterAction)
             DispatchQueue.main.asyncAfter(deadline: .now() + aiDelay) {

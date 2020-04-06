@@ -19,9 +19,11 @@ final class ReplayScene: GameScene {
     
     init(model_: GameModel,_ activePlayer: Bool) {
         self.activePlayer = activePlayer
-        self.actualModel = model_
-        super.init(model: GameModel(replayWith: actualModel.gameData, for: activePlayer))
-
+        actualModel = model_
+        super.init(model: GameModel(replayWith: actualModel.gameData))
+        model.localPlayerNumber = actualModel.localPlayerNumber
+        model.vsOnline = true
+        thisGameType = .vsOnline
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -29,11 +31,12 @@ final class ReplayScene: GameScene {
     }
     
     override func didMove(to view: SKView) {
-        super.didMove(to: view)
-        
         successGenerator.prepare()
         feedbackGenerator.prepare()
-        removeAllChildren()
+        
+        addObserverForPresentGame()
+        addObserverForPresentSettings()
+        
         setUpScene(in: view)
         
         replay()
@@ -45,7 +48,6 @@ final class ReplayScene: GameScene {
     }
     
     // MARK: - Setup
-    
     override func setUpScene(in view: SKView?) {
         guard viewWidth > 0 else {
             return
@@ -55,6 +57,18 @@ final class ReplayScene: GameScene {
         if UserDefaults.allowGradientAnimations {
             GradientNode.makeLinearNode(with: self, view: view!, linearGradientColors: GradientNode.sunsetPurples, animate: true)
             GradientNode.makeRadialNode(with: self, view: view!)
+        } else {
+              let billiardFelt = SKSpriteNode(imageNamed: "Mancala-billiard-felt-")
+              billiardFelt.size = CGSize(
+                  width: billiardFelt.size.width,
+                  height: billiardFelt.size.height
+              )
+              billiardFelt.position = CGPoint(
+                  x: viewWidth / 2,
+                  y: viewHeight / 2
+              )
+              billiardFelt.zPosition = GameScene.NodeLayer.background.rawValue - 1
+              addChild(billiardFelt)
         }
         
         var runningYOffset: CGFloat = 0
@@ -89,8 +103,23 @@ final class ReplayScene: GameScene {
         
         //MARK: - Button actions
         let buttonSize = CGSize(width: 125, height: 50)
-        let returnButton = ButtonNode("Return", size: buttonSize) {
-            self.returnToGame()
+        let returnButton = ButtonNode("Continue", size: buttonSize) {
+            if self.model.onlineGameOver {
+                
+                GameCenterHelper.helper.endMatch(self.actualModel, completion: { error in
+                    defer {
+                        self.isSendingTurn = false
+                    }
+                    
+                    if let e = error {
+                        print("Error ending turn: \(e.localizedDescription)")
+                    }
+                    
+                })
+                self.returnToMenu()
+            } else {
+                self.returnToGame()
+            }
         }
         returnButton.position = CGPoint(
             x: sceneMargin / 3.0,
@@ -101,7 +130,9 @@ final class ReplayScene: GameScene {
         addChild(returnButton)
         
         let replayButton = ButtonNode("Replay", size: buttonSize) {
-            self.model = GameModel(replayWith: self.actualModel.gameData, for: self.activePlayer)
+            self.model = GameModel(replayWith: self.actualModel.gameData)
+            self.model.localPlayerNumber = self.actualModel.localPlayerNumber
+            self.model.vsOnline = true
             self.allTokenNodes = CircularLinkedList<TokenNode>()
             self.removeAllChildren()
             self.setUpScene(in: view)
@@ -126,7 +157,7 @@ final class ReplayScene: GameScene {
         
         addChild(playerWindowTopRight)
         
-        let plyWinBottomText = model.playerPerspective == 1 ? "P1" : "P2"
+        let plyWinBottomText = "You"
         let playerWindowBottomLeft = InformationNode(plyWinBottomText, size: playerWindowSize, named: nil)
         playerWindowBottomLeft.position = CGPoint(
             x: sceneMargin / 3.0,
@@ -140,7 +171,6 @@ final class ReplayScene: GameScene {
     }
     
     // MARK: - Helpers
-    
     private func returnToGame() {
         actualModel.gameData.oldPitsList = actualModel.saveGameBoardToList(actualModel.pits)
         
@@ -148,6 +178,10 @@ final class ReplayScene: GameScene {
         gameScene.thisGameType = .vsOnline
 
         view?.presentScene(gameScene, transition: SKTransition.push(with: .down, duration: 0.3))
+    }
+    override func returnToMenu() {
+        actualModel.gameData.oldPitsList = actualModel.saveGameBoardToList(actualModel.pits)
+        super.returnToMenu()
     }
     
     private func replay() {
@@ -158,20 +192,25 @@ final class ReplayScene: GameScene {
             //animationTimeCounter += 1
             globalActions.append(wait)
             handleReplay(of: move)
-            let move2 = model.lastMovesList.popLast()
+            _ = model.lastMovesList.popLast()
         }
         if model.winner != nil {
-            let infoActions = messageNode.animateInfoNode(textArray: model.winnerTextArray, changeColorAction: changeMessageNodeBlue, duration: 3.0)
-            messageGlobalActions.append(SKAction.wait(forDuration: animationWait * animationTimeCounter))
-            messageGlobalActions.append(infoActions)
+            messageGlobalActions.popLast()
+            let congratulationMessage1 = messageNode.animateInfoNode(text: "Congratulations to", changeColorAction: changeMessageNodeBlue, duration: 1.5)
+            messageGlobalActions.append(congratulationMessage1)
+            let winnerPlayerAlias = actualModel.winnerTextArray[actualModel.winnerTextArray.endIndex - 1]
+            let congratulationMessage2 = messageNode.animateInfoNode(text: winnerPlayerAlias, changeColorAction: changeMessageNodeBlue, duration: 1.5)
+            messageGlobalActions.append(congratulationMessage2)
         }
+        let finalMessageAction1 = messageNode.animateInfoNode(text: "Press Continue when finished", changeColorAction: nil)
+        let finalMessageAction2 = messageNode.animateInfoNode(text: "Press Replay to watch again", changeColorAction: nil)
+        messageGlobalActions.append(finalMessageAction2)
+        messageGlobalActions.append(finalMessageAction1)
+        
         boardNode.run(SKAction.sequence(globalActions))
-        messageNode.run(SKAction.sequence(messageGlobalActions))
-        messageGlobalActions.removeAll()
         globalActions.removeAll()
+        runMessageNodeActions()
     }
-    
-  
     
     private func handleReplay(of move: [Int : String])  {
         
@@ -184,7 +223,7 @@ final class ReplayScene: GameScene {
     
     override func processGameUpdate(){
         
-        if model.hasBonusTurn {
+        if model.lastPlayerBonusTurn {
             successGenerator.notificationOccurred(.success)
             successGenerator.prepare()
         } else {

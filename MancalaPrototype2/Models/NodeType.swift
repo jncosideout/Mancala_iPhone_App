@@ -12,10 +12,13 @@ private struct NodeTypeKeys {
     static let info = "info"
     static let link = "link"
 }
-
+/**
+    Generic class used in linked lists
+ */
 public class NodeType<Element> {
-    
+    ///the data of this node. Use LinkdedListIterator to dereference the node with \* and return its ```info```
     public var  info: Element
+    ///the link to the next node
     public var  link: NodeType<Element>?
     
     public init(_ info: Element) {

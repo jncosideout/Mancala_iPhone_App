@@ -15,6 +15,7 @@ import GameKit
     var window: UIWindow?
     let savedGamesStore = SavedGameStore()
     var savedGameModels = [GameModel]()
+    var matchHistory = MatchHistory()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
@@ -22,6 +23,7 @@ import GameKit
         window?.rootViewController = GameViewController()
         let gameViewController = window!.rootViewController as! GameViewController
         gameViewController.savedGameModels = savedGameModels
+        gameViewController.matchHistory = matchHistory
         window?.makeKeyAndVisible()
         configureUserNotifications()
         
@@ -40,7 +42,9 @@ import GameKit
             savedGameModels = savedGames
         }
         savedGamesStore.saveAllGames(savedGameModels)
-        
+        if matchHistory.saveData() {
+            print("saved matchHistory in AppDelegate")
+        }
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -73,12 +77,12 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        //get the match from the notification payload
-        let userInfo = response.notification.request.content.userInfo
-        let matchID = userInfo["MATCH_ID"] as! String
         
         switch response.actionIdentifier {
         case "PLAY_TURN":
+            //get the match from the notification payload
+            let userInfo = response.notification.request.content.userInfo
+            let matchID = userInfo["MATCH_ID"] as! String
             GKTurnBasedMatch.load(withID: matchID) { (match, error) in
                 if let match = match {
                     NotificationCenter.default.post(name: .presentGame, object: match)
@@ -89,6 +93,8 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             
         case "IGNORE_TURN":
             break
+        case "SEE_UNLOCKED":
+            NotificationCenter.default.post(name: .presentSettings, object: nil)
         default:
             break
         }

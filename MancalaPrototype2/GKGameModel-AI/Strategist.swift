@@ -13,7 +13,7 @@ struct Strategist {
     private let strategist: GKMinmaxStrategist = {
         let strategist = GKMinmaxStrategist()
         
-        strategist.maxLookAheadDepth = 4
+        strategist.maxLookAheadDepth = 3
         strategist.randomSource = GKARC4RandomSource()
         
         return strategist

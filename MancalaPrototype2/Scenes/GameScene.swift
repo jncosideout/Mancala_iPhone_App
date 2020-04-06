@@ -28,7 +28,7 @@ class GameScene: SKScene {
     var model: GameModel
     var boardNode: BoardNode!
     var messageNode: InformationNode!
-    
+
     var allTokenNodes = CircularLinkedList<TokenNode>()
     
     let successGenerator = UINotificationFeedbackGenerator()
@@ -44,6 +44,9 @@ class GameScene: SKScene {
     var messageGlobalActions = [SKAction]()
     var thisGameType = GameType.vsHuman//asb test 01/30/20
     var savedGameModels: [GameModel]!
+    var animationTimer: Timer?
+    var animationsFinished = true
+    var lastActivePlayer = 0
     
     var changeMessageNodeRed = SKAction()
     var changeMessageNodeGreen = SKAction()
@@ -103,11 +106,11 @@ class GameScene: SKScene {
         
         setUpScene(in: view)
         addObserverForPresentGame()
+        addObserverForPresentSettings()
         
+        setupGameOverMessageActions(false)
         if model.winner != nil {
-            messageNode.text = ""
-            let infoActions = messageNode.animateInfoNode(textArray: model.winnerTextArray, changeColorAction: changeMessageNodeBlue, duration: 3.0)
-            messageNode.run(infoActions)
+            runMessageNodeActions()
         }
     }
     
@@ -127,6 +130,30 @@ class GameScene: SKScene {
         if UserDefaults.allowGradientAnimations {
             GradientNode.makeLinearNode(with: self, view: view!, linearGradientColors: GradientNode.sunsetPurples, animate: true)
             GradientNode.makeRadialNode(with: self, view: view!)
+        } else {
+//            let logoNode = SKSpriteNode(imageNamed: "Mancala-logo")
+//            logoNode.size = CGSize(
+//                width: logoNode.size.width ,
+//                height: logoNode.size.height
+//            )
+//            logoNode.position = CGPoint(
+//                x: viewWidth / 2,
+//                y: viewHeight / 2
+//            )
+//            logoNode.zPosition = GameScene.NodeLayer.background.rawValue
+//            addChild(logoNode)
+            
+            let billiardFelt = SKSpriteNode(imageNamed: "Mancala-billiard-felt-")
+            billiardFelt.size = CGSize(
+                width: billiardFelt.size.width,
+                height: billiardFelt.size.height
+            )
+            billiardFelt.position = CGPoint(
+                x: viewWidth / 2,
+                y: viewHeight / 2
+            )
+            billiardFelt.zPosition = GameScene.NodeLayer.background.rawValue - 1
+            addChild(billiardFelt)
         }
         
         var runningYOffset: CGFloat = 0
@@ -149,14 +176,14 @@ class GameScene: SKScene {
         
         let messageNodeName: String? = "messageNodeName"
         let messageNodeWidth = viewWidth - (sceneMargin * 2)
-        let openingMessage = model.messagesToDisplay.first
-        messageNode = InformationNode(openingMessage ?? "Welcome", size: CGSize(width: messageNodeWidth, height: 40), named: messageNodeName)
+        let openingMessage = model.messageToDisplay
+        messageNode = InformationNode(openingMessage, size: CGSize(width: messageNodeWidth, height: 40), named: messageNodeName)
         messageNode.zPosition = NodeLayer.ui.rawValue
-        let messageNodeHeigth = viewHeight - sceneMargin - 5
-        messageNode.position = CGPoint(x: (viewWidth / 2) - messageNodeWidth / 2, y: messageNodeHeigth)
+        let messageNodeHeight = viewHeight - sceneMargin - 5
+        messageNode.position = CGPoint(x: (viewWidth / 2) - messageNodeWidth / 2, y: messageNodeHeight)
         
         addChild(messageNode)
-           
+        
         setupColorChangeActions()
         
         //MARK: - Buttons
@@ -183,7 +210,10 @@ class GameScene: SKScene {
         
         addChild(playerWindowTopRight)
         
-        let plyWinBottomText = model.playerPerspective == 1 ? "P1" : "P2"
+        var plyWinBottomText = model.playerPerspective == 1 ? "P1" : "P2"
+        if thisGameType == .vsOnline {
+            plyWinBottomText = "You"
+        }
         let playerWindowBottomLeft = InformationNode(plyWinBottomText, size: playerWindowSize, named: nil)
         playerWindowBottomLeft.position = CGPoint(
             x: sceneMargin / 3.0,
@@ -228,7 +258,7 @@ class GameScene: SKScene {
      must pass in board iterator from a MancalaPlayer
      pre-advanced to correct pit
      */
-    func updatePitsFrom(_ tokenIterator: LinkedListIterator<TokenNode>, capture: Bool){
+    func updatePitsFrom(_ tokenIterator: LinkedListIterator<TokenNode>, capture: Bool) {
         
         let inHand = animateTokens
         var actions = [SKAction]()
@@ -252,12 +282,13 @@ class GameScene: SKScene {
                     return
                 }
                 
-                if willOverlap && i == 0 {
-                    pitAction = tokenNode.animateSpecific(with: animationDuration, beads: 0)
-                } else if willOverlap && i <= overlapDifference {
-                    pitAction = tokenNode.animate(with: animationDuration, previous: true)
+//                if willOverlap && i == 0 {
+//                    pitAction = tokenNode.animateSpecific(with: animationDuration, beads: 0)
+                if willOverlap && i <= overlapDifference {
+                    let firstLap = i < allTokenNodes.length - 1
+                    pitAction = tokenNode.animatePreviousBeads(firstLap, with: animationDuration)
                 } else {
-                    pitAction = tokenNode.animate(with: animationDuration, previous: false)
+                    pitAction = tokenNode.animateCurrentValue(with: animationDuration)
                 }
                 
                 capturelabel: if capture {
@@ -271,7 +302,9 @@ class GameScene: SKScene {
                     }
                     
                     //If we're animating with beads fewer than required for a wrap-around, we skip animateBeforeCapture()
-                    if i == 0 && token_pit.previousBeads! < allTokenNodes.length / 2 + 1 {
+                    let prevBeads = token_pit.mostRecentBeads
+                    
+                    if i == 0 && prevBeads < allTokenNodes.length / 2 + 1 {
                         break capturelabel
                     }
                     
@@ -314,7 +347,7 @@ class GameScene: SKScene {
         }
         
         if tokenNode.pit == preStealPit  {
-            action = tokenNode.animate(with: animationDuration, previous: true)
+            action = tokenNode.animateMostRecent(with: animationDuration)
         }
         
         guard let basePit = model._activePlayer.basePitAfterCapture else {
@@ -322,7 +355,7 @@ class GameScene: SKScene {
         }
         
         if tokenNode.pit == basePit {
-            action = tokenNode.animate(with: animationDuration, previous: true)
+            action = tokenNode.animateMostRecent(with: animationDuration)
         }
         
         return action
@@ -343,7 +376,7 @@ class GameScene: SKScene {
         }
         
         let captureFromPitAction2 = captureFromToken.animateHighlight(with: animationDuration, beads: 1)
-        let captureFromPitAction3 = captureFromToken.animate(with: animationDuration, previous: false)
+        let captureFromPitAction3 = captureFromToken.animateCurrentValue(with: animationDuration)
         
         guard let stealFromPit = model._activePlayer.preStolenFromPit else {
             return sequence
@@ -391,10 +424,11 @@ class GameScene: SKScene {
             
             if let nonClearingPlayerToken = *tokenIterator {
                 guard let nodeName = nonClearingPlayerToken.name else {
-                    return
+                    fatalError("In " + #function + "could not get nodeName from nonClearingPlayerToken in")
                 }
+                let prevBeads = nonClearingPlayerToken.pit.mostRecentBeads
                 
-                if nonClearingPlayerToken.pit.player == nonClearingPlayer && nonClearingPlayerToken.pit.name != "BASE" && nonClearingPlayerToken.pit.previousBeads != 0 {
+                if nonClearingPlayerToken.pit.player == nonClearingPlayer && nonClearingPlayerToken.pit.name != "BASE" && prevBeads != 0 {
                     let clearingAction = nonClearingPlayerToken.animateThroughInterval(with: animationDuration, reverse: true)
                     actions.append(SKAction.run(clearingAction, onChildWithName: nodeName))
                     actions.append(SKAction.wait(forDuration: animationWait))
@@ -417,9 +451,15 @@ class GameScene: SKScene {
             actions.append(SKAction.wait(forDuration: 2 * animationWait))
             actions.append(SKAction.run(fillClearingPlayerBase, onChildWithName: nodeName))
         }
-        
+        globalActions.append(SKAction.wait(forDuration: 2 * animationWait))
         globalActions.append(SKAction.sequence(actions))
 
+    }
+    
+    func setupColorChangeActions() {
+        changeMessageNodeRed = messageNode.getBackgroundAnimation(color: .red, duration: animationDuration * 2.5)
+        changeMessageNodeGreen = messageNode.getBackgroundAnimation(color: .green, duration: animationDuration * 1.25)
+        changeMessageNodeBlue = messageNode.getBackgroundAnimation(color: .blue, duration: animationDuration * 1.25)
     }
     
     // MARK: - Spawning
@@ -455,12 +495,6 @@ class GameScene: SKScene {
     
     // MARK: - Helpers
     
-    func setupColorChangeActions() {
-        changeMessageNodeRed = messageNode.getBackgroundAnimation(color: .red, duration: animationDuration * 2.5)
-        changeMessageNodeGreen = messageNode.getBackgroundAnimation(color: .green, duration: animationDuration * 2.5)
-        changeMessageNodeBlue = messageNode.getBackgroundAnimation(color: .blue, duration: animationDuration * 2.5)
-    }
-    
     func returnToMenu() {
         var menuScene = MenuScene()//ASB TEMP 1/31/20
         if let savedGames = savedGameModels {
@@ -468,9 +502,11 @@ class GameScene: SKScene {
             menuScene = MenuScene(with: savedGames)
         } else {
             if thisGameType == .vsOnline {
-                let savedGameStore = SavedGameStore()
-                let allSavedGames = savedGameStore.setupSavedGames()
-                SKScene.savedGameModels = allSavedGames
+//                let savedGameStore = SavedGameStore()
+//                let allSavedGames = savedGameStore.setupSavedGames()
+//                SKScene.savedGameModels = allSavedGames
+                let appDelegate = UIApplication.shared.delegate as? AppDelegate
+                let allSavedGames = appDelegate?.savedGameModels
                 menuScene = MenuScene(with: allSavedGames)
             } else {
                 print("warning! returnToMenu from GameScene without savedGamesStore")
@@ -518,11 +554,14 @@ class GameScene: SKScene {
             let tokenNode = node as? TokenNode
             else { return }
         
-        let pit = tokenNode.pit
-        updateGameBoard(player: pit.player, name: pit.name)
+        if animationsFinished {
+            let pit = tokenNode.pit
+            updateGameBoard(player: pit.player, name: pit.name)
+        }
     }
     
     func updateGameBoard(player: Int, name: String) {
+        lastActivePlayer = player
         let pit = PitNode(player: player, name: name)
         
         animateTokens  = model.playPhase1(pit.player, pit.name)
@@ -536,7 +575,10 @@ class GameScene: SKScene {
                 
                 //overlapping move
                 if animateTokens >= allTokenNodes.length {
-                    overlapDifference = animateTokens - (allTokenNodes.length - 1)
+                    let fullLap = allTokenNodes.length - 1
+//                    let numOfLaps = animateTokens / fullLap
+//                    overlapDifference = animateTokens - (numOfLaps * fullLap)
+                    overlapDifference = animateTokens - fullLap
                     willOverlap = true
                 }
                 
@@ -553,11 +595,11 @@ class GameScene: SKScene {
             /*-------- finish turn -----------*/
             var printPlayerTurnText = false
             var colorAction = SKAction()
-            var messages = [String]()
+            var message = String()
             var lastPlayerCaptured = false
             
             if model.hasBonusTurn || model.isCapturingPiece {
-                messages.append(model.messagesToDisplay.first!)
+                message = model.messageToDisplay
                 if model.hasBonusTurn {
                     colorAction = changeMessageNodeGreen
                 } else {
@@ -572,37 +614,28 @@ class GameScene: SKScene {
             
             if printPlayerTurnText {
                 //regular turn
-                updateMessageNode(with: [playerTurnText], changeColor: nil)
+                updateMessageNode(with: playerTurnText, changeColor: nil)
             } else {
                 //either last player got bonus or captured
-                updateMessageNode(with: messages, changeColor: colorAction)
+                updateMessageNode(with: message, changeColor: colorAction)
                 if lastPlayerCaptured {
-                    messageGlobalActions.append(messageNode.animateInfoNode(textArray: [playerTurnText], changeColorAction: nil))
+                    messageGlobalActions.append(messageNode.animateInfoNode(text: playerTurnText, changeColorAction: nil))
                     
                 }
             }
-            
-            if model.winner != nil {
-                messageNode.text = ""
-                let infoActions = messageNode.animateInfoNode(textArray: model.winnerTextArray, changeColorAction: changeMessageNodeBlue, duration: 3.0)
-                if !lastPlayerCaptured {
-                    messageGlobalActions.append(SKAction.wait(forDuration: animationWait * animationTimeCounter))
-                }
-                messageGlobalActions.append(infoActions)
-            }
-            
+            setupGameOverMessageActions(lastPlayerCaptured)
             processGameUpdate()
         }    
     }
     
-    func updateMessageNode(with messages: [String]?, changeColor: SKAction?) {
+    func updateMessageNode(with message: String?, changeColor: SKAction?) {
         let messageActions: SKAction
-        if let theMessages = messages {
+        if let theMessage = message {
             //messageNode.text = theMessage
-            messageActions = messageNode.animateInfoNode(textArray: theMessages, changeColorAction: changeColor)
+            messageActions = messageNode.animateInfoNode(text: theMessage, changeColorAction: changeColor)
         } else {
             //messageNode.text = model.messagesToDisplay
-            messageActions = messageNode.animateInfoNode(textArray: model.messagesToDisplay, changeColorAction: changeColor)
+            messageActions = messageNode.animateInfoNode(text: model.messageToDisplay, changeColorAction: changeColor)
         }
         
         messageGlobalActions.append(SKAction.wait(forDuration: animationWait * animationTimeCounter))
@@ -611,6 +644,42 @@ class GameScene: SKScene {
     }
     
     func processGameUpdate(){
+        
+        if let _winner = model.winner {
+            var nonClearingPlayer = 0
+            if 0 == model.sum1 {
+                nonClearingPlayer = 2
+            } else {
+                nonClearingPlayer = 1
+            }
+            
+            //must not run animateClearingPlayerTakesAll(from:)
+            //if game ends by capturing 
+            let winnerBasePit = PitNode(player: _winner, name: "BASE")
+            let basePitIterator = findTokenNode(with: winnerBasePit, in: allTokenNodes)
+            let basePitToken = *basePitIterator
+            let basePit = basePitToken?.pit
+            
+            
+            if let _basePit = basePit {
+                let prevBeads = _basePit.mostRecentBeads
+                if prevBeads < _basePit.beads {
+                    animateClearingPlayerTakesAll(from: nonClearingPlayer)
+                }
+            }
+            
+            if thisGameType == .vsOnline {
+                GameCenterHelper.helper.sendFinalTurn(model) { error in
+                    defer {
+                        self.isSendingTurn = false
+                    }
+                    if let e = error {
+                        print("Error winning match: \(e.localizedDescription)")
+                    }
+                    
+                }
+            }
+        }
         
         if model.hasBonusTurn {
             successGenerator.notificationOccurred(.success)
@@ -626,64 +695,58 @@ class GameScene: SKScene {
                 successGenerator.prepare()
         
             }
+              
+            if model.playerTurn == 1 {
+                model.gameData.turnNumber += 1
+            }
             
-            if let _winner = model.winner {
-                var nonClearingPlayer = 0
-                if 0 == model.sum1 {
-                    nonClearingPlayer = 2
-                } else {
-                    nonClearingPlayer = 1
-                }
-                
-                //must not run animateClearingPlayerTakesAll(from:)
-                //if game ends by capturing
-                let winnerBasePit = PitNode(player: _winner, name: "BASE")
-                let basePitIterator = findTokenNode(with: winnerBasePit, in: allTokenNodes)
-                let basePitToken = *basePitIterator
-                let basePit = basePitToken?.pit
-                
-                if let _basePit = basePit, let prevBeads = _basePit.previousBeads,
-                    prevBeads < _basePit.beads {
-                    animateClearingPlayerTakesAll(from: nonClearingPlayer)
-                }
-                
-                if thisGameType == .vsOnline {
-                    GameCenterHelper.helper.win(model) { error in
-                        defer {
-                            self.isSendingTurn = false
-                        }
-                        
-                        if let e = error {
-                            print("Error winning match: \(e.localizedDescription)")
-                        }
-                        
+            if thisGameType == .vsOnline {
+                GameCenterHelper.helper.endTurn(model, completion: { error in
+                    defer {
+                        self.isSendingTurn = false
                     }
-                }
-            } else {
-                
-                if model.playerTurn == 1 {
-                    model.gameData.turnNumber += 1
-                }
-                
-                if thisGameType == .vsOnline {
-                    GameCenterHelper.helper.endTurn(model, completion: { error in
-                        defer {
-                            self.isSendingTurn = false
-                        }
-                        
-                        if let e = error {
-                            print("Error ending turn: \(e.localizedDescription)")
-                        }
-                        
-                    })
-                }
+                    
+                    if let e = error {
+                        print("Error ending turn: \(e.localizedDescription)")
+                    }
+                    
+                })
             }
             
         }
-
+        
+        animationsFinished = false
+        var timerScheduledInterval = animationTimeCounter * animationWait
+        
+        //to wait for "Player captured X beads!" info text animation to end
+        if model.lastPlayerCaptured, lastActivePlayer != model._activePlayer.player {
+            timerScheduledInterval += 2
+        }
         boardNode.run(SKAction.sequence(globalActions))
-        messageNode.run(SKAction.sequence(messageGlobalActions))
         globalActions.removeAll()
+        runMessageNodeActions()
+        
+        //to wait for all animations to end before accepting more gameplay input
+        animationTimer = Timer.scheduledTimer(withTimeInterval: timerScheduledInterval, repeats: false, block: { _ in
+            self.animationsFinished = true
+        })
+    }
+    
+    func runMessageNodeActions() {
+        messageNode.run(SKAction.sequence(messageGlobalActions))
         messageGlobalActions.removeAll()
+    }
+    
+    func setupGameOverMessageActions(_ lastPlayerCaptured: Bool) {
+        if model.winner != nil {
+            var infoActions = [SKAction]()
+            for winText in model.winnerTextArray {
+                infoActions.append(messageNode.animateInfoNode(text: winText, changeColorAction: changeMessageNodeBlue, duration: 1.5))
+            }
+//            if lastPlayerCaptured {
+//                messageGlobalActions.append(SKAction.wait(forDuration: animationWait * animationTimeCounter))
+//            }
+            messageGlobalActions.append(contentsOf: infoActions)
+        }
     }
 }//EoC

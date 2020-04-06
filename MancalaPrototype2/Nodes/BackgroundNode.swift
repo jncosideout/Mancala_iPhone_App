@@ -57,12 +57,10 @@ class BackgroundNode: SKSpriteNode {
     func growWidth(over time: TimeInterval) -> SKAction {
         var growAction = SKAction()
         let originalPosition = position
-//        if let parentNode = parent {
         growAction = SKAction.sequence([
             SKAction.run{ self.position.x = -(self.originalSize.width)/2},
             SKAction.moveTo(x: originalPosition.x, duration: time)
                     ])
-//        }
         return growAction
     }
 }

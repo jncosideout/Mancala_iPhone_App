@@ -28,7 +28,7 @@ extension SKTexture
   {
     let renderer = UIGraphicsImageRenderer(size: size)
     let image = renderer.image { (context) in
-      let colorSpace = context.cgContext.colorSpace ?? CGColorSpaceCreateDeviceRGB()
+      let colorSpace = CGColorSpaceCreateDeviceRGB()
       let cgColors = colors.map({ $0.cgColor }) as CFArray
       guard let gradient = CGGradient(colorsSpace: colorSpace, colors: cgColors, locations: UnsafePointer<CGFloat>(locations)) else {
                 fatalError("Failed creating gradient.")
@@ -47,11 +47,11 @@ extension SKTexture
   {
     let renderer = UIGraphicsImageRenderer(size: size)
     let image = renderer.image { (context) in
-      let colorSpace = context.cgContext.colorSpace ?? CGColorSpaceCreateDeviceRGB()
+      let colorSpace = CGColorSpaceCreateDeviceRGB()
       let cgColors = colors.map({ $0.cgColor }) as CFArray
       guard let gradient = CGGradient(colorsSpace: colorSpace, colors: cgColors, locations: UnsafePointer<CGFloat>(locations)) else {
                 fatalError("Failed creating gradient.")
-      }
+          }
             
       let angles = [angleInRadians + .pi, angleInRadians]
       let radius = (pow(size.width / 2.0, 2.0) + pow(size.height / 2.0, 2.0)).squareRoot()

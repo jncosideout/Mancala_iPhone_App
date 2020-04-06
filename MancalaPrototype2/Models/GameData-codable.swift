@@ -7,7 +7,11 @@
 //
 
 import Foundation
-
+/**
+ Serializable struct used for saving GameData to disk or for transferring over a network
+ 
+ All data in this class must reflect the MancalaGameModel. It should not have any members outside of the set of members in that class.
+ */
 struct GameData: Codable {
     
     init() {
@@ -20,8 +24,10 @@ struct GameData: Codable {
         winner = nil
         turnNumber = 0
         firstPlayerID = ""
+        lastPlayerID = ""
         lastMovesList = [[Int : String]]()
         winnerTextArray = [String]()
+        onlineGameOver = false
     }
     
     var pitsList: [PitNode]
@@ -32,7 +38,8 @@ struct GameData: Codable {
     var winner: Int?
     var turnNumber: Int
     var firstPlayerID: String
+    var lastPlayerID: String
     var lastMovesList: [[Int : String]]
     var winnerTextArray: [String]
-    
+    var onlineGameOver: Bool
 }

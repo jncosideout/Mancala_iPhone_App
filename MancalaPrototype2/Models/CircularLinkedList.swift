@@ -13,10 +13,16 @@ struct Keys {
     static let length = "length"
     
 }
-
+/**
+    Data structure of linked nodes of type ```Elem``` where the last node is linked to the first node
+ 
+ ### Best Practices
+    1. Try not to move the ```last``` pointer to any other node once the ```CircularLinkedList``` has been created.
+ 
+        The methods of this class are assuming that ```last``` remains fixed on its node
+    2. The list is always initialized with ```last = nil```
+ */
 public class CircularLinkedList<Elem: Codable>: NSObject, NSCoding {
-    
-    
     public func encode(with aCoder: NSCoder) {
         aCoder.encode(last, forKey: Keys.last)
         aCoder.encode(length, forKey: Keys.length)
@@ -49,17 +55,24 @@ public class CircularLinkedList<Elem: Codable>: NSObject, NSCoding {
     public func advanceLast() {
         last = last?.link
     }
-    
+    /**
+        append a node to the end of this list
+            
+        if list is empty, creates a single node list
+     
+     
+        - Parameter q: ```<Elem>``` type of ```q```  must be of same type of this ```CircularLinkedList<Elem>```
+     */
     public func enqueue(_ q: Elem) {
         
         let newNode = NodeType<Elem>(q)      // new node
         
-        if last == nil {               // if empty list
-            last = newNode            //  create single node list
+        if last == nil {                     // if empty list
+            last = newNode                   // create single node list
             newNode.link = newNode
             
         } else {
-            newNode.link = last?.link    //  append node to end list
+            newNode.link = last?.link        // append node to end list
             last?.link = newNode
             last = newNode
         }
@@ -67,6 +80,11 @@ public class CircularLinkedList<Elem: Codable>: NSObject, NSCoding {
         length += 1
     }
     
+    /**
+        Removes the node pointed to by ```last``` ,  and moves the ```last``` pointer to the next node in the list
+     
+     - Returns: the ```info``` of the last node. If list is empty, returns ```nil```
+     */
     @discardableResult func dequeue() -> Elem?  {
         
         if isEmpty {
@@ -98,9 +116,10 @@ public class CircularLinkedList<Elem: Codable>: NSObject, NSCoding {
             dequeue()
         }
     }
-    
+    /**
+        Rolls out the info contained in each node of this list
+     */
     public override var description: String {
-        
         var text = "["
         var node = last
         var len = length
