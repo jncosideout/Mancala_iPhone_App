@@ -9,8 +9,8 @@
 import SpriteKit
 
 class GameScene: SKScene {
-    // MARK: - Enums
     
+    // MARK: - Enums
     enum GameType: Int {
         case vsHuman
         case vsAI
@@ -42,7 +42,7 @@ class GameScene: SKScene {
     var isSendingTurn = false
     var globalActions = [SKAction]()
     var messageGlobalActions = [SKAction]()
-    var thisGameType = GameType.vsHuman//asb test 01/30/20
+    var thisGameType = GameType.vsHuman
     var savedGameModels: [GameModel]!
     var animationTimer: Timer?
     var animationsFinished = true
@@ -227,7 +227,6 @@ class GameScene: SKScene {
     }
     
     // MARK: - Touches
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         touches.forEach { touch in
             handleTouch(touch)
@@ -254,8 +253,10 @@ class GameScene: SKScene {
     }
     
     // MARK: - animation functions
-    /*
-     must pass in board iterator from a MancalaPlayer
+    /**
+     Handles animating pits on the board for an entire move.
+     
+     Must pass in board iterator from a MancalaPlayer
      pre-advanced to correct pit
      */
     func updatePitsFrom(_ tokenIterator: LinkedListIterator<TokenNode>, capture: Bool) {
@@ -282,8 +283,6 @@ class GameScene: SKScene {
                     return
                 }
                 
-//                if willOverlap && i == 0 {
-//                    pitAction = tokenNode.animateSpecific(with: animationDuration, beads: 0)
                 if willOverlap && i <= overlapDifference {
                     let firstLap = i < allTokenNodes.length - 1
                     pitAction = tokenNode.animatePreviousBeads(firstLap, with: animationDuration)
@@ -338,6 +337,11 @@ class GameScene: SKScene {
         }
     }
     
+    /**
+     Helper function used in updatePitsFrom(:capture)
+     
+     During a capture, it's possible that the beads are sown wrapping around the board in a round-trip. In this scenario the pit that is captured from and the base pit of the capturing player will need to be animated twice, once for their value before the capture and once each after.
+     */
     func animateBeforeCapture(_ tokenNode: TokenNode) -> (SKAction?) {
         
         var action: SKAction?
