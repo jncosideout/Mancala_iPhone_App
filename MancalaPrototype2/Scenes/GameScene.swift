@@ -63,6 +63,12 @@ class GameScene: SKScene {
     }
     
     // MARK: - Init
+    /**
+     Carries the GameModel array of saved games for "2 Player Mode" (VS Human) and "VS Computer" mode. Used for dependency injection from AppDelegate.
+     
+     The entire system operates on the assumption that savedGames[1] contains the "VS Human" saved game and savedGames[0] contains the "VS Computer" saved game.
+     - Important: Do not use this initializer unless you have a loaded [GameModel] array to pass to it. Otherwise ```savedGameModels``` will be set nil
+     */
     convenience init(fromSavedGames: [GameModel]?, gameType: GameType) {
         let gameModel: GameModel
         if let savedGames = fromSavedGames {
@@ -98,6 +104,9 @@ class GameScene: SKScene {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /**
+     Responsible for calling ```setUpScene``` and adding observers for notifications. Also runs "Game Over" message if user is returning to a saved game that has been finished.
+     */
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         
@@ -120,7 +129,9 @@ class GameScene: SKScene {
     }
     
     // MARK: - Setup
-    
+    /**
+     Responsible for adding all child nodes to the scene, including game board and buttons.
+     */
     func setUpScene(in view: SKView?) {
         guard viewWidth > 0 else {
             return
@@ -233,8 +244,12 @@ class GameScene: SKScene {
         }
     }
     
+    /**
+     Used to filter for certain conditions before passing the UITouch and its location to ```handlePick(at:)```
+     
+     Place any code here to execute before the UITouch is used to find a game token and update pits
+     */
     func handleTouch(_ touch: UITouch) {
-        
         if thisGameType == .vsOnline {
             guard !isSendingTurn && GameCenterHelper.helper.canTakeTurnForCurrentMatch else {
                 return
@@ -242,7 +257,6 @@ class GameScene: SKScene {
         }
         
         guard model.winner == nil else {
-            updateMessageNode(with: nil, changeColor: changeMessageNodeBlue)
             return
         }
         
@@ -265,7 +279,7 @@ class GameScene: SKScene {
         var actions = [SKAction]()
         var pitAction = SKAction()
         animationTimeCounter = 0
-        
+        var wrapAroundCapture = false
         
         var i = 0
         repeat {
@@ -297,20 +311,28 @@ class GameScene: SKScene {
                     }
                     if i == inHand && token_pit == captureFromPit {
                         //we only animate capturePit once (before animateAfterCapture())
-                        break
+                        break //exit while loop
                     }
                     
                     //If we're animating with beads fewer than required for a wrap-around, we skip animateBeforeCapture()
                     let prevBeads = token_pit.mostRecentBeads
                     
-                    if i == 0 && prevBeads < allTokenNodes.length / 2 + 1 {
-                        break capturelabel
+                    if i == 0 {
+                        if prevBeads >= allTokenNodes.length / 2 + 1 {
+                            wrapAroundCapture = true
+                            break capturelabel
+                        }
+                    } else {
+                        if !wrapAroundCapture {
+                            break capturelabel
+                        }
                     }
                     
-                    //this is for animating the captureFrom pit, the stealFrom pit, or the base pit before stealing takes place in a wrap around capture
+                    //this is for animating the stealFrom pit or the base pit before stealing takes place in a wrap around capture
                     if let pitAction2 = animateBeforeCapture(tokenNode) {
                         pitAction = pitAction2
                     }
+                    
                 }
                 
                 let sequence = SKAction.sequence([
@@ -338,7 +360,7 @@ class GameScene: SKScene {
     }
     
     /**
-     Helper function used in updatePitsFrom(:capture)
+     Helper function used in updatePitsFrom(:capture) 
      
      During a capture, it's possible that the beads are sown wrapping around the board in a round-trip. In this scenario the pit that is captured from and the base pit of the capturing player will need to be animated twice, once for their value before the capture and once each after.
      */
@@ -366,6 +388,9 @@ class GameScene: SKScene {
         
     }
     
+    /**
+     Helper function for ```updatePits(from:)``` to coordinate the capturing animation sequence
+     */
     func animateAfterCapture(addTo actions: [SKAction]) -> SKAction {
         
         var sequence = SKAction()
@@ -419,6 +444,11 @@ class GameScene: SKScene {
         
     }
     
+    /**
+     Coordinate the Clearing animation at the end of the game
+     
+     The game ends when one player clears their side. That player takes all the beads left on the other player's side and adds them to his base. This logic has already been triggered by the GameModel and this function animates the result of that.
+     */
     func animateClearingPlayerTakesAll(from nonClearingPlayer: Int){
         let pit = PitNode(player: nonClearingPlayer, name: "1")
         var actions = [SKAction.wait(forDuration: 4 * animationWait)]
@@ -460,6 +490,9 @@ class GameScene: SKScene {
 
     }
     
+    /**
+     These are initialized eary in setUpScene(in:) because it takes too much computation to generate them when they are needed each time.
+     */
     func setupColorChangeActions() {
         changeMessageNodeRed = messageNode.getBackgroundAnimation(color: .red, duration: animationDuration * 2.5)
         changeMessageNodeGreen = messageNode.getBackgroundAnimation(color: .green, duration: animationDuration * 1.25)
@@ -467,9 +500,10 @@ class GameScene: SKScene {
     }
     
     // MARK: - Spawning
-    
+    /**
+     Translates the pits in the gameboard of the model to their ```boardPointNodes``` on the ```boardNode```
+     */
     func loadTokens() {
-        
         let pitsIterator = model.pits.circIter
         var i = 1
         while i <= model.pits.length {
@@ -487,6 +521,9 @@ class GameScene: SKScene {
         }
     }
     
+    /**
+     Helper function for ```loadTokens``` which creates the TokenNodes, adds them to ```allTokenNodes``` and the ```boardNode```
+     */
     private func spawnToken(at point: CGPoint, pit: PitNode) {
         let tokenNode = TokenNode(pit)
         
@@ -498,7 +535,11 @@ class GameScene: SKScene {
     }
     
     // MARK: - Helpers
-    
+    /**
+     Loads and displays the MenuScene with the ```savedGameModels```
+      
+     Either via keeping the dependency injection chain or retrieving from the appDelegate and reinjecting to MenuScene. This keeps the number of references to ```savedGameModels``` to only the shared instance in appDelegate or the one belonging to the current SKScene
+     */
     func returnToMenu() {
         var menuScene = MenuScene()//ASB TEMP 1/31/20
         if let savedGames = savedGameModels {
@@ -521,7 +562,6 @@ class GameScene: SKScene {
     }
     
     func findTokenNode(with tokenNode: TokenNode, in allTokens: CircularLinkedList<TokenNode>) -> LinkedListIterator<TokenNode> {
-        
         let tempPit = tokenNode.pit
        
         return findTokenNode(with: tempPit, in: allTokens)
