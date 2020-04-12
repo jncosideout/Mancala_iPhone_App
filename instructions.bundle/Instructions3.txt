@@ -1,0 +1,3 @@
+The game provides a Kalah board and a number of seeds or bead counters. 
+The board has 6 small pits on each side, and a big pit, called a base, at each end. 
+The object of the game is to have the most seeds in your base at the end of play.

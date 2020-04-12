@@ -1,0 +1,7 @@
+Thanks to:
+raywenderlich.com for tutorials on Game Center and Gameplay Kit
+StackOverflow.com for advice on using Sprite Kit, etc.
+Toomas Vahter for code used to animate the background
+augmentedcode.io/2017/11/12/drawing-gradients-in-spritekit/
+Dylan Bettermann:
+https://github.com/dbettermann/DBAlertController

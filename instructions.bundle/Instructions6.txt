@@ -1,0 +1,3 @@
+5. If the last sown seed lands in an empty pit owned by the player, and the opposite pit contains seeds, both the last seed and the opposite seeds are captured and placed into the player's base.
+6. If the last sown seed lands in the player's base, the player gets a bonus move.
+There is no limit on the number of bonus moves a player can make in their turn.
