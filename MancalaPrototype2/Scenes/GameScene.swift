@@ -561,6 +561,13 @@ class GameScene: SKScene {
         view?.presentScene(menuScene, transition: SKTransition.push(with: .down, duration: 0.3))
     }
     
+    /**
+     Uses a TokenNode to find the matching TokenNode in a CircularLinkedList of TokenNodes
+     
+     - Parameters:
+         - tokenNode: the tokenNode to find whose pit matches a token in ```allTokens```
+         - allTokens: the container of TokenNodes to search in, usually the ```allTokenNodes```  list of the GameScene
+     */
     func findTokenNode(with tokenNode: TokenNode, in allTokens: CircularLinkedList<TokenNode>) -> LinkedListIterator<TokenNode> {
         let tempPit = tokenNode.pit
        
@@ -568,6 +575,11 @@ class GameScene: SKScene {
         
     }
     
+    
+    /// Uses a PitNode to find the matching TokenNode in a CircularLinkedList of TokenNodes
+    /// - Parameters:
+    ///   - pitNode: use this PitNode to find the TokenNode with the matching PitNode in ```allTokens```
+    ///   - allTokens: the container of TokenNodes to search in, usually the ```allTokenNodes``` list of the GameScene
     func findTokenNode(with pitNode: PitNode, in allTokens: CircularLinkedList<TokenNode>) -> LinkedListIterator<TokenNode> {
         
         let tokenIterator = allTokens.circIter
@@ -590,6 +602,9 @@ class GameScene: SKScene {
         
     }
     
+    
+    /// Helper function for handleTouch(_:). Determines if the user touched on a TokenNode, and if so, kicks off gameplay for the active player
+    /// - Parameter location: the location of the touch that has already been translated into the parent node's coordinate system. Assuming the GameScene.boardNode is the parent node, this will resolve into a pit on the game board. If not, nothing happens.
     private func handlePick(at location: CGPoint) {
         let node = atPoint(location)
         
@@ -604,6 +619,13 @@ class GameScene: SKScene {
         }
     }
     
+    
+    /// Exectutes a player's turn. All gameplay logic is activated in this method and the state of the board is animated after. Finally, the message to display to the player is determined based on the state of the GameModel and the rest of the gameplay logic is executed for this turn.
+    ///
+    /// In order to uncouple this method, the parameters have been set to reflect the data of the pit the player chose, instead of passing the pit directly to this method.
+    /// - Parameters:
+    ///   - player: the number of the player who's executing this turn (1 or 2)
+    ///   - name: the name of the pit that was chosen by the player
     func updateGameBoard(player: Int, name: String) {
         lastActivePlayer = player
         let pit = PitNode(player: player, name: name)
@@ -620,8 +642,6 @@ class GameScene: SKScene {
                 //overlapping move
                 if animateTokens >= allTokenNodes.length {
                     let fullLap = allTokenNodes.length - 1
-//                    let numOfLaps = animateTokens / fullLap
-//                    overlapDifference = animateTokens - (numOfLaps * fullLap)
                     overlapDifference = animateTokens - fullLap
                     willOverlap = true
                 }
@@ -667,18 +687,22 @@ class GameScene: SKScene {
                     
                 }
             }
+            // Checks if there is a winner first, then...
             setupGameOverMessageActions(lastPlayerCaptured)
             processGameUpdate()
         }    
     }
     
+    
+    /// Updates the text of ```messageNode``` and animates it if necessary
+    /// - Parameters:
+    ///   - message: a custom message or the default stored in model.messageToDisplay
+    ///   - changeColor: a prefabricated SKAction specifically created for the backgroundNode of the ```messageNode```
     func updateMessageNode(with message: String?, changeColor: SKAction?) {
         let messageActions: SKAction
         if let theMessage = message {
-            //messageNode.text = theMessage
             messageActions = messageNode.animateInfoNode(text: theMessage, changeColorAction: changeColor)
         } else {
-            //messageNode.text = model.messagesToDisplay
             messageActions = messageNode.animateInfoNode(text: model.messageToDisplay, changeColorAction: changeColor)
         }
         
@@ -687,6 +711,11 @@ class GameScene: SKScene {
 
     }
     
+    /// Checks the state of the GameModel to determine what to do next and run the necessary animations
+    ///
+    /// 1. Checks for a winner, sets up the final animation, and sends the final turn (in an Online match)
+    /// 2. Sets up impact generators. In an Online match, GameCenterHelper play passes to the next player
+    /// 3. Runs all ```boardNode``` and ```messageNode``` actions
     func processGameUpdate(){
         
         if let _winner = model.winner {
@@ -781,15 +810,15 @@ class GameScene: SKScene {
         messageGlobalActions.removeAll()
     }
     
+    
+    /// Checks for a winner and queues the game-over ```messageNode``` actions
+    /// - Parameter lastPlayerCaptured: This may be obsolete. It was used to add a little extra waiting time before running the ```messageNode``` action sequence
     func setupGameOverMessageActions(_ lastPlayerCaptured: Bool) {
         if model.winner != nil {
             var infoActions = [SKAction]()
             for winText in model.winnerTextArray {
                 infoActions.append(messageNode.animateInfoNode(text: winText, changeColorAction: changeMessageNodeBlue, duration: 1.5))
             }
-//            if lastPlayerCaptured {
-//                messageGlobalActions.append(SKAction.wait(forDuration: animationWait * animationTimeCounter))
-//            }
             messageGlobalActions.append(contentsOf: infoActions)
         }
     }
