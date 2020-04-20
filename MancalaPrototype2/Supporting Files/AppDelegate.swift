@@ -19,6 +19,7 @@ import GameKit
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
+        //Restore saved [GameData] to [GameModel] savedGameModels
         savedGameModels = savedGamesStore.setupSavedGames()
         window?.rootViewController = GameViewController()
         let gameViewController = window!.rootViewController as! GameViewController
@@ -38,10 +39,8 @@ import GameKit
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-        if let savedGames = SKScene.savedGameModels {
-            savedGameModels = savedGames
-        }
-        savedGamesStore.saveAllGames(savedGameModels)
+
+        savedGamesStore.backupAndSaveAllGames(savedGameModels)
         if matchHistory.saveData() {
             print("saved matchHistory in AppDelegate")
         }
@@ -72,10 +71,12 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         UserNotificationsHelper.declareNotificationTypesAndActions()
     }
     
+    ///Present local notifications received while app is open
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler(.alert)
     }
     
+    ///Handles local notifications received while app is open
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         
         switch response.actionIdentifier {

@@ -9,6 +9,9 @@
 import GameKit
 import SpriteKit
 
+/**
+ The forefront menu of the app. First to assume responsibility for the major dependencies injected by the GameViewController.
+ */
 class MenuScene: SKScene, Alertable {
     
     let feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
@@ -37,17 +40,24 @@ class MenuScene: SKScene, Alertable {
     var showSlide = 0
 
     // MARK: - Init
+    
+    
+    /// Receives the saved [GameModel] from the ```GameViewController```
+    /// - Parameter savedGames: The classes that interact with this one and which reference the injected [```GameModel```]  all expect that ```savedGames``` contains exactly 2 elements, and that the first element is the ```GameModel``` of "VS Computer" mode and the second element is the ```GameModel``` of "VS Human" or "2 Player Mode."
     convenience init(with savedGames: [GameModel]?) {
         self.init()
         if let allSavedGames = savedGames {
             savedGameModels = allSavedGames
-             //we break the dependency injection rule and use a singleton in order to save local games before launching an Online Game
-            SKScene.savedGameModels = allSavedGames
+             //OUTDATED: we break the dependency injection rule and use a singleton in order to save local games before launching an Online Game
+            //SKScene.savedGameModels = allSavedGames
         } else {
             print("WARNING! savedGameModels in MenuScene is nil")
         }
     }
     
+    /// After calling super.init(sizse:), get ```walkthroughText``` from the firstTimeWalkthrough.bundle
+    ///
+    /// + Important: You probably don't want to call this initializer directly or the saved games won't be loaded from disk
     override init() {
         super.init(size: .zero)
         scaleMode = .resizeFill
@@ -58,6 +68,11 @@ class MenuScene: SKScene, Alertable {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /**
+     Call setUpScene(in:) and do additional configurations.
+     
+     Also adds notification observers.
+     */
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         feedbackGenerator.prepare()
@@ -73,16 +88,6 @@ class MenuScene: SKScene, Alertable {
         addObserverForPresentGame()
         addObserverForPresentSettings()
         
-//        if !UserDefaults.hasLaunchedFirstTime {
-////            if let message1 = walkthroughText {
-////                showAlert(withTitle: "Connecting with friends", message: message1[2])
-////                showAlert(withTitle: "Starting Online Games", message: message1[1])
-////                showAlert(withTitle: "Welcome to Mancala World!", message: message1[0])
-//            instructionsNode.isHidden = false
-//            instructionsNode.animatePopUpFadeIn()
-//            fadeAllButtonsAlpha(to: 0.25)
-////            }
-//        }
     }
     
     override func didChangeSize(_ oldSize: CGSize) {
@@ -90,6 +95,7 @@ class MenuScene: SKScene, Alertable {
         setUpScene(in: view)
     }
     
+    /// Add all the nodes to this scene. Configure the buttons and their actions. Trigger instructionsNode animation if required.
     private func setUpScene(in view: SKView?) {
         guard viewWidth > 0 else {
             return
@@ -179,6 +185,7 @@ class MenuScene: SKScene, Alertable {
         }
     }
 
+    /// Create and add the ```instructionsNode``` to this scene. Configure the animations for the firstTimeWalkthrough slides.
     func addInstructionsNode(to view: SKView, _ text: [String]) {
         let width = viewWidth - sceneMargin
         let height = viewHeight - sceneMargin
@@ -206,6 +213,7 @@ class MenuScene: SKScene, Alertable {
         addChild(instructionsNode)
     }
     
+    /// Animate the buttons in this scene to fade. Initial purpose of this method was to unobstruct the view when ```instructionsNode``` is animated.
     func fadeAllButtonsAlpha(to value: CGFloat) {
         versusHumanButton.run(SKAction.fadeAlpha(to: value, duration: 1))
         versusComputerButton.run(SKAction.fadeAlpha(to: value, duration: 1))
@@ -214,13 +222,17 @@ class MenuScene: SKScene, Alertable {
         }
         settingsButton.run(SKAction.fadeAlpha(to: value, duration: 1))
     }
+    
     //MARK: Notifications
+    
+    /// Selector function for authenticationChanged notification.
     @objc private func authenticationChanged(_ notification: Notification) {
         if UserDefaults.hasLaunchedFirstTime {
             onlineButton.isEnabled = notification.object as? Bool ?? false
         }
     }
     
+    /// Initial purpose of this dictionary was selecting the appropriate images for this scene. This is outdated now that the "Launch Screen.storyboard" uses the same image set as the backgrounds in the SKScenes
     let modelMap : [ String : Model ] = [
         "i386"       : .simulator,
         "x86_64"     : .simulator,
