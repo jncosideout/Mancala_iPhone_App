@@ -89,6 +89,7 @@ public class MancalaPlayer: NSObject, GKGameModelPlayer {
                             } catch let error {
                                 fatalError(error.localizedDescription)
                             }
+                            // b/c we the one bead that initiated capture was added, we remove it
                             captured -= 1
                             
                             if captured > 0 {
@@ -107,8 +108,11 @@ public class MancalaPlayer: NSObject, GKGameModelPlayer {
                         //skip your opponent's base!
                         continue
                     }
-                    
+                    // place the bead in the active pit
                     pit2.beads += 1
+                    if captured > 0 {
+                        pit2.beads = 0                                                                    
+                    }
                     inHand = inHand - 1
                 } else {
                     print("2nd iter_pit returned nil")
@@ -254,7 +258,7 @@ public class MancalaPlayer: NSObject, GKGameModelPlayer {
                 captured = pit_oppo.beads
                 pit_oppo.beads = 0
                 captured = captured + 1 //the one bead that initiated capture gets added
-                yourPit.beads = yourPit.beads - 1//bc have not finished fillHoles, last bead will go here, but it was included in capture
+                //yourPit.beads = yourPit.beads - 1//bc have not finished fillHoles, last bead will go here, but it was included in capture
                 
                 //add captured to our base
                 do {

@@ -1,13 +1,54 @@
-//
-//  GameCenterHelper.swift
-//  MancalaPrototype2
-//
-//  Created by Alexander Scott Beaty on 7/30/19.
-//  Copyright © 2019 Alexander Scott Beaty. All rights reserved.
-//
+///
+///  GameCenterHelper.swift
+///  MancalaPrototype2
+///
+///  File created by Alexander Scott Beaty on 7/30/19.
+/// ============LICENSE_START=======================================================
+/// Copyright (c) 2018 Razeware LLC
+/// Modification Copyright © 2019 Alexander Scott Beaty. All rights reserved.
+/// Modification License:
+/// SPDX-License-Identifier: Apache-2.0
+/// =================================================================================
+/// Copyright (c) 2018 Razeware LLC
+///
+/// Permission is hereby granted, free of charge, to any person obtaining a copy
+/// of this software and associated documentation files (the "Software"), to deal
+/// in the Software without restriction, including without limitation the rights
+/// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+/// copies of the Software, and to permit persons to whom the Software is
+/// furnished to do so, subject to the following conditions:
+///
+/// The above copyright notice and this permission notice shall be included in
+/// all copies or substantial portions of the Software.
+///
+/// Notwithstanding the foregoing, you may not use, copy, modify, merge, publish,
+/// distribute, sublicense, create a derivative work, and/or sell copies of the
+/// Software in any work that is designed, intended, or marketed for pedagogical or
+/// instructional purposes related to programming, coding, application development,
+/// or information technology.  Permission for such use, copying, modification,
+/// merger, publication, distribution, sublicensing, creation of derivative works,
+/// or sale is expressly withheld.
+///
+/// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+/// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+/// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+/// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+/// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+/// THE SOFTWARE.
+///
+
 import GameKit
 import UserNotifications
-
+/**
+ Responsible for immediately authenticating the user to Game Center. Extends GKLocalPlayerListener to receive turn events remotely from Game Center. Presents the user interface for Game Center to the user and handles turn events triggered by the user.
+ 
+ + Additional responsibilities:
+     - After authenticating the user, check and updates MatchHistory to see if new game modes have been unlocked.
+     - Presents ```GKTurnBasedMatchmakerViewController``` to allow the user to pick from their list of current games or send a match request
+     - Helper functions to facilitate ending each turn and ending each match and passing the match to the next player
+    - Checks and updates match outcomes in case a match ended unexpectedly
+ */
 final class GameCenterHelper: NSObject, GKGameCenterControllerDelegate {
     
     typealias CompletionBlock = (Error?) -> Void

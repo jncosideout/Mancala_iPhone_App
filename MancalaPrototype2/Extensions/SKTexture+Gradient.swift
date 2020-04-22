@@ -22,12 +22,15 @@
 import UIKit
 import SpriteKit
 
+/// https://augmentedcode.io/2017/11/12/drawing-gradients-in-spritekit/
 extension SKTexture
 {
   convenience init(radialGradientWithColors colors: [UIColor], locations: [CGFloat], size: CGSize)
   {
     let renderer = UIGraphicsImageRenderer(size: size)
     let image = renderer.image { (context) in
+        
+        // Original author tried to initialize colorSpace = context.cgContext.colorSpace before defaulting to CGColorSpaceCreateDeviceRGB(). The former never worked and trying it always threw uncaught exceptions that sometimes caused the app to crash
       let colorSpace = CGColorSpaceCreateDeviceRGB()
       let cgColors = colors.map({ $0.cgColor }) as CFArray
       guard let gradient = CGGradient(colorsSpace: colorSpace, colors: cgColors, locations: UnsafePointer<CGFloat>(locations)) else {
@@ -47,6 +50,8 @@ extension SKTexture
   {
     let renderer = UIGraphicsImageRenderer(size: size)
     let image = renderer.image { (context) in
+        
+        // Original author tried to use context.cgContext.colorSpace before defaulting to CGColorSpaceCreateDeviceRGB(). The former never worked and trying it always threw uncaught exceptions that sometimes caused the app to crash
       let colorSpace = CGColorSpaceCreateDeviceRGB()
       let cgColors = colors.map({ $0.cgColor }) as CFArray
       guard let gradient = CGGradient(colorsSpace: colorSpace, colors: cgColors, locations: UnsafePointer<CGFloat>(locations)) else {

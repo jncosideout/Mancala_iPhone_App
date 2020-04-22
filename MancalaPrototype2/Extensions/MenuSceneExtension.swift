@@ -1,16 +1,20 @@
-//
-//  MenuSceneDeviceModel.swift
-//  Mancala World
-//
-//  Created by Alexander Scott Beaty on 3/20/20.
-//  Copyright © 2020 Alexander Scott Beaty. All rights reserved.
-//
+///
+///  MenuSceneDeviceModel.swift
+///  Mancala World
+///
+///  Created by Alexander Scott Beaty on 3/20/20.
+/// ============LICENSE_START=======================================================
+/// Copyright © 2020 Alexander Scott Beaty. All rights reserved.
+/// SPDX-License-Identifier: Apache-2.0
+/// =================================================================================
 
 import GameKit
-
+/// https://stackoverflow.com/questions/26028918/how-to-determine-the-current-iphone-device-model
 extension MenuScene {
     
     //MARK: load background
+    
+    /// Finds this device's model and gets the corresponding prefix to the correctly sized image file 
     func loadBackgroundNode(_ viewWidth: CGFloat, _ viewHeight: CGFloat) -> SKSpriteNode {
         var image = backgroundImage
         var deviceType = UIDevice().type
@@ -68,7 +72,13 @@ extension MenuScene {
         }
         return SKSpriteNode(imageNamed: image)
     }
+        
+    //MARK: - Other helpers
     
+    /// Loads text files from a resource bundle
+    /// - Parameters:
+    ///   - numPages: Must be equal to the num of pages in the bundle
+    ///   - filePath: the path to the resource bundle
     func getContent(numPages: Int, filePath: String) -> [String]? {
         var contentArray = [String]()
         do {

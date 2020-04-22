@@ -333,7 +333,7 @@ class GameModel: NSObject {//removed Codable ASB 06/29/19 //changed struct to cl
                 print("error loading gkMatchData: \(error.localizedDescription)")
             }
         } else {
-            pits = GameModel.buildGameboard(pitsPerPlayer: GameModel.pitsOnEachSideNotIncludingBase)
+            pits = GameModel.buildGameboardTEST(pitsPerPlayer: GameModel.pitsOnEachSideNotIncludingBase)
         }
 
         playerTurnText = gameData.playerTurnText
@@ -358,7 +358,7 @@ class GameModel: NSObject {//removed Codable ASB 06/29/19 //changed struct to cl
         if gameData.pitsList.count > 0 {
             pits = GameModel.initGameboard(from: gameData.pitsList)
         } else {
-            pits = GameModel.buildGameboard(pitsPerPlayer: GameModel.pitsOnEachSideNotIncludingBase)
+            pits = GameModel.buildGameboardTEST(pitsPerPlayer: GameModel.pitsOnEachSideNotIncludingBase)
         }
         playerTurn = gameData.playerTurn
         _activePlayer = playerTurn == 1 ? mancalaPlayer1 : mancalaPlayer2
@@ -815,22 +815,22 @@ class GameModel: NSObject {//removed Codable ASB 06/29/19 //changed struct to cl
                 
                 if player == 1 {
                     if pit == 1 {
-                        pitN.beads = 1
+                        pitN.beads = 0
                         pitN.name = String(pit)
                     } else if pit == 2 {
-                        pitN.beads = 1
+                        pitN.beads = 12
                         pitN.name = String(pit)
                     } else if pit == 3 {
-                        pitN.beads = 4
+                        pitN.beads = 11
                         pitN.name = String(pit)
                     } else if pit == 4 {
-                        pitN.beads = 8
+                        pitN.beads = 10
                         pitN.name = String(pit)
                     } else if pit == 5 {
-                        pitN.beads = 2
+                        pitN.beads = 9
                         pitN.name = String(pit)
                     } else if pit == 6 {
-                        pitN.beads = 1
+                        pitN.beads = 8
                         pitN.name = String(pit)
                     } else if pit == 7 {
                         pitN.beads = 7
@@ -844,16 +844,16 @@ class GameModel: NSObject {//removed Codable ASB 06/29/19 //changed struct to cl
                         pitN.beads = 1
                         pitN.name = String(pit)
                     } else if pit == 3 {
-                        pitN.beads = 0
+                        pitN.beads = 1
                         pitN.name = String(pit)
                     } else if pit == 4 {
-                        pitN.beads = 8
+                        pitN.beads = 1
                         pitN.name = String(pit)
                     } else if pit == 5 {
-                        pitN.beads = 7
+                        pitN.beads = 1
                         pitN.name = String(pit)
                     } else if pit == 6 {
-                        pitN.beads = 2
+                        pitN.beads = 1
                         pitN.name = String(pit)
                     } else if pit == 7 {
                         pitN.beads = 5

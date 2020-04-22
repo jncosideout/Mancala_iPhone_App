@@ -1,10 +1,12 @@
-//
-//  SKSceneExtension.swift
-//  Mancala World
-//
-//  Created by Alexander Scott Beaty on 2/21/20.
-//  Copyright © 2020 Alexander Scott Beaty. All rights reserved.
-//
+///
+///  SKSceneExtension.swift
+///  Mancala World
+///
+///  Created by Alexander Scott Beaty on 2/21/20.
+/// ============LICENSE_START=======================================================
+/// Copyright © 2019 Alexander Scott Beaty. All rights reserved.
+/// SPDX-License-Identifier: Apache-2.0
+/// =================================================================================
 
 import Foundation
 import SpriteKit

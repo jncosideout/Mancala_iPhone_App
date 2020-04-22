@@ -1,24 +1,28 @@
-//
-//  DeviceModelID.swift
-//  Mancala World
-//
-//  Created by Alexander Scott Beaty on 3/12/20.
-//  Copyright © 2020 Alexander Scott Beaty. All rights reserved.
-//
+///
+///  DeviceModelID.swift
+///  Mancala World
+///
+///  Created by Alexander Scott Beaty on 3/12/20.
+/// ============LICENSE_START=======================================================
+/// Copyright © 2020 Alexander Scott Beaty. All rights reserved.
+/// SPDX-License-Identifier: Apache-2.0
+/// =============================================================================
+///
+/// 1. Declare outside class definition (or in its own file).
+/// 2. UIKit must be included in file where this code is added.
+/// 3. Extends UIDevice class, thus is available anywhere in app.
+///
+/// Usage example:
+///
+///    if UIDevice().type == .simulator {
+///       print("You're running on the simulator... boring!")
+///    } else {
+///       print("Wow! Running on a \(UIDevice().type.rawValue)")
+///    }
 
-// 1. Declare outside class definition (or in its own file).
-// 2. UIKit must be included in file where this code is added.
-// 3. Extends UIDevice class, thus is available anywhere in app.
-//
-// Usage example:
-//
-//    if UIDevice().type == .simulator {
-//       print("You're running on the simulator... boring!")
-//    } else {
-//       print("Wow! Running on a \(UIDevice().type.rawValue)")
-//    }
 import UIKit
 
+/// https://stackoverflow.com/questions/26028918/how-to-determine-the-current-iphone-device-model/27759550#27759550
 public enum Model : String {
     case simulator   = "simulator/sandbox",
     iPod1            = "iPod 1",
@@ -151,6 +155,7 @@ public extension UIDevice {
         return Model.unrecognized
     }
     
+    /// https://stackoverflow.com/questions/26028918/how-to-determine-the-current-iphone-device-model/30075200#30075200
     static func modelIdentifier() -> String {
         if let simulatorModelIdentifier = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"] {
             return simulatorModelIdentifier

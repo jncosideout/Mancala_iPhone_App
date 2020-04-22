@@ -21,6 +21,7 @@
 
 import SpriteKit
 
+/// https://augmentedcode.io/2017/11/12/drawing-gradients-in-spritekit/
 final class GradientNode {
     
     static let billiardFelt = [UIColor(red: 0.0 / 255.0, green: 51.0 / 255.0, blue: 25.0 / 255.0, alpha: 1.0),
