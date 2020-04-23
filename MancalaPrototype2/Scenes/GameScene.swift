@@ -755,6 +755,9 @@ class GameScene: SKScene {
     func processGameUpdate(){
         
         if let _winner = model.winner {
+            
+            isSendingTurn = true
+
             var nonClearingPlayer = 0
             if 0 == model.sum1 {
                 nonClearingPlayer = 2

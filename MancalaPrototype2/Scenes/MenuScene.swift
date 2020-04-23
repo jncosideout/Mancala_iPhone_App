@@ -46,6 +46,7 @@ import SpriteKit
  */
 class MenuScene: SKScene, Alertable {
     
+    // The feedbackGenerator creates the rumble feature when playing the game
     let feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
     var notificationsAuthorized = UserNotificationsHelper.allowMatchNotifications    
     
@@ -108,15 +109,16 @@ class MenuScene: SKScene, Alertable {
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         feedbackGenerator.prepare()
+        // Destroy the last Online GKTurnBasedMatch
         GameCenterHelper.helper.currentMatch = nil
-        
+        // Add nodes to the scene
         setUpScene(in: view)
+        // Register the scene to receive these types of notifications
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(authenticationChanged(_:)),
             name: .authenticationChanged,
             object: nil)
-        
         addObserverForPresentGame()
         addObserverForPresentSettings()
         
@@ -152,9 +154,7 @@ class MenuScene: SKScene, Alertable {
         
         runningYOffset += safeAreaTopInset
         let logoNode = SKSpriteNode(imageNamed: "Mancala-logo")
-        //let aspectRatio = logoNode.size.width / logoNode.size.height
-//        var adjustedGroundWidth = view?.bounds.width ?? logoNode.size.width
-//        adjustedGroundWidth *= 0.5
+
         logoNode.size = CGSize(
             width: logoNode.size.width ,
             height: logoNode.size.height
@@ -188,7 +188,9 @@ class MenuScene: SKScene, Alertable {
         }
         
         onlineButton = ButtonNode("Online\nGame", size: buttonSize) {
+            // Ask for permission to send notifications
             UserNotificationsHelper.askForPermission()
+            // Present the Game Center Matchmaker ViewController
             GameCenterHelper.helper.presentMatchMaker()
         }
         
@@ -206,8 +208,10 @@ class MenuScene: SKScene, Alertable {
         onlineButton.zPosition = GameScene.NodeLayer.ui.rawValue
         addChild(onlineButton)
         
+        // On the first launch or after the user has reset this value directly via SettingsScene
          if !UserDefaults.hasLaunchedFirstTime {
             if let messages1 = walkthroughText {
+                // dropLast(1) because we will show that instructions page on MenuScene_2
                 let messages2: [String] = messages1.dropLast(1)
                 addInstructionsNode(to: view ?? SKView(), messages2)
                 instructionsNode.isHidden = false
@@ -222,22 +226,28 @@ class MenuScene: SKScene, Alertable {
         let width = viewWidth - sceneMargin
         let height = viewHeight - sceneMargin
         let size = CGSize(width: width, height: height)
+        
         instructionsNode = InstructionsNode("Hello", size: size, newInstructions: text) {
             self.instructionsNode.run(SKAction.sequence([
+                // First fade out the InstructionsNode
                 SKAction.fadeAlpha(to: 0, duration: 1),
                 SKAction.run {
+                    // Show the next slide
                     self.showSlide += 1
                     if self.showSlide < self.instructionsNode.instructions.count {
                         self.instructionsNode.plainText = self.instructionsNode.instructions[self.showSlide]
                     } else {
+                        // When we reach the last slide, remove the node and fade the buttons back in
                         self.instructionsNode.removeFromParent()
                         self.fadeAllButtonsAlpha(to: 1.0)
                         self.showSlide = 0
                     }
                 },
+                // Always fade out the Instructions node
                 SKAction.fadeAlpha(to: 1, duration: 1)
             ]))
         }
+        
         instructionsNode.position = CGPoint(x: sceneMargin/2, y: sceneMargin/2)
         instructionsNode.zPosition = GameScene.NodeLayer.ui.rawValue
         instructionsNode.alpha = 1.0

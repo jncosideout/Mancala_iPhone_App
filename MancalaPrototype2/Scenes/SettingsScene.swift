@@ -41,6 +41,9 @@
 import GameKit
 import SpriteKit
 
+/**
+ Provides an array of settings that can be toggled by the user. Also provides the slide shows for the "How to play" instructions and "Credits."
+ */
 class SettingsScene: MenuScene_2 {
     
     private var backGroundAnimationToggle: ButtonNode!
@@ -67,16 +70,14 @@ class SettingsScene: MenuScene_2 {
         addObserverForPresentSettings()
     }
     
+    /// Add all the nodes to this scene. Configure the buttons and their actions.
     private func setUpScene(in view: SKView?) {
            
         guard viewWidth > 0 else {
             return
         }
-        //backgroundImage = "Mancala-billiard-felt-"
 
         backgroundColor = .background
-        //GradientNode.makeLinearNode(with: self, view: view!, linearGradientColors: GradientNode.billiardFelt, animate: false)
-        
         
         var runningYOffset = CGFloat(0.0)
         
@@ -85,20 +86,6 @@ class SettingsScene: MenuScene_2 {
         let buttonSize = CGSize(width: buttonWidth, height: buttonWidth * 3 / 11)
         
         runningYOffset += safeAreaTopInset
-        
-//        let logoNode = loadBackgroundNode(viewWidth, viewHeight)
-//
-//        logoNode.size = CGSize(
-//            width: logoNode.size.width ,
-//            height: logoNode.size.height
-//        )
-//        logoNode.position = CGPoint(
-//            x: viewWidth / 2,
-//            y: viewHeight / 2
-//        )
-//        logoNode.zPosition = GameScene.NodeLayer.background.rawValue
-//        addChild(logoNode)
-//
         
         let billiardFelt = SKSpriteNode(imageNamed: "Mancala-billiard-felt-")
         billiardFelt.size = CGSize(
@@ -111,6 +98,7 @@ class SettingsScene: MenuScene_2 {
         )
         billiardFelt.zPosition = GameScene.NodeLayer.background.rawValue - 1
         addChild(billiardFelt)
+        
         //MARK: - backGroundAnimationToggle
         backGroundAnimationToggle = ButtonNode("Background\nAnimations", size: buttonSize) {
              if UserDefaults.allowGradientAnimations {
@@ -141,12 +129,13 @@ class SettingsScene: MenuScene_2 {
              if UserDefaults.hasLaunchedFirstTime {
                  self.firstTimeWalkthroughToggle.looksEnabled = false
                  UserDefaults.set(hasLaunchedFirstTime: false)
-                self.showAlert(withTitle: "Walkthrough activated", message: "Go back to Main Menu and choose \"2 Player\" or \"Versus Computer\" to see the walkthrough istructions.\nAfterward, you won't see them again until you press this button again")
+                self.showAlert(withTitle: "Walkthrough activated", message: "Go back to Main Menu to see the first-time walkthrough. Then and choose \"2 Player\" or \"Versus Computer\" to see the rest of the instructions.\nAfterward, you won't see them again until you press this button.")
              } else {
                  self.firstTimeWalkthroughToggle.looksEnabled = true
                  UserDefaults.set(hasLaunchedFirstTime: true)
              }
         }
+        
         runningYOffset = viewHeight / 2 - (buttonSize.height / 2)
         firstTimeWalkthroughToggle.position = CGPoint(x: sceneMargin, y: runningYOffset)
         firstTimeWalkthroughToggle.zPosition = GameScene.NodeLayer.ui.rawValue
@@ -156,13 +145,14 @@ class SettingsScene: MenuScene_2 {
         externalSettings = ButtonNode("External\nSettings", size: buttonSize) {
             self.showAlertWithSettings(withTitle: "Go to device's settings for Mancala World", message: "This action opens your device's settings menu for this app")
         }
+        
         externalSettings.position = CGPoint(x: viewWidth - sceneMargin - buttonSize.width, y: runningYOffset)
         externalSettings.zPosition = GameScene.NodeLayer.ui.rawValue
         addChild(externalSettings)
         
-        let instructionsTexts = getContent(numPages: numInstructionPages, filePath: instructionsFilePath)
-        
         //MARK: - instructionsButton
+        // Get the "How to play" text pages from the bundle
+        let instructionsTexts = getContent(numPages: numInstructionPages, filePath: instructionsFilePath)
         instructionsButton = ButtonNode("How to play", size: buttonSize) {
             self.addInstructionsNode(to: view ?? SKView(), instructionsTexts ?? [String]())
             self.instructionsNode.isHidden = false
@@ -178,8 +168,11 @@ class SettingsScene: MenuScene_2 {
         addChild(instructionsButton)
         
         //MARK: - creditsButton
+        // Get the "Credits" text pages from the bundle
+        // Each time the creditsButton is pressed a new creditsNode is added to the scene
         let creditsTexts = getContent(numPages: numCreditsPages, filePath: creditsFilePath)
         creditsButton = ButtonNode("Credits", size: buttonSize) {
+            // Add the hidden creditsNode to the scene.
             self.addCreditsNode(to: view ?? SKView(), creditsTexts ?? [String]())
             self.creditsNode.isHidden = false
             self.creditsNode.animatePopUpFadeIn()
@@ -194,9 +187,11 @@ class SettingsScene: MenuScene_2 {
         addChild(creditsButton)
         
         //MARK: - beadNumberToggle
+        // If the user has unlocked at least "five beads starting," this button will be displayed.
         var numBeadsString = String(numberOfBeads?.rawValue ?? 4)
         var beadToggleString = "Start with\n" + numBeadsString + " beads"
         beadNumberToggle = ButtonNode(beadToggleString, size: buttonSize) {
+            // Cycle through the unlocked game modes that are available
             switch self.numberOfBeads {
             case .four:
                 if UserDefaults.unlockFiveBeadsStarting {
@@ -218,6 +213,7 @@ class SettingsScene: MenuScene_2 {
             beadToggleString = "Start with\n" + numBeadsString + " beads"
             self.beadNumberToggle.text = beadToggleString
         }
+        
         beadNumberToggle.isHidden = !UserDefaults.unlockFiveBeadsStarting
         beadNumberToggle.position = CGPoint(
             x: viewWidth/2 - buttonSize.width/2,
@@ -225,29 +221,35 @@ class SettingsScene: MenuScene_2 {
         )
         beadNumberToggle.zPosition = GameScene.NodeLayer.ui.rawValue
         addChild(beadNumberToggle)
-        
     }
     
+    /// Configure the ```creditsNode``` and add it to the scene. This allows for the ```creditsNode``` text-slide show animation to be set here instead of in setUpScene(in:)
     func addCreditsNode(to view: SKView, _ text: [String]) {
         let width = viewWidth - sceneMargin
         let height = viewHeight - sceneMargin
         let size = CGSize(width: width, height: height)
+        
         creditsNode = InstructionsNode("Hello", size: size, newInstructions: text) {
             self.creditsNode.run(SKAction.sequence([
+                    // First fade out the InstructionsNode
                     SKAction.fadeAlpha(to: 0, duration: 1),
+                    // Show the next slide
                     SKAction.run {
                         self.showSlide += 1
                         if self.showSlide < self.creditsNode.instructions.count {
                             self.creditsNode.plainText = self.creditsNode.instructions[self.showSlide]
                         } else {
+                            // When we reach the last slide, remove the node and fade the buttons back in
                             self.creditsNode.removeFromParent()
                             self.fadeAllButtonsAlpha(to: 1.0)
                             self.showSlide = 0
                         }
                     },
+                    // Always fade out the Instructions node
                     SKAction.fadeAlpha(to: 1, duration: 1)
                 ]))
         }
+        
         creditsNode.position = CGPoint(x: sceneMargin/2, y: sceneMargin/2)
         creditsNode.zPosition = GameScene.NodeLayer.ui.rawValue
         creditsNode.alpha = 0
@@ -261,6 +263,8 @@ class SettingsScene: MenuScene_2 {
         case six = 6
     }
     
+    /// Animate the buttons in this scene to fade. Initial purpose of this method was to unobstruct the view when either ```creditsNode``` or ```instructionsNode``` is animated.
+    /// Overriden to take care of the buttons unique to this SKScene
     override func fadeAllButtonsAlpha(to value: CGFloat) {
         backGroundAnimationToggle.run(SKAction.fadeAlpha(to: value, duration: 1))
         instructionsButton.run(SKAction.fadeAlpha(to: value, duration: 1))

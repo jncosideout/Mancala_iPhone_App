@@ -39,12 +39,17 @@
 
 
 import SpriteKit
-
+/**
+ Replays the last player's move in an Online match. This scene is always presented exxept for on the first player's first turn
+ */
 final class ReplayScene: GameScene {
     
     // MARK: - Properties
     
+    // Contains the current data of the game
     private var actualModel: GameModel
+    // Used to ensure that playerPerspective is set to the player who loaded the match, regardless of who's turn it is
+    // This is no longer necessary
     private var activePlayer: Bool
     
     // MARK: - Init
@@ -53,6 +58,7 @@ final class ReplayScene: GameScene {
         self.activePlayer = activePlayer
         actualModel = model_
         super.init(model: GameModel(replayWith: actualModel.gameData))
+        // Used to personalize the game info text for the activePlayer
         model.localPlayerNumber = actualModel.localPlayerNumber
         model.vsOnline = true
         thisGameType = .vsOnline
@@ -136,6 +142,10 @@ final class ReplayScene: GameScene {
         //MARK: - Button actions
         let buttonSize = CGSize(width: 125, height: 50)
         let returnButton = ButtonNode("Continue", size: buttonSize) {
+            // The player who ends the match does call GameCenterHelper.endMatch()
+            // The reason for this functionality is to send a notification to the other player when the match is over
+            // by ending the turn instead of ending the match. Therefore, the next player has the responsibility of
+            // truly ending the match. That is why we check model.onlineGameOver here.
             if self.model.onlineGameOver {
                 
                 GameCenterHelper.helper.endMatch(self.actualModel, completion: { error in
@@ -161,6 +171,7 @@ final class ReplayScene: GameScene {
         
         addChild(returnButton)
         
+        // Same setup as init(model_:,_:), but call replay() after
         let replayButton = ButtonNode("Replay", size: buttonSize) {
             self.model = GameModel(replayWith: self.actualModel.gameData)
             self.model.localPlayerNumber = self.actualModel.localPlayerNumber
@@ -203,7 +214,14 @@ final class ReplayScene: GameScene {
     }
     
     // MARK: - Helpers
+    
+    /**
+     Return to the GameScene to play the current turn or go back to the menu from there.
+     
+     Perform any last minute saving and configuration here.
+     */
     private func returnToGame() {
+        // First, copy the current pits to the oldPitsList so that when/if the user takes their turn the pitsList will be updated and oldPitsList will refer to the previous turn.
         actualModel.gameData.oldPitsList = actualModel.saveGameBoardToList(actualModel.pits)
         
         let gameScene = GameScene(model: actualModel)
@@ -211,11 +229,11 @@ final class ReplayScene: GameScene {
 
         view?.presentScene(gameScene, transition: SKTransition.push(with: .down, duration: 0.3))
     }
-    override func returnToMenu() {
-        actualModel.gameData.oldPitsList = actualModel.saveGameBoardToList(actualModel.pits)
-        super.returnToMenu()
-    }
     
+    
+    /// Replays the last move according to the last player's actions stored in ```model.lastMovesList``` and the data in ```model.oldPitsList```
+    ///
+    /// Each replayed turn is animated and handled the same way as a real game by ```updateGameBoard(player:,name:)```. This causes the ```globalActions``` and ```messageGlobalActions``` to be populated implicitly. 
     private func replay() {
         let wait = SKAction.wait(forDuration: 4.5 * animationWait)
         messageGlobalActions.append(wait)
@@ -253,6 +271,9 @@ final class ReplayScene: GameScene {
         updateGameBoard(player: player, name: name)
     }
     
+    /// This implementation of ```processGameUpdate``` strips out the GameCenterHelper method calls and does not run the ```globalActions``` or ```messageGlobalActions``` because we are running them in ```replay()```. Otherwise, it is the same.
+    ///
+    /// This override preserves the original structure of checking ```model.lastPlayerBonusTurn``` before ```model.winner``` whereas the base class version has reorganized that logic.
     override func processGameUpdate(){
         
         if model.lastPlayerBonusTurn {
@@ -284,12 +305,9 @@ final class ReplayScene: GameScene {
                 
                 if model.playerTurn == 1 {
                     model.gameData.turnNumber += 1
-                }
-                
+                }   
             }
-            
         }
-        
     }
     
 }//EoC
