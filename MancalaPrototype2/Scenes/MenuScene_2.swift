@@ -40,6 +40,11 @@
 import GameKit
 import SpriteKit
 
+/**
+ Sub-menu for choosing a new game or continuing the saved game.
+ 
+ + Important: Because this SKScene is used for both "VS Human" (2 Player mode) and "VS Computer" modes, the ```savedGameModels``` [GameModel] must contain exactly 2 elements, where the first element [0] is the ```GameData``` of "VS Computer" mode and the second element [1] is the ```GameData``` of "VS Human" or "2 Player Mode." Changing this will break things.
+ */
 class MenuScene_2: MenuScene {
     
     private var savedLocalButton: ButtonNode!
@@ -53,33 +58,43 @@ class MenuScene_2: MenuScene {
         fatalError("init(coder:) has not been implemented")
     }
     
-    convenience init(vsComp: Bool, with savedGames: [GameModel]?) {
+    /**
+     The primary init that must be used for this class, since the player always launches a "local" game via this SKScene and therefore it must have access to the saved local game data.
+     */
+    required convenience init(vsComp: Bool, with savedGames: [GameModel]?) {
         self.init()
         vsComputer = vsComp
         if let newSavedGames = savedGames {
             self.savedGameModels = newSavedGames
         } else {
-            print("warning! savedGamesStore in MenuScene_2 = nil")
+            fatalError("warning! savedGamesStore in MenuScene_2 = nil")
         }
     }
 
     override init() {
+        // Formality: must initialize all members first before super.init()
         vsComputer = false
         super.init()
     }
+    
+    /**
+     Call setUpScene(in:) and do additional configurations.
+     
+     Also adds notification observers.
+     */
     override func didMove(to view: SKView) {
         setUpScene(in: view)
         addObserverForPresentGame()
         addObserverForPresentSettings()
     }
     
+    /// Add all the nodes to this scene. Configure the buttons and their actions. Trigger instructionsNode animation if required.
     private func setUpScene(in view: SKView?) {
         guard viewWidth > 0 else {
             return
         }
         
         backgroundColor = .background
-        //GradientNode.makeLinearNode(with: self, view: view!, linearGradientColors: GradientNode.billiardFelt, animate: false)
         
         var runningYOffset = CGFloat(0.0)
         
@@ -90,16 +105,12 @@ class MenuScene_2: MenuScene {
         
         runningYOffset += safeAreaTopInset
         
-        //let logoNode = loadBackgroundNode(viewWidth, viewHeight)
         let logoNode = SKSpriteNode(imageNamed: "Mancala-logo")
         logoNode.size = CGSize(
             width: logoNode.size.width ,
             height: logoNode.size.height
         )
-//        logoNode.size = CGSize(
-//            width: adjustedGroundWidth,
-//            height: adjustedGroundWidth / aspectRatio
-//        )
+
         logoNode.position = CGPoint(
             x: viewWidth / 2,
             y: viewHeight / 2
@@ -170,8 +181,10 @@ class MenuScene_2: MenuScene {
         backButton.zPosition = GameScene.NodeLayer.ui.rawValue
         addChild(backButton)
         
+        // On the first launch or after the user has reset this value directly via SettingsScene
         if !UserDefaults.hasLaunchedFirstTime {
             if var messages1 = walkthroughText {
+                // popLast(1) because we have shown the first 3 instructions pages on MenuScene before landing here, now we show the last, pertinent one
                 if let messages2 = messages1.popLast() {
                     addInstructionsNode(to: view ?? SKView(), [messages2])
                     instructionsNode.isHidden = false
@@ -182,7 +195,8 @@ class MenuScene_2: MenuScene {
             }
         }
     }
-
+    
+    /// Animate the buttons in this scene to fade. Initial purpose of this method was to unobstruct the view when ```instructionsNode``` is animated.
     override func fadeAllButtonsAlpha(to value: CGFloat) {
         savedLocalButton.run(SKAction.fadeAlpha(to: value, duration: 1))
         newLocalButton.run(SKAction.fadeAlpha(to: value, duration: 1))
@@ -191,13 +205,15 @@ class MenuScene_2: MenuScene {
     
     // MARK: - Helpers
     
+    /**
+     Loads and displays the MenuScene with the reference to ```savedGameModels```
+     */
     func returnToMenu() {
         let menuScene: MenuScene
         if let savedGames = savedGameModels {
             menuScene = MenuScene(with: savedGames)
         } else {
-            menuScene = MenuScene()//ASB TEMP 1/31/20
-            print("warning! returnToMenu from MenuScene_2 without savedGamesStore")
+            fatalError("warning! returnToMenu from MenuScene_2 without savedGamesStore")
         }
         
         view?.presentScene(menuScene, transition: SKTransition.push(with: .down, duration: 0.3))

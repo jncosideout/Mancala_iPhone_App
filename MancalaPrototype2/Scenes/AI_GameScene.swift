@@ -40,6 +40,9 @@
 
 import SpriteKit
 
+/**
+ Derived class of GameScene that allows the GameplayKit AI to interact with the GameScene
+ */
 class AI_GameScene: GameScene {
     
     // MARK: - Properties
@@ -72,6 +75,9 @@ class AI_GameScene: GameScene {
     
     // MARK: - Setup
     
+    /**
+      Responsible for adding all child nodes to the scene, including game board and buttons.
+      */
     override func setUpScene(in view: SKView?) {
         guard viewWidth > 0 else {
             return
@@ -158,34 +164,49 @@ class AI_GameScene: GameScene {
     }
     
     // MARK: - touches
+    
+    /**
+    Used to filter for certain conditions before passing the UITouch and its location to ```handlePick(at:)```
+    
+    Place any code here to execute before the UITouch is used to find a game token and update pits
+    */
     override func handleTouch(_ touch: UITouch) {
+        // The AI is always player 2, so do not allow user interaction unless it is their turn
         guard model._activePlayer.playerId == 1 else { return }
         super.handleTouch(touch)
     }
     
     // MARK: - AI
+    
+    /**
+     The AI runs its calculations on the global background queue. When it is finished the time taken to perform that task is used to animate the ```aiProcessingMeter``` to give the illution of thinking. Then on the main thread we schedule the AI player's move and update the board with it
+     */
      fileprivate func processAIMove() {
         var aiMeterAction = SKAction()
+        // The AI must be delayed for at least the amount of time taken to animate the human (player 1)'s move
         let animationDelay = animationTimeCounter * animationWait + 2 * animationWait
         print("in \(#function), called by board \(model) ")
         
         DispatchQueue.global().asyncAfter(deadline: .now() + animationDelay) { [unowned self] in
+            // Record the current time
             let strategistTime = CFAbsoluteTimeGetCurrent()
             print("in \(#function) DispatchQueue, called by board \(self.model) ")
+            // Calculate the "bestChoice" which contains the AI's move
             guard let bestChoice = self.strategist.bestChoice else {
                 return
             }
-            
+            // Calculate the time it took to find the bestChoice
             let delta = CFAbsoluteTimeGetCurrent() - strategistTime
             let aiTimeCeiling = 0.75
             let aiDelay = max(delta, aiTimeCeiling)
             
             let aiMessage = "Computer is thinking"
             self.messageNode.run(self.messageNode.animateInfoNode(text: aiMessage, changeColorAction: nil))
+            // Animate the aiProcessingMeter
             aiMeterAction = self.aiProcessingMeter.growWidth(over: aiDelay)
             self.aiProcessingMeter.run(aiMeterAction)
             DispatchQueue.main.asyncAfter(deadline: .now() + aiDelay) {
-            
+                // Apply the move to the GameModel, animate the consequences of the 'bestChoice' move, update the GameModel and update the MessageNode (in otherwords, every responsibility that updateGameBoard() has normally
                 self.updateGameBoard(player: bestChoice.player, name: bestChoice.pit)
                 self.animationTimeCounter = 0
             }
@@ -193,7 +214,9 @@ class AI_GameScene: GameScene {
     }
     
     override func updateGameBoard(player: Int, name: String) {
+        // Run updateGameBoard() regardless of which player it is
         super.updateGameBoard(player: player, name: name)
+        // The AI (player 2) will use processAIMove() to call updateGameBoard(player:name:) recursively
         if model._activePlayer.player == 2 {
             processAIMove()
         }
