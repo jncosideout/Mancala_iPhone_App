@@ -1,0 +1,849 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		89019C3F2384DF8E0012BE43 /* Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89019C3E2384DF8E0012BE43 /* Move.swift */; };
+		89019C422384E1520012BE43 /* Strategist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89019C412384E1520012BE43 /* Strategist.swift */; };
+		89054BD6231B1E2B00F1C027 /* PitNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89054BD5231B1E2B00F1C027 /* PitNode.swift */; };
+		8910738A2412B6AC0002523C /* MatchHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891073892412B6AC0002523C /* MatchHistory.swift */; };
+		8924E66C24156A500059C9A5 /* NotificationNameExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8924E66B24156A4F0059C9A5 /* NotificationNameExtension.swift */; };
+		8945318823B8268B0057008E /* AI_GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8945318723B8268B0057008E /* AI_GameScene.swift */; };
+		8945318A23B92DE60057008E /* MenuScene_2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8945318923B92DE50057008E /* MenuScene_2.swift */; };
+		89509502241AED8C00B90D38 /* DeviceModelID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89509501241AED8C00B90D38 /* DeviceModelID.swift */; };
+		89792F6F23D40B1E00873467 /* SettingsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89792F6E23D40B1E00873467 /* SettingsScene.swift */; };
+		897D141F244009F000BE05BE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 897D141D244009F000BE05BE /* Main.storyboard */; };
+		89830419240065E80044BFFC /* UserDefaultsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89830418240065E80044BFFC /* UserDefaultsExtension.swift */; };
+		8983041B240068010044BFFC /* SKSceneExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8983041A240068010044BFFC /* SKSceneExtension.swift */; };
+		8983041D2402290C0044BFFC /* MancalaGameModel_GKAI-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8983041C2402290C0044BFFC /* MancalaGameModel_GKAI-Extension.swift */; };
+		8983041F2406E7C80044BFFC /* InstructionsNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8983041E2406E7C80044BFFC /* InstructionsNode.swift */; };
+		898673122426778E00D4DC33 /* DBAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898673112426778E00D4DC33 /* DBAlertController.swift */; };
+		8997300F231F0E3600619CBD /* CircularLinkedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8997300E231F0E3600619CBD /* CircularLinkedList.swift */; };
+		89973021232D3F6D00619CBD /* GameData-codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8997301E232D3F6D00619CBD /* GameData-codable.swift */; };
+		89973025232D41F100619CBD /* MancalaGameModel-codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89973024232D41F100619CBD /* MancalaGameModel-codable.swift */; };
+		89973027232D41FE00619CBD /* MancalaPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89973026232D41FE00619CBD /* MancalaPlayer.swift */; };
+		89A07F6423D92C9D002EAB5B /* SavedGameStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A07F6323D92C9D002EAB5B /* SavedGameStore.swift */; };
+		89A5CBF723C2CF3500968A0E /* UserNotificationsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A5CBF623C2CF3500968A0E /* UserNotificationsHelper.swift */; };
+		89A6238F244374FC00062C39 /* Alertable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A6238E244374FC00062C39 /* Alertable.swift */; };
+		89A62391244375DE00062C39 /* MenuSceneExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A62390244375DE00062C39 /* MenuSceneExtension.swift */; };
+		89A6239424437EE100062C39 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89A6239224437EE100062C39 /* Launch Screen.storyboard */; };
+		89A623982443990400062C39 /* firstTimeWalkthrough.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 89A623952443990400062C39 /* firstTimeWalkthrough.bundle */; };
+		89A623992443990400062C39 /* credits.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 89A623962443990400062C39 /* credits.bundle */; };
+		89A6239A2443990400062C39 /* instructions.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 89A623972443990400062C39 /* instructions.bundle */; };
+		89DEB48922F110F9004BCD88 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB48822F110F9004BCD88 /* AppDelegate.swift */; };
+		89DEB48F22F110F9004BCD88 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB48E22F110F9004BCD88 /* GameScene.swift */; };
+		89DEB49122F110F9004BCD88 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB49022F110F9004BCD88 /* GameViewController.swift */; };
+		89DEB49622F110FB004BCD88 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89DEB49522F110FB004BCD88 /* Assets.xcassets */; };
+		89DEB4A422F110FB004BCD88 /* MancalaPrototype2Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB4A322F110FB004BCD88 /* MancalaPrototype2Tests.swift */; };
+		89DEB4AF22F110FB004BCD88 /* MancalaPrototype2UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB4AE22F110FB004BCD88 /* MancalaPrototype2UITests.swift */; };
+		89DEB4BE22F11280004BCD88 /* GKTurnBasedMatch+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB4BD22F11280004BCD88 /* GKTurnBasedMatch+Additions.swift */; };
+		89DEB4C022F112D8004BCD88 /* SKTexture+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB4BF22F112D8004BCD88 /* SKTexture+Additions.swift */; };
+		89DEB4C222F11302004BCD88 /* UIColor+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB4C122F11302004BCD88 /* UIColor+Additions.swift */; };
+		89DEB4CA22F113F7004BCD88 /* LinkedListIterator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB4C922F113F7004BCD88 /* LinkedListIterator.swift */; };
+		89DEB4CE22F11444004BCD88 /* NodeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB4CD22F11444004BCD88 /* NodeType.swift */; };
+		89DEB4D522F120D5004BCD88 /* BackgroundNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB4D422F120D5004BCD88 /* BackgroundNode.swift */; };
+		89DEB4D722F120F6004BCD88 /* BoardNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB4D622F120F6004BCD88 /* BoardNode.swift */; };
+		89DEB4D922F1216F004BCD88 /* ButtonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB4D822F1216F004BCD88 /* ButtonNode.swift */; };
+		89DEB4DB22F121AA004BCD88 /* InformationNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB4DA22F121AA004BCD88 /* InformationNode.swift */; };
+		89DEB4DD22F121D7004BCD88 /* TokenNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB4DC22F121D7004BCD88 /* TokenNode.swift */; };
+		89DEB4DF22F12221004BCD88 /* TouchNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB4DE22F12221004BCD88 /* TouchNode.swift */; };
+		89DEB4E222F122C7004BCD88 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB4E122F122C7004BCD88 /* MenuScene.swift */; };
+		89DEB4EC2308BEA5004BCD88 /* GradientGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB4EB2308BEA5004BCD88 /* GradientGameScene.swift */; };
+		89DEB4EE2308BEF8004BCD88 /* SKTexture+Gradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB4ED2308BEF7004BCD88 /* SKTexture+Gradient.swift */; };
+		89DEB4F12309CA2B004BCD88 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89DEB4F02309CA2B004BCD88 /* GameKit.framework */; };
+		89DEB4F42309EE2F004BCD88 /* GameCenterHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB4F32309EE2F004BCD88 /* GameCenterHelper.swift */; };
+		89E6057C233813AC009A59F3 /* ReplayScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E6057B233813AB009A59F3 /* ReplayScene.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		89DEB4A022F110FB004BCD88 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 89DEB47D22F110F9004BCD88 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 89DEB48422F110F9004BCD88;
+			remoteInfo = MancalaPrototype2;
+		};
+		89DEB4AB22F110FB004BCD88 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 89DEB47D22F110F9004BCD88 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 89DEB48422F110F9004BCD88;
+			remoteInfo = MancalaPrototype2;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		89019C3E2384DF8E0012BE43 /* Move.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Move.swift; sourceTree = "<group>"; };
+		89019C412384E1520012BE43 /* Strategist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strategist.swift; sourceTree = "<group>"; };
+		89054BD5231B1E2B00F1C027 /* PitNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitNode.swift; sourceTree = "<group>"; };
+		891073892412B6AC0002523C /* MatchHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchHistory.swift; sourceTree = "<group>"; };
+		8924E66B24156A4F0059C9A5 /* NotificationNameExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationNameExtension.swift; sourceTree = "<group>"; };
+		8945318723B8268B0057008E /* AI_GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AI_GameScene.swift; sourceTree = "<group>"; };
+		8945318923B92DE50057008E /* MenuScene_2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuScene_2.swift; sourceTree = "<group>"; };
+		89509501241AED8C00B90D38 /* DeviceModelID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceModelID.swift; sourceTree = "<group>"; };
+		89792F6E23D40B1E00873467 /* SettingsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScene.swift; sourceTree = "<group>"; };
+		897D141E244009F000BE05BE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		89830418240065E80044BFFC /* UserDefaultsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsExtension.swift; sourceTree = "<group>"; };
+		8983041A240068010044BFFC /* SKSceneExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKSceneExtension.swift; sourceTree = "<group>"; };
+		8983041C2402290C0044BFFC /* MancalaGameModel_GKAI-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MancalaGameModel_GKAI-Extension.swift"; sourceTree = "<group>"; };
+		8983041E2406E7C80044BFFC /* InstructionsNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionsNode.swift; sourceTree = "<group>"; };
+		898673112426778E00D4DC33 /* DBAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBAlertController.swift; sourceTree = "<group>"; };
+		8997300E231F0E3600619CBD /* CircularLinkedList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircularLinkedList.swift; sourceTree = "<group>"; };
+		8997301E232D3F6D00619CBD /* GameData-codable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "GameData-codable.swift"; sourceTree = "<group>"; };
+		89973024232D41F100619CBD /* MancalaGameModel-codable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MancalaGameModel-codable.swift"; sourceTree = "<group>"; };
+		89973026232D41FE00619CBD /* MancalaPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MancalaPlayer.swift; sourceTree = "<group>"; };
+		89A07F6323D92C9D002EAB5B /* SavedGameStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedGameStore.swift; sourceTree = "<group>"; };
+		89A5CBF623C2CF3500968A0E /* UserNotificationsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationsHelper.swift; sourceTree = "<group>"; };
+		89A6238E244374FC00062C39 /* Alertable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alertable.swift; sourceTree = "<group>"; };
+		89A62390244375DE00062C39 /* MenuSceneExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSceneExtension.swift; sourceTree = "<group>"; };
+		89A6239324437EE100062C39 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = "Base.lproj/Launch Screen.storyboard"; sourceTree = "<group>"; };
+		89A623952443990400062C39 /* firstTimeWalkthrough.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = firstTimeWalkthrough.bundle; sourceTree = "<group>"; };
+		89A623962443990400062C39 /* credits.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = credits.bundle; sourceTree = "<group>"; };
+		89A623972443990400062C39 /* instructions.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = instructions.bundle; sourceTree = "<group>"; };
+		89DEB48522F110F9004BCD88 /* Mancala World.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mancala World.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		89DEB48822F110F9004BCD88 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		89DEB48E22F110F9004BCD88 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		89DEB49022F110F9004BCD88 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		89DEB49522F110FB004BCD88 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		89DEB49F22F110FB004BCD88 /* MancalaPrototype2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MancalaPrototype2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		89DEB4A322F110FB004BCD88 /* MancalaPrototype2Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MancalaPrototype2Tests.swift; sourceTree = "<group>"; };
+		89DEB4A522F110FB004BCD88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		89DEB4AA22F110FB004BCD88 /* MancalaPrototype2UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MancalaPrototype2UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		89DEB4AE22F110FB004BCD88 /* MancalaPrototype2UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MancalaPrototype2UITests.swift; sourceTree = "<group>"; };
+		89DEB4B022F110FB004BCD88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		89DEB4BD22F11280004BCD88 /* GKTurnBasedMatch+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GKTurnBasedMatch+Additions.swift"; sourceTree = "<group>"; };
+		89DEB4BF22F112D8004BCD88 /* SKTexture+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SKTexture+Additions.swift"; sourceTree = "<group>"; };
+		89DEB4C122F11302004BCD88 /* UIColor+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Additions.swift"; sourceTree = "<group>"; };
+		89DEB4C922F113F7004BCD88 /* LinkedListIterator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedListIterator.swift; sourceTree = "<group>"; };
+		89DEB4CD22F11444004BCD88 /* NodeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeType.swift; sourceTree = "<group>"; };
+		89DEB4D422F120D5004BCD88 /* BackgroundNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundNode.swift; sourceTree = "<group>"; };
+		89DEB4D622F120F6004BCD88 /* BoardNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardNode.swift; sourceTree = "<group>"; };
+		89DEB4D822F1216F004BCD88 /* ButtonNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonNode.swift; sourceTree = "<group>"; };
+		89DEB4DA22F121AA004BCD88 /* InformationNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationNode.swift; sourceTree = "<group>"; };
+		89DEB4DC22F121D7004BCD88 /* TokenNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenNode.swift; sourceTree = "<group>"; };
+		89DEB4DE22F12221004BCD88 /* TouchNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchNode.swift; sourceTree = "<group>"; };
+		89DEB4E122F122C7004BCD88 /* MenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
+		89DEB4E722F123E9004BCD88 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		89DEB4EB2308BEA5004BCD88 /* GradientGameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientGameScene.swift; sourceTree = "<group>"; };
+		89DEB4ED2308BEF7004BCD88 /* SKTexture+Gradient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SKTexture+Gradient.swift"; sourceTree = "<group>"; };
+		89DEB4F02309CA2B004BCD88 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		89DEB4F22309CA34004BCD88 /* MancalaPrototype2.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MancalaPrototype2.entitlements; sourceTree = "<group>"; };
+		89DEB4F32309EE2F004BCD88 /* GameCenterHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCenterHelper.swift; sourceTree = "<group>"; };
+		89E6057B233813AB009A59F3 /* ReplayScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReplayScene.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		89DEB48222F110F9004BCD88 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89DEB4F12309CA2B004BCD88 /* GameKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89DEB49C22F110FB004BCD88 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89DEB4A722F110FB004BCD88 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		89019C402384E0F90012BE43 /* GKGameModel-AI */ = {
+			isa = PBXGroup;
+			children = (
+				89019C3E2384DF8E0012BE43 /* Move.swift */,
+				89019C412384E1520012BE43 /* Strategist.swift */,
+				8983041C2402290C0044BFFC /* MancalaGameModel_GKAI-Extension.swift */,
+			);
+			path = "GKGameModel-AI";
+			sourceTree = "<group>";
+		};
+		89DEB47C22F110F9004BCD88 = {
+			isa = PBXGroup;
+			children = (
+				89A623962443990400062C39 /* credits.bundle */,
+				89A623952443990400062C39 /* firstTimeWalkthrough.bundle */,
+				89A623972443990400062C39 /* instructions.bundle */,
+				89DEB48722F110F9004BCD88 /* MancalaPrototype2 */,
+				89DEB4A222F110FB004BCD88 /* MancalaPrototype2Tests */,
+				89DEB4AD22F110FB004BCD88 /* MancalaPrototype2UITests */,
+				89DEB48622F110F9004BCD88 /* Products */,
+				89DEB4EF2309CA2B004BCD88 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		89DEB48622F110F9004BCD88 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				89DEB48522F110F9004BCD88 /* Mancala World.app */,
+				89DEB49F22F110FB004BCD88 /* MancalaPrototype2Tests.xctest */,
+				89DEB4AA22F110FB004BCD88 /* MancalaPrototype2UITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		89DEB48722F110F9004BCD88 /* MancalaPrototype2 */ = {
+			isa = PBXGroup;
+			children = (
+				89019C402384E0F90012BE43 /* GKGameModel-AI */,
+				89DEB4F22309CA34004BCD88 /* MancalaPrototype2.entitlements */,
+				89DEB4BC22F11257004BCD88 /* Extensions */,
+				89DEB4D122F11524004BCD88 /* Helpers */,
+				89DEB4E422F1233A004BCD88 /* ViewControllers */,
+				89DEB4E322F122DD004BCD88 /* Supporting Files */,
+				89DEB4E022F12243004BCD88 /* Scenes */,
+				89DEB4D322F120BA004BCD88 /* Nodes */,
+				89DEB4C622F1139B004BCD88 /* Models */,
+				89DEB4E722F123E9004BCD88 /* Info.plist */,
+			);
+			path = MancalaPrototype2;
+			sourceTree = "<group>";
+		};
+		89DEB4A222F110FB004BCD88 /* MancalaPrototype2Tests */ = {
+			isa = PBXGroup;
+			children = (
+				89DEB4A322F110FB004BCD88 /* MancalaPrototype2Tests.swift */,
+				89DEB4A522F110FB004BCD88 /* Info.plist */,
+			);
+			path = MancalaPrototype2Tests;
+			sourceTree = "<group>";
+		};
+		89DEB4AD22F110FB004BCD88 /* MancalaPrototype2UITests */ = {
+			isa = PBXGroup;
+			children = (
+				89DEB4AE22F110FB004BCD88 /* MancalaPrototype2UITests.swift */,
+				89DEB4B022F110FB004BCD88 /* Info.plist */,
+			);
+			path = MancalaPrototype2UITests;
+			sourceTree = "<group>";
+		};
+		89DEB4BC22F11257004BCD88 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				89DEB4ED2308BEF7004BCD88 /* SKTexture+Gradient.swift */,
+				89DEB4BD22F11280004BCD88 /* GKTurnBasedMatch+Additions.swift */,
+				89DEB4BF22F112D8004BCD88 /* SKTexture+Additions.swift */,
+				89DEB4C122F11302004BCD88 /* UIColor+Additions.swift */,
+				8983041A240068010044BFFC /* SKSceneExtension.swift */,
+				8924E66B24156A4F0059C9A5 /* NotificationNameExtension.swift */,
+				89A62390244375DE00062C39 /* MenuSceneExtension.swift */,
+				89A6238E244374FC00062C39 /* Alertable.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		89DEB4C622F1139B004BCD88 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				89A07F6323D92C9D002EAB5B /* SavedGameStore.swift */,
+				89973026232D41FE00619CBD /* MancalaPlayer.swift */,
+				89973024232D41F100619CBD /* MancalaGameModel-codable.swift */,
+				8997301E232D3F6D00619CBD /* GameData-codable.swift */,
+				8997300E231F0E3600619CBD /* CircularLinkedList.swift */,
+				89DEB4C922F113F7004BCD88 /* LinkedListIterator.swift */,
+				89DEB4CD22F11444004BCD88 /* NodeType.swift */,
+				89054BD5231B1E2B00F1C027 /* PitNode.swift */,
+				891073892412B6AC0002523C /* MatchHistory.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		89DEB4D122F11524004BCD88 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				89DEB4F32309EE2F004BCD88 /* GameCenterHelper.swift */,
+				89A5CBF623C2CF3500968A0E /* UserNotificationsHelper.swift */,
+				89509501241AED8C00B90D38 /* DeviceModelID.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		89DEB4D322F120BA004BCD88 /* Nodes */ = {
+			isa = PBXGroup;
+			children = (
+				89DEB4D422F120D5004BCD88 /* BackgroundNode.swift */,
+				8983041E2406E7C80044BFFC /* InstructionsNode.swift */,
+				89DEB4D622F120F6004BCD88 /* BoardNode.swift */,
+				89DEB4D822F1216F004BCD88 /* ButtonNode.swift */,
+				89DEB4DA22F121AA004BCD88 /* InformationNode.swift */,
+				89DEB4DC22F121D7004BCD88 /* TokenNode.swift */,
+				89DEB4DE22F12221004BCD88 /* TouchNode.swift */,
+			);
+			path = Nodes;
+			sourceTree = "<group>";
+		};
+		89DEB4E022F12243004BCD88 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				8945318923B92DE50057008E /* MenuScene_2.swift */,
+				8945318723B8268B0057008E /* AI_GameScene.swift */,
+				89792F6E23D40B1E00873467 /* SettingsScene.swift */,
+				89E6057B233813AB009A59F3 /* ReplayScene.swift */,
+				89DEB4EB2308BEA5004BCD88 /* GradientGameScene.swift */,
+				89DEB48E22F110F9004BCD88 /* GameScene.swift */,
+				89DEB4E122F122C7004BCD88 /* MenuScene.swift */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		89DEB4E322F122DD004BCD88 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				897D141D244009F000BE05BE /* Main.storyboard */,
+				89DEB49522F110FB004BCD88 /* Assets.xcassets */,
+				89DEB48822F110F9004BCD88 /* AppDelegate.swift */,
+				89A6239224437EE100062C39 /* Launch Screen.storyboard */,
+				89830418240065E80044BFFC /* UserDefaultsExtension.swift */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		89DEB4E422F1233A004BCD88 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				89DEB49022F110F9004BCD88 /* GameViewController.swift */,
+				898673112426778E00D4DC33 /* DBAlertController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		89DEB4EF2309CA2B004BCD88 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				89DEB4F02309CA2B004BCD88 /* GameKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		89DEB48422F110F9004BCD88 /* Mancala World */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 89DEB4B322F110FB004BCD88 /* Build configuration list for PBXNativeTarget "Mancala World" */;
+			buildPhases = (
+				89DEB48122F110F9004BCD88 /* Sources */,
+				89DEB48222F110F9004BCD88 /* Frameworks */,
+				89DEB48322F110F9004BCD88 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Mancala World";
+			productName = MancalaPrototype2;
+			productReference = 89DEB48522F110F9004BCD88 /* Mancala World.app */;
+			productType = "com.apple.product-type.application";
+		};
+		89DEB49E22F110FB004BCD88 /* MancalaPrototype2Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 89DEB4B622F110FB004BCD88 /* Build configuration list for PBXNativeTarget "MancalaPrototype2Tests" */;
+			buildPhases = (
+				89DEB49B22F110FB004BCD88 /* Sources */,
+				89DEB49C22F110FB004BCD88 /* Frameworks */,
+				89DEB49D22F110FB004BCD88 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				89DEB4A122F110FB004BCD88 /* PBXTargetDependency */,
+			);
+			name = MancalaPrototype2Tests;
+			productName = MancalaPrototype2Tests;
+			productReference = 89DEB49F22F110FB004BCD88 /* MancalaPrototype2Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		89DEB4A922F110FB004BCD88 /* MancalaPrototype2UITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 89DEB4B922F110FB004BCD88 /* Build configuration list for PBXNativeTarget "MancalaPrototype2UITests" */;
+			buildPhases = (
+				89DEB4A622F110FB004BCD88 /* Sources */,
+				89DEB4A722F110FB004BCD88 /* Frameworks */,
+				89DEB4A822F110FB004BCD88 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				89DEB4AC22F110FB004BCD88 /* PBXTargetDependency */,
+			);
+			name = MancalaPrototype2UITests;
+			productName = MancalaPrototype2UITests;
+			productReference = 89DEB4AA22F110FB004BCD88 /* MancalaPrototype2UITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		89DEB47D22F110F9004BCD88 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1020;
+				LastUpgradeCheck = 1020;
+				ORGANIZATIONNAME = "Alexander Scott Beaty";
+				TargetAttributes = {
+					89DEB48422F110F9004BCD88 = {
+						CreatedOnToolsVersion = 10.2.1;
+						SystemCapabilities = {
+							com.apple.GameCenter.iOS = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
+					};
+					89DEB49E22F110FB004BCD88 = {
+						CreatedOnToolsVersion = 10.2.1;
+						TestTargetID = 89DEB48422F110F9004BCD88;
+					};
+					89DEB4A922F110FB004BCD88 = {
+						CreatedOnToolsVersion = 10.2.1;
+						TestTargetID = 89DEB48422F110F9004BCD88;
+					};
+				};
+			};
+			buildConfigurationList = 89DEB48022F110F9004BCD88 /* Build configuration list for PBXProject "MancalaPrototype2" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 89DEB47C22F110F9004BCD88;
+			productRefGroup = 89DEB48622F110F9004BCD88 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				89DEB48422F110F9004BCD88 /* Mancala World */,
+				89DEB49E22F110FB004BCD88 /* MancalaPrototype2Tests */,
+				89DEB4A922F110FB004BCD88 /* MancalaPrototype2UITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		89DEB48322F110F9004BCD88 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89A6239424437EE100062C39 /* Launch Screen.storyboard in Resources */,
+				897D141F244009F000BE05BE /* Main.storyboard in Resources */,
+				89A6239A2443990400062C39 /* instructions.bundle in Resources */,
+				89A623992443990400062C39 /* credits.bundle in Resources */,
+				89A623982443990400062C39 /* firstTimeWalkthrough.bundle in Resources */,
+				89DEB49622F110FB004BCD88 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89DEB49D22F110FB004BCD88 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89DEB4A822F110FB004BCD88 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		89DEB48122F110F9004BCD88 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89DEB4DB22F121AA004BCD88 /* InformationNode.swift in Sources */,
+				8983041D2402290C0044BFFC /* MancalaGameModel_GKAI-Extension.swift in Sources */,
+				89DEB4DD22F121D7004BCD88 /* TokenNode.swift in Sources */,
+				89DEB4BE22F11280004BCD88 /* GKTurnBasedMatch+Additions.swift in Sources */,
+				89A62391244375DE00062C39 /* MenuSceneExtension.swift in Sources */,
+				89DEB4E222F122C7004BCD88 /* MenuScene.swift in Sources */,
+				89DEB4EE2308BEF8004BCD88 /* SKTexture+Gradient.swift in Sources */,
+				89DEB48F22F110F9004BCD88 /* GameScene.swift in Sources */,
+				8910738A2412B6AC0002523C /* MatchHistory.swift in Sources */,
+				89DEB4D722F120F6004BCD88 /* BoardNode.swift in Sources */,
+				89DEB4C022F112D8004BCD88 /* SKTexture+Additions.swift in Sources */,
+				89973027232D41FE00619CBD /* MancalaPlayer.swift in Sources */,
+				8924E66C24156A500059C9A5 /* NotificationNameExtension.swift in Sources */,
+				89A07F6423D92C9D002EAB5B /* SavedGameStore.swift in Sources */,
+				898673122426778E00D4DC33 /* DBAlertController.swift in Sources */,
+				89A5CBF723C2CF3500968A0E /* UserNotificationsHelper.swift in Sources */,
+				89DEB49122F110F9004BCD88 /* GameViewController.swift in Sources */,
+				89830419240065E80044BFFC /* UserDefaultsExtension.swift in Sources */,
+				8983041F2406E7C80044BFFC /* InstructionsNode.swift in Sources */,
+				89019C3F2384DF8E0012BE43 /* Move.swift in Sources */,
+				89509502241AED8C00B90D38 /* DeviceModelID.swift in Sources */,
+				89A6238F244374FC00062C39 /* Alertable.swift in Sources */,
+				89973025232D41F100619CBD /* MancalaGameModel-codable.swift in Sources */,
+				89DEB4CA22F113F7004BCD88 /* LinkedListIterator.swift in Sources */,
+				89DEB4F42309EE2F004BCD88 /* GameCenterHelper.swift in Sources */,
+				89DEB48922F110F9004BCD88 /* AppDelegate.swift in Sources */,
+				89019C422384E1520012BE43 /* Strategist.swift in Sources */,
+				89DEB4D522F120D5004BCD88 /* BackgroundNode.swift in Sources */,
+				89E6057C233813AC009A59F3 /* ReplayScene.swift in Sources */,
+				8945318823B8268B0057008E /* AI_GameScene.swift in Sources */,
+				89DEB4CE22F11444004BCD88 /* NodeType.swift in Sources */,
+				89DEB4EC2308BEA5004BCD88 /* GradientGameScene.swift in Sources */,
+				8983041B240068010044BFFC /* SKSceneExtension.swift in Sources */,
+				89054BD6231B1E2B00F1C027 /* PitNode.swift in Sources */,
+				89973021232D3F6D00619CBD /* GameData-codable.swift in Sources */,
+				89792F6F23D40B1E00873467 /* SettingsScene.swift in Sources */,
+				8997300F231F0E3600619CBD /* CircularLinkedList.swift in Sources */,
+				89DEB4DF22F12221004BCD88 /* TouchNode.swift in Sources */,
+				89DEB4C222F11302004BCD88 /* UIColor+Additions.swift in Sources */,
+				8945318A23B92DE60057008E /* MenuScene_2.swift in Sources */,
+				89DEB4D922F1216F004BCD88 /* ButtonNode.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89DEB49B22F110FB004BCD88 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89DEB4A422F110FB004BCD88 /* MancalaPrototype2Tests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89DEB4A622F110FB004BCD88 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89DEB4AF22F110FB004BCD88 /* MancalaPrototype2UITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		89DEB4A122F110FB004BCD88 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 89DEB48422F110F9004BCD88 /* Mancala World */;
+			targetProxy = 89DEB4A022F110FB004BCD88 /* PBXContainerItemProxy */;
+		};
+		89DEB4AC22F110FB004BCD88 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 89DEB48422F110F9004BCD88 /* Mancala World */;
+			targetProxy = 89DEB4AB22F110FB004BCD88 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		897D141D244009F000BE05BE /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				897D141E244009F000BE05BE /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		89A6239224437EE100062C39 /* Launch Screen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				89A6239324437EE100062C39 /* Base */,
+			);
+			name = "Launch Screen.storyboard";
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		89DEB4B122F110FB004BCD88 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.3;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		89DEB4B222F110FB004BCD88 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		89DEB4B422F110FB004BCD88 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-2";
+				CODE_SIGN_ENTITLEMENTS = MancalaPrototype2/MancalaPrototype2.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1.2.3;
+				DEVELOPMENT_TEAM = 82FUG9A524;
+				INFOPLIST_FILE = MancalaPrototype2/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.Beaty.MancalaPrototype2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		89DEB4B522F110FB004BCD88 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-2";
+				CODE_SIGN_ENTITLEMENTS = MancalaPrototype2/MancalaPrototype2.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1.2.3;
+				DEVELOPMENT_TEAM = 82FUG9A524;
+				INFOPLIST_FILE = MancalaPrototype2/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.Beaty.MancalaPrototype2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		89DEB4B722F110FB004BCD88 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = MancalaPrototype2Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.Beaty.MancalaPrototype2Tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MancalaPrototype2.app/MancalaPrototype2";
+			};
+			name = Debug;
+		};
+		89DEB4B822F110FB004BCD88 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = MancalaPrototype2Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.Beaty.MancalaPrototype2Tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MancalaPrototype2.app/MancalaPrototype2";
+			};
+			name = Release;
+		};
+		89DEB4BA22F110FB004BCD88 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = MancalaPrototype2UITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.Beaty.MancalaPrototype2UITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = MancalaPrototype2;
+			};
+			name = Debug;
+		};
+		89DEB4BB22F110FB004BCD88 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = MancalaPrototype2UITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.Beaty.MancalaPrototype2UITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = MancalaPrototype2;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		89DEB48022F110F9004BCD88 /* Build configuration list for PBXProject "MancalaPrototype2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				89DEB4B122F110FB004BCD88 /* Debug */,
+				89DEB4B222F110FB004BCD88 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		89DEB4B322F110FB004BCD88 /* Build configuration list for PBXNativeTarget "Mancala World" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				89DEB4B422F110FB004BCD88 /* Debug */,
+				89DEB4B522F110FB004BCD88 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		89DEB4B622F110FB004BCD88 /* Build configuration list for PBXNativeTarget "MancalaPrototype2Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				89DEB4B722F110FB004BCD88 /* Debug */,
+				89DEB4B822F110FB004BCD88 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		89DEB4B922F110FB004BCD88 /* Build configuration list for PBXNativeTarget "MancalaPrototype2UITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				89DEB4BA22F110FB004BCD88 /* Debug */,
+				89DEB4BB22F110FB004BCD88 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 89DEB47D22F110F9004BCD88 /* Project object */;
+}
