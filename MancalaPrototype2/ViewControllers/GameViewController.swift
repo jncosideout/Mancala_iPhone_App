@@ -50,7 +50,7 @@ final class GameViewController: UIViewController {
     var savedGameModels: [GameModel]!
     var matchHistory: MatchHistory!
     
-    // Make sure our view is recognized as an SKView
+    // Make sure our view is recognized as an SKView 
     var skView: SKView {
         return view as! SKView
     }

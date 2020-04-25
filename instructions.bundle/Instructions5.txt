@@ -1,0 +1,3 @@
+4. Players take turns sowing their seeds. 
+⁃ On a turn, the player removes all seeds from one of the pits under their control. 
+⁃ Moving counter-clockwise, the player drops one seed in each pit in turn, including the player's own base but not their opponent's.

@@ -1,0 +1,2 @@
+7. When one player no longer has any seeds in any of their pits, the game ends. 
+The first player to clear his side moves all remaining seeds on his opponent's side to his base, and the player with the most seeds in their base wins.

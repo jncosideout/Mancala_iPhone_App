@@ -14,7 +14,7 @@ extension MenuScene {
     
     //MARK: load background
     
-    /// Finds this device's model and gets the corresponding prefix to the correctly sized image file 
+    /// Finds this device's model and gets the corresponding prefix to the correctly sized image file  
     func loadBackgroundNode(_ viewWidth: CGFloat, _ viewHeight: CGFloat) -> SKSpriteNode {
         var image = backgroundImage
         var deviceType = UIDevice().type

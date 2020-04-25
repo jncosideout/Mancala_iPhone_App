@@ -1,0 +1,3 @@
+In "2 Player Mode" or "Versus Computer" mode, your game will be saved automatically as soon as you exit or dismiss the app.
+Only the last match played will be saved.
+If you press "New Game" it will overwrite your saved game.
