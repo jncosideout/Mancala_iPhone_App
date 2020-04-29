@@ -32,8 +32,8 @@ import GameKit
 /**
  Getter-properties for GKTurnBasedMatch
  
- https:www.raywenderlich.com/7544-game-center-for-ios-building-a-turn-based-game#
- Ryan Ackerman
+ Based on code from the tutorial found at https:www.raywenderlich.com/7544-game-center-for-ios-building-a-turn-based-game#
+ By Ryan Ackerman
  */
 extension GKTurnBasedMatch {
     var isLocalPlayersTurn: Bool {

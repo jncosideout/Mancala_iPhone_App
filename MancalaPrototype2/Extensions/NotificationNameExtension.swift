@@ -12,6 +12,10 @@
 
 import Foundation
 
+/**
+ Based on code from the tutorial found at https:www.raywenderlich.com/7544-game-center-for-ios-building-a-turn-based-game#
+ By Ryan Ackerman
+ */
 extension Notification.Name {
     static let presentGame = Notification.Name("presentGame")
     static let authenticationChanged = Notification.Name("authenticationChanged")

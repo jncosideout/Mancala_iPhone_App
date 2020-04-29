@@ -269,6 +269,7 @@ class MenuScene: SKScene, Alertable {
     
     /// Selector function for authenticationChanged notification.
     @objc private func authenticationChanged(_ notification: Notification) {
+        // When the firstTimeWalkthrough is being overlayed on the MenuScene, the "Online Game" button may stand out because the user was authenticated to Game Center in the background. So to keep it uniform, we need to check ```UserDefaults.hasLaunchedFirstTime```
         if UserDefaults.hasLaunchedFirstTime {
             onlineButton.isEnabled = notification.object as? Bool ?? false
         }

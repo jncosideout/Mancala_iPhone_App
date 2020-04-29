@@ -40,6 +40,12 @@
 
 import SpriteKit
 
+/**
+ Main UI for playing the game. Interacts with the GameModel to present the gameboard to the user and update it, animate the the moves of the players, and accepts user input play the game and relay changes to the GameModel.
+ 
+ Based on code from the tutorial found at https:www.raywenderlich.com/7544-game-center-for-ios-building-a-turn-based-game#
+ By Ryan Ackerman
+ */
 class GameScene: SKScene {
     
     // MARK: - Enums
