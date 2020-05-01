@@ -1052,14 +1052,14 @@ class GameModel: NSObject {//removed Codable ASB 06/29/19 //changed struct to cl
 extension GameModel {
 
     /**
-     The relative Y axis position of a pit on thie GameModel's gameboard
+     The relative Y axis position of a pit on the BoardNode SKNode
      */
     enum GridPosition_Y: Int, Codable {
         case min, mid, max
     }
     
     /**
-    The relative X axis position of a pit on thie GameModel's gameboard
+    The relative X axis position of a pit on the BoardNode SKNode
      
     -  min and max are used for Player 1 or 2's "BASE" (depending on ```playerPerspective```)
      - mid1-6 are used for the pits on each side between the players' "BASE"s

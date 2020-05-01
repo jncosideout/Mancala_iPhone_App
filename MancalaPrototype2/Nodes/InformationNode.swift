@@ -40,6 +40,7 @@
 import SpriteKit
 
 /**
+ Displays text to the user that can be updated dynamically and animated.
  
  Based on code from the tutorial found at https:www.raywenderlich.com/7544-game-center-for-ios-building-a-turn-based-game#
  By Ryan Ackerman
@@ -55,6 +56,7 @@ final class InformationNode: TouchNode {
     private let labelNode: SKLabelNode
     private let originalSize: CGSize
     
+    /// Allows a String to convert to and from NSAttributedString and be applied to or retrieved from the foreground ```labelNode``` and background  and ```shadowNode```
     var text: String {
         get {
             if let text = labelNode.attributedText?.string {
@@ -65,16 +67,16 @@ final class InformationNode: TouchNode {
         }
         set {
             if newValue != "" {
-                let nsAttrString = NSAttributedString(string: newValue,
-                                                attributes: [
-                                                    .font : UIFont.systemFont(ofSize: 18, weight: .semibold)
-                                                ])
+                let nsAttrString = NSAttributedString(string: newValue, attributes: [
+                    .font : UIFont.systemFont(ofSize: 18, weight: .semibold)
+                    ])
                 
                 labelNode.attributedText = nsAttrString
             }
         }
     }
     
+    /// Creates a white BackgroundNode with a text SKLabelNode on top to display feedback info to the user
     init(_ text: String, size: CGSize, actionBlock: ActionBlock? = nil, named: String?) {
         originalSize = size
         backgroundNode = BackgroundNode(kind: .pill, size: size)
@@ -111,12 +113,14 @@ final class InformationNode: TouchNode {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /// Creates and returns a color changing action to be run on this node's ```backgroundNode```
     func getBackgroundAnimation(color: UIColor, duration: TimeInterval) -> SKAction {
         return backgroundNode.changeColor(color: color, duration: duration)
     }
     
+    /// Runs an action on the ```backgroundNode```, changes the text on the ```labelNode``` and pauses the animation so the new text can be read
     func animateInfoNode(text: String, changeColorAction: SKAction?, duration: TimeInterval = 2) -> SKAction {
-//        var actions = [SKAction]()
+
         guard let nodeName = backgroundNode.name else { return SKAction() }
 
         let backgroundAction: SKAction = {
@@ -127,16 +131,11 @@ final class InformationNode: TouchNode {
             return action
         }()
         
-//        for text in textArray {
-//        actions.append(
         return SKAction.sequence([
             SKAction.run(backgroundAction, onChildWithName: nodeName),
             SKAction.run{self.text = text},
             SKAction.wait(forDuration: duration)
          ])
-//        )
-//        }
-//        return SKAction.sequence(actions)
     }
     
 

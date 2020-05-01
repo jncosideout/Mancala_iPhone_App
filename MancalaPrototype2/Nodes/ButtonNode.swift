@@ -40,6 +40,7 @@
 import SpriteKit
 
 /**
+ Creates a rectangular, translucent button with foreground text. Accepts a trailing closure containing any code to be executed when this button is tapped.
  
  Based on code from the tutorial found at https:www.raywenderlich.com/7544-game-center-for-ios-building-a-turn-based-game#
  By Ryan Ackerman
@@ -49,6 +50,9 @@ class ButtonNode: TouchNode {
     private let labelNode: SKLabelNode
     private let shadowNode: SKLabelNode
     
+    /**
+     Specifies an image to be displayed as a button. The ```labelNode``` and ```shadowNode``` are initialized but unused.
+     */
     init(image: String, size: CGSize, actionBlock: ActionBlock?) {
         backgroundNode = BackgroundNode(kind: .recessed, size: size)
         backgroundNode.position = CGPoint(
@@ -76,6 +80,13 @@ class ButtonNode: TouchNode {
         self.actionBlock = actionBlock
     }
     
+    
+    /// Creates a button with a shadow effect.
+    /// - Parameters:
+    ///   - text: the text to put on the ```labelNode``` and ```shadowNode```
+    ///   - size: the relative size of the button
+    ///   - aTextColor: defaults to white
+    ///   - actionBlock: is executed when this button is pressed
     init(_ text: String, size: CGSize, aTextColor: UIColor? = nil, actionBlock: ActionBlock?) {
         backgroundNode = BackgroundNode(kind: .recessed, size: size)
         backgroundNode.position = CGPoint(
@@ -89,7 +100,7 @@ class ButtonNode: TouchNode {
         } else {
             textColor = UIColor.init(white: 1, alpha: 1)
         }
-        
+        // Use NSAttributedString because SKLabelNode(fontNamed:) has been deprecated in iOS 13
         let foregroundText = NSAttributedString(string: text, attributes: [
             .font : UIFont.systemFont(ofSize: 24, weight: .semibold),
             .foregroundColor : textColor
@@ -127,6 +138,7 @@ class ButtonNode: TouchNode {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /// Fade-out slightly when tapped
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         
@@ -137,6 +149,7 @@ class ButtonNode: TouchNode {
         labelNode.run(SKAction.fadeAlpha(to: 0.8, duration: 0.2))
     }
     
+    /// Fade back in after tapped and execute ```actionBlock```
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         
@@ -147,6 +160,7 @@ class ButtonNode: TouchNode {
         labelNode.run(SKAction.fadeAlpha(to: 1, duration: 0.2))
     }
     
+    /// Allows a String to convert to and from NSAttributedString and be applied to or retrieved from the foreground ```labelNode``` and background  and ```shadowNode```
     var text: String {
         get {
             if let text = labelNode.attributedText?.string {
@@ -163,8 +177,8 @@ class ButtonNode: TouchNode {
                     ])
                 
                 let backgroundText = NSAttributedString(string: newValue, attributes: [
-                .font : UIFont.systemFont(ofSize: 24, weight: .semibold)
-                ])
+                    .font : UIFont.systemFont(ofSize: 24, weight: .semibold)
+                    ])
                 
                 labelNode.attributedText = foregroundText
                 shadowNode.attributedText = backgroundText

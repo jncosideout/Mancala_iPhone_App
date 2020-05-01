@@ -41,6 +41,9 @@ import Foundation
 import SpriteKit
 
 /**
+ Presents a translucent overlay on the SKScene that holds text. Owns a string array of ```instructions``` to be presented sequentially through an animation that simulates a slide show.
+ 
+ - Important: the code to perform the slide show must be passed to this ```InstructionsNode``` through the ```actionBlock``` in init()
  
  Based on code from the tutorial found at https:www.raywenderlich.com/7544-game-center-for-ios-building-a-turn-based-game#
  By Ryan Ackerman
@@ -64,6 +67,7 @@ class InstructionsNode : TouchNode {
     private var instructionsCount = 0
     private var showSlide = 0
     
+    /// Sets the text to be shown on the InstructionsNode
     var plainText: String? {
         get {
             return textLabelNode.text
@@ -73,6 +77,15 @@ class InstructionsNode : TouchNode {
         }
     }
     
+    
+    /// Initializes an Instructions node to show several blocks of text in succession.
+    ///
+    /// - Important: the code to perform the slide show must be passed to this ```InstructionsNode``` through the ```actionBlock``` in init()
+    /// - Parameters:
+    ///   - text: not used.
+    ///   - size: the size of the node on the screen
+    ///   - newInstructions: a string array containing the 'slides' of information to display
+    ///   - actionBlock: the code to perform the slide show must be passed to this ```InstructionsNode``` through the ```actionBlock``` in init()
     init(_ text: String, size: CGSize, newInstructions: [String], actionBlock: ActionBlock? = nil) {
         
         instructions = newInstructions
@@ -109,7 +122,7 @@ class InstructionsNode : TouchNode {
         self.actionBlock = actionBlock
     }
     
-    
+    /// Should be called only when the InstructionsNode is already set alpha = 0
     func animatePopUpFadeIn() {
         run(SKAction.fadeAlpha(to: 1, duration: 1))
         textLabelNode.run(SKAction.fadeAlpha(to: 1, duration: 1))

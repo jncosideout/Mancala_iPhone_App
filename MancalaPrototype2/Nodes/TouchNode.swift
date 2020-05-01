@@ -51,12 +51,14 @@ class TouchNode: SKNode {
     /// Stores code to be run when this node is tapped
     var actionBlock: ActionBlock?
     
+    /// Fades alpha channel of the node and locks ```touchesEnded(_:,with:)```
     var isEnabled: Bool = true {
         didSet {
             alpha = isEnabled ? 1 : 0.5
         }
     }
     
+    /// Fades alpha channel but **does not lock** ```touchesEnded(_:,with:)```
     var looksEnabled: Bool = true {
         didSet {
             alpha = looksEnabled ? 1 : 0.5

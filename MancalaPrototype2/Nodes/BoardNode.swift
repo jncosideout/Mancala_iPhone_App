@@ -40,6 +40,7 @@
 import SpriteKit
 
 /**
+ Creates the Mancala GameBoard SKSpriteNode representation in the GameScene.
  
  Based on code from the tutorial found at https:www.raywenderlich.com/7544-game-center-for-ios-building-a-turn-based-game#
  By Ryan Ackerman
@@ -56,6 +57,13 @@ final class BoardNode: SKNode {
     private let sideLength: CGFloat
     private let halfNumberOfPits: CGFloat
     
+    
+    /// Creates the ```containerNode``` for the board, creates the board point nodes on the ```containerNode``` and adds it to the scene.
+    ///
+    /// - Important: initializing the BoardNode does not load TokenNodes onto itself. You must do that separately using BoardNode.node(at:named:) and other helper functions in the GameScene
+    /// - Parameters:
+    ///   - sideLength: the width on the screen fitted on the parent SKScene
+    ///   - halfNumPits: exactly 1/2 the length of the game board, as a ```CircularLinkedList``` or ```model.pits```. (should be 14 / 2 = 7)
     init(sideLength: CGFloat, halfNumPits: Int) {
         self.sideLength = sideLength
         halfNumberOfPits = CGFloat(halfNumPits)
@@ -84,10 +92,21 @@ final class BoardNode: SKNode {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /// Translates a GameModel.GridCoordinate into a point relative to the BoardNode and returns the node at that a point. Original purpose of this method is to load TokenNodes onto the BoardNode during setup of the GameScene.
+    ///
+    /// - Important: This method has not been tested outside of its primary purpose for loading TokenNodes onto the BoardNode
+    ///
+    /// - Returns: An SKNode if the ```gridCoordinate``` resolves to the node with a name matching ```nodeName```
+    /// - Parameters:
+    ///   - gridCoordinate: should be a ```PitNode.coordP1``` or ```coordP1```
+    ///   - nodeName: if this method is used to load TokenNodes onto the BoardNode, then use BoardNode.boardPointNodeName
     func node(at gridCoordinate: GameModel.GridCoordinate, named nodeName: String) -> SKNode? {
        
+        // The max length on the relative X axis for either - or + direction
         let halfSide = sideLength / 2
+        // The max height on the relative Y axis for either - or + direction
         let halfHeight = sideLength / 4
+        // The distance between pits on the board's X axis
         let pitDistance = sideLength / halfNumberOfPits
         
         let adjustedXCoord = (CGFloat(gridCoordinate.x.rawValue) * pitDistance)
@@ -99,22 +118,36 @@ final class BoardNode: SKNode {
         return node.name == nodeName ? node : nil
     }
     
+    /// Creates a "skeleton" of boardPointNodes on the BoardNode frame. These nodes will allow TokenNodes to be fit onto them in the future.
+    /// - Parameter node: should be the ```containerNode``` of this BoardNode
     private func createBoardPoints(on node: SKSpriteNode) {
         let lineWidth: CGFloat = 3
+        // Because the relative Cartesian coordinates of the BoardNode begin in the center, we need to take half the width and height to get the min and max for the X an Y axis respectively
+        // The max length on the relative X axis for either - or + direction
         let halfBoardWidth = node.size.width / 2
+        // The max height on the relative Y axis for either - or + direction
         let halfBoardHeigth = node.size.height / 2
         let boardPointSize = CGSize(width: 24, height: 24)
+        // The distance between pits on the board's X axis
         let pitDistance = node.size.width / halfNumberOfPits
         
+        // These pits are listed in counter-clockwise order, starting at Player 2's base (from Player 1's perspective),
+        // although Player 1 and 2 are hypothetical at this point
         let relativeBoardPositions = [
+            // The base on the left
             CGPoint(x: -halfBoardWidth, y: 0),
+            // The first pit on the bottom half of the board
             CGPoint(x: -halfBoardWidth + pitDistance * 1, y: -halfBoardHeigth),
+            // The second pit on the bottom half of the board
             CGPoint(x: -halfBoardWidth + pitDistance * 2, y: -halfBoardHeigth),
             CGPoint(x: -halfBoardWidth + pitDistance * 3, y: -halfBoardHeigth),
             CGPoint(x: halfBoardWidth - pitDistance * 3, y: -halfBoardHeigth),
             CGPoint(x: halfBoardWidth - pitDistance * 2, y: -halfBoardHeigth),
             CGPoint(x: halfBoardWidth - pitDistance * 1, y: -halfBoardHeigth),
+            // The base on the right
             CGPoint(x: halfBoardWidth, y: 0),
+            // The first pit on the top half of the board.
+            // It is directly above "Pit 6" on the Y axis, on the right-half of the board.
             CGPoint(x: halfBoardWidth - pitDistance * 1, y: halfBoardHeigth),
             CGPoint(x: halfBoardWidth - pitDistance * 2, y: halfBoardHeigth),
             CGPoint(x: halfBoardWidth - pitDistance * 3, y: halfBoardHeigth),
@@ -125,7 +158,7 @@ final class BoardNode: SKNode {
         
         for (index, position) in relativeBoardPositions.enumerated() {
             let boardPointNode = SKShapeNode(ellipseOf: boardPointSize)
-            
+            // Draw a circular node and place it at the next point in the list of relativeBoardPositions
             boardPointNode.zPosition = NodeLayer.point.rawValue
             boardPointNode.name = BoardNode.boardPointNodeName
             boardPointNode.lineWidth = lineWidth
@@ -135,14 +168,15 @@ final class BoardNode: SKNode {
             
             node.addChild(boardPointNode)
             
-            
+            // Get the next position in the relativeBoardPositions list
             let lineIndex = index < relativeBoardPositions.count - 1 ? index + 1 : 0
             let nextPosition = relativeBoardPositions[lineIndex]
             
+            // Draw a line between this boardPointNode we just added to the next position
             let path = CGMutablePath()
             path.move(to: position)
             path.addLine(to: nextPosition)
-            
+            // Create the lineNode and center it, then add it to the BoardNode
             let lineNode = SKShapeNode(path: path, centered: true)
             lineNode.position = CGPoint(
                 x: (position.x + nextPosition.x) / 2,

@@ -180,17 +180,6 @@ class GameScene: SKScene {
             GradientNode.makeLinearNode(with: self, view: view!, linearGradientColors: GradientNode.sunsetPurples, animate: true)
             GradientNode.makeRadialNode(with: self, view: view!)
         } else {
-//            let logoNode = SKSpriteNode(imageNamed: "Mancala-logo")
-//            logoNode.size = CGSize(
-//                width: logoNode.size.width ,
-//                height: logoNode.size.height
-//            )
-//            logoNode.position = CGPoint(
-//                x: viewWidth / 2,
-//                y: viewHeight / 2
-//            )
-//            logoNode.zPosition = GameScene.NodeLayer.background.rawValue
-//            addChild(logoNode)
             
             let billiardFelt = SKSpriteNode(imageNamed: "Mancala-billiard-felt-")
             billiardFelt.size = CGSize(
@@ -589,9 +578,6 @@ class GameScene: SKScene {
             menuScene = MenuScene(with: savedGames)
         } else {
             if thisGameType == .vsOnline {
-//                let savedGameStore = SavedGameStore()
-//                let allSavedGames = savedGameStore.setupSavedGames()
-//                SKScene.savedGameModels = allSavedGames
                 let appDelegate = UIApplication.shared.delegate as? AppDelegate
                 let allSavedGames = appDelegate?.savedGameModels
                 menuScene = MenuScene(with: allSavedGames)
@@ -644,7 +630,6 @@ class GameScene: SKScene {
         
     }
     
-    
     /// Helper function for handleTouch(_:). Determines if the user touched on a TokenNode, and if so, kicks off gameplay for the active player
     /// - Parameter location: the location of the touch that has already been translated into the parent node's coordinate system. Assuming the GameScene.boardNode is the parent node, this will resolve into a pit on the game board. If not, nothing happens.
     private func handlePick(at location: CGPoint) {
@@ -660,7 +645,6 @@ class GameScene: SKScene {
             updateGameBoard(player: pit.player, name: pit.name)
         }
     }
-    
     
     /// Exectutes a player's turn. All gameplay logic is activated in this method and the state of the board is animated after. Finally, the message to display to the player is determined based on the state of the GameModel and the rest of the gameplay logic is executed for this turn.
     ///
@@ -697,7 +681,6 @@ class GameScene: SKScene {
                 
             }
 
-            
             /*-------- finish turn -----------*/
             var printPlayerTurnText = false
             var colorAction = SKAction()
@@ -734,7 +717,6 @@ class GameScene: SKScene {
             processGameUpdate()
         }    
     }
-    
     
     /// Updates the text of ```messageNode``` and animates it if necessary
     /// - Parameters:
@@ -853,8 +835,7 @@ class GameScene: SKScene {
     func runMessageNodeActions() {
         messageNode.run(SKAction.sequence(messageGlobalActions))
         messageGlobalActions.removeAll()
-    }
-    
+    }  
     
     /// Checks for a winner and queues the game-over ```messageNode``` actions
     /// - Parameter lastPlayerCaptured: This may be obsolete. It was used to add a little extra waiting time before running the ```messageNode``` action sequence

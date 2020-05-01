@@ -40,6 +40,7 @@
 import SpriteKit
 
 /**
+ A self-animating SKSpriteNode that is applied as a child node to buttons and other nodes. Makes use of "SKTexture+Additions.swift"
  
  Based on code from the tutorial found at https:www.raywenderlich.com/7544-game-center-for-ios-building-a-turn-based-game#
  By Ryan Ackerman
@@ -49,8 +50,9 @@ class BackgroundNode: SKSpriteNode {
         case pill
         case recessed
     }
-    
+    /// Was used for a manual implementation of ```changeColor(color:,duration:)```
     typealias ComputedFloat = () -> CGFloat
+    
     var originalColor: UIColor
     var originalSize: CGSize
     var originalKind: Kind
@@ -73,12 +75,14 @@ class BackgroundNode: SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /// Causes this background node to glow with a specified UIColor, then return to its originalColor
     func changeColor(color: UIColor, duration: TimeInterval) -> SKAction {
         let colorizeAction = SKAction.colorize(with: color, colorBlendFactor: 0.5, duration: duration)
         let reversedColorize = SKAction.colorize(with: originalColor, colorBlendFactor: 0.5, duration: duration)
         return SKAction.sequence([colorizeAction, reversedColorize])
     }
     
+    /// + Returns: An SKTexture created in  "SKTexture+Additions.swift"
     static func pillOrRecessed(_ kind: Kind,_ size: CGSize,_ color: UIColor?) -> SKTexture {
         let texture: SKTexture
         switch kind {
@@ -90,6 +94,7 @@ class BackgroundNode: SKSpriteNode {
         return texture
     }
     
+    /// Used to animate a background node that is acting as a progress bar
     func growWidth(over time: TimeInterval) -> SKAction {
         var growAction = SKAction()
         let originalPosition = position
