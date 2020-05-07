@@ -71,9 +71,7 @@ final class GameViewController: UIViewController {
         super.viewDidLoad()
         
         // Pass the savedGameModels dependency
-        let currentSKscene = MenuScene(with: savedGameModels)
-        currentSKscene.gameViewController = self
-        skView.presentScene(currentSKscene)
+        skView.presentScene(MenuScene(with: savedGameModels))
         // Set up the GameCenterHelper singleton
         GameCenterHelper.helper.viewController = self
         GameCenterHelper.helper.matchHistory = self.matchHistory

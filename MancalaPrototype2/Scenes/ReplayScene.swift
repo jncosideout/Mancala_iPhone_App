@@ -141,16 +141,17 @@ final class ReplayScene: GameScene {
         
         //MARK: - Button actions
         let buttonSize = CGSize(width: 125, height: 50)
-        let returnButton = ButtonNode("Continue", size: buttonSize) {
+        let returnButton = ButtonNode("Continue", size: buttonSize)
+        {   [weak self] in
             // The player who ends the match does call GameCenterHelper.endMatch()
             // The reason for this functionality is to send a notification to the other player when the match is over
             // by ending the turn instead of ending the match. Therefore, the next player has the responsibility of
             // truly ending the match. That is why we check model.onlineGameOver here.
-            if self.model.onlineGameOver {
-                
-                GameCenterHelper.helper.endMatch(self.actualModel, completion: { error in
+            if let onlineGameOver = self?.model.onlineGameOver, onlineGameOver {
+                guard let _actualModel = self?.actualModel else { return }
+                GameCenterHelper.helper.endMatch(_actualModel, completion: { error in
                     defer {
-                        self.isSendingTurn = false
+                        self?.isSendingTurn = false
                     }
                     
                     if let e = error {
@@ -158,9 +159,9 @@ final class ReplayScene: GameScene {
                     }
                     
                 })
-                self.returnToMenu()
+                self?.returnToMenu()
             } else {
-                self.returnToGame()
+                self?.returnToGame()
             }
         }
         returnButton.position = CGPoint(
@@ -172,14 +173,17 @@ final class ReplayScene: GameScene {
         addChild(returnButton)
         
         // Same setup as init(model_:,_:), but call replay() after
-        let replayButton = ButtonNode("Replay", size: buttonSize) {
-            self.model = GameModel(replayWith: self.actualModel.gameData)
-            self.model.localPlayerNumber = self.actualModel.localPlayerNumber
-            self.model.vsOnline = true
-            self.allTokenNodes = CircularLinkedList<TokenNode>()
-            self.removeAllChildren()
-            self.setUpScene(in: view)
-            self.replay()
+        let replayButton = ButtonNode("Replay", size: buttonSize)
+        {   [weak self, weak _actualModel = self.actualModel] in
+            guard let _gameData = _actualModel?.gameData, let _localPlayer = _actualModel?.localPlayerNumber
+                else { return }
+            self?.model = GameModel(replayWith: _gameData)
+            self?.model.localPlayerNumber = _localPlayer
+            self?.model.vsOnline = true
+            self?.allTokenNodes = CircularLinkedList<TokenNode>()
+            self?.removeAllChildren()
+            self?.setUpScene(in: view)
+            self?.replay()
         }
         replayButton.position = CGPoint(
             x: viewWidth - sceneMargin / 3.0 - buttonSize.width,

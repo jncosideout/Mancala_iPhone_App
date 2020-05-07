@@ -310,33 +310,15 @@ class GameModel: NSObject {//removed Codable ASB 06/29/19 //changed struct to cl
     }
     
     /**
-     Initializes directly from GKTurnBasedMatch.matchData
+     Initializes from GKTurnBasedMatch.matchData
      
-     
-     - Parameter gkMatchData: If this is empty then this GameModel will be setup for a new game.
+     Call this initializer in SKSCeneExtension.loadAndDisplay or whatever method gets a GKTurnBasedMatch object from receives a GKTurnBasedMatch object from GKLocalPlayerListener.player(_:receivedTurnEventFor:didBecomeActive)
+     - Parameter gkMatchData: This is GameData that was deserialized from ```GKTurnBasedMatch.matchData``` after calling ```GKTurnBasedMatch.loadMatchData```
      */
-    convenience init(fromGKMatch gkMatchData: Data) {
-        self.init(newGame: false)
-        
-        if !gkMatchData.isEmpty {
-            do {
-                gameData = try JSONDecoder().decode(GameData.self, from: gkMatchData)
-                pits = GameModel.initGameboard(from: gameData.pitsList)
-                playerTurn = gameData.playerTurn
-                _activePlayer = playerTurn == 1 ? mancalaPlayer1 : mancalaPlayer2
-                turnNumber = gameData.turnNumber
-                playerTurnText = gameData.playerTurnText
-                winner = gameData.winner
-                winnerTextArray = winnerTextArray
-                onlineGameOver = gameData.onlineGameOver
-            } catch {
-                print("error loading gkMatchData: \(error.localizedDescription)")
-            }
-        } else {
-            pits = GameModel.buildGameboard(pitsPerPlayer: GameModel.pitsOnEachSideNotIncludingBase)
-        }
-
-        playerTurnText = gameData.playerTurnText
+    convenience init(fromGKMatch gkMatchData: GameData) {
+        self.init(from: gkMatchData)
+        turnNumber = gameData.turnNumber
+        onlineGameOver = gameData.onlineGameOver
         printBoard(pits)
     }
    

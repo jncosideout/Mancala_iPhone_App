@@ -44,7 +44,7 @@ import SpriteKit
 /**
  The forefront menu of the app. First to assume responsibility for the major dependencies injected by the GameViewController.
  */
-class MenuScene: SKScene, Alertable {
+class MenuScene: SKScene {
     
     // The feedbackGenerator creates the rumble feature when playing the game
     let feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
@@ -69,7 +69,6 @@ class MenuScene: SKScene, Alertable {
     let firstTimeWalkthroughFilePath = Bundle.main.resourcePath! + "/firstTimeWalkthrough.bundle/firstTimeWalkthrough"
     let numPagesWalkthrough = 4
     var walkthroughText: [String]?
-    var gameViewController: UIViewController?
     var showSlide = 0
 
     // MARK: - Init
@@ -179,15 +178,18 @@ class MenuScene: SKScene, Alertable {
         addChild(billiardFelt)
         
         //MARK: - Buttons
-        versusHumanButton = ButtonNode("2 Player\nMode", size: buttonSize) {
-            self.view?.presentScene(MenuScene_2(vsComp: false, with: self.savedGameModels), transition: SKScene.transition)
+        versusHumanButton = ButtonNode("2 Player\nMode", size: buttonSize)
+        {   [weak self] in
+                self?.view?.presentScene(MenuScene_2(vsComp: false, with: self?.savedGameModels), transition: SKScene.transition)
         }
         
-        versusComputerButton = ButtonNode("Versus\nComputer", size: buttonSize) {
-            self.view?.presentScene(MenuScene_2(vsComp: true, with: self.savedGameModels), transition: SKScene.transition)
+        versusComputerButton = ButtonNode("Versus\nComputer", size: buttonSize)
+        {   [weak self] in
+                self?.view?.presentScene(MenuScene_2(vsComp: true, with: self?.savedGameModels), transition: SKScene.transition)
         }
         
-        onlineButton = ButtonNode("Online\nGame", size: buttonSize) {
+        onlineButton = ButtonNode("Online\nGame", size: buttonSize)
+        {   
             // Ask for permission to send notifications
             UserNotificationsHelper.askForPermission()
             // Present the Game Center Matchmaker ViewController

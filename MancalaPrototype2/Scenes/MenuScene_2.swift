@@ -51,7 +51,7 @@ class MenuScene_2: MenuScene {
     private var newLocalButton: ButtonNode!
     var backButton: ButtonNode!
     private var vsComputer: Bool
-    
+    private var gameTypeNode: InformationNode!
     // MARK: - Init
     
     required init?(coder aDecoder: NSCoder) {
@@ -131,41 +131,69 @@ class MenuScene_2: MenuScene {
         billiardFelt.zPosition = GameScene.NodeLayer.background.rawValue - 1
         addChild(billiardFelt)
         
+        let gameTypeText = vsComputer ? "Versus Computer" : "2 Player Mode"
+        let gameTypeNSAString = NSAttributedString(string: gameTypeText,
+                                              attributes: [
+                                              .font : UIFont.systemFont(ofSize: 18, weight: .semibold)
+                                              ])
+        var stringSizeConstraint = CGSize(width: buttonWidth, height: buttonSize.height)
+        let gameTypeNodeSize = gameTypeNSAString.boundingRect(with: stringSizeConstraint, options: [], context: nil)
+        stringSizeConstraint = CGSize(width: gameTypeNodeSize.width, height: gameTypeNodeSize.height)
+        stringSizeConstraint.width += sceneMargin
+        stringSizeConstraint.height *= 1.5
+        gameTypeNode = InformationNode(gameTypeText, size: stringSizeConstraint, named: nil)
+        gameTypeNode.position = CGPoint(
+            x: viewWidth / 2 - stringSizeConstraint.width / 2,
+            y: viewHeight - stringSizeConstraint.height * 1.5
+        )
+        gameTypeNode.zPosition = GameScene.NodeLayer.ui.rawValue
+        addChild(gameTypeNode)
+        
         //MARK: - Buttons
-        savedLocalButton = ButtonNode("Saved Game", size: buttonSize) {
-            if self.vsComputer {
+        savedLocalButton = ButtonNode("Saved Game", size: buttonSize)
+        {   [weak self] in
+            if let _vsComputer = self?.vsComputer, _vsComputer {
 
-                self.view?.presentScene(AI_GameScene(fromSavedGames: self.savedGameModels, gameType: .vsAI), transition: SKScene.self.transition)
-            } else {
+                    self?.view?.presentScene(AI_GameScene(fromSavedGames: self?.savedGameModels, gameType: .vsAI), transition: SKScene.transition)
+                } else {
 
-                self.view?.presentScene(GameScene(fromSavedGames: self.savedGameModels, gameType: .vsHuman), transition: SKScene.self.transition)
-            }
+                    self?.view?.presentScene(GameScene(fromSavedGames: self?.savedGameModels, gameType: .vsHuman), transition: SKScene.transition)
+                }
         }
         
-        newLocalButton = ButtonNode("New Game", size: buttonSize) {
-            var newGame: GameModel
-            let newGameData = GameData()
-            if self.vsComputer {
-                
-                newGame = self.savedGameModels[0]
-                newGame.gameData = newGameData
-                newGame.resetGame()
-                newGame.setUpGame(from: newGameData)
-                
-                self.view?.presentScene(AI_GameScene(fromSavedGames: self.savedGameModels, gameType: .vsAI), transition: SKScene.transition)
-            } else {
-                
-                newGame = self.savedGameModels[1]
-                newGame.gameData = newGameData
-                newGame.resetGame()
-                newGame.setUpGame(from: newGameData)
-                
-                self.view?.presentScene(GameScene(fromSavedGames: self.savedGameModels, gameType: .vsHuman), transition: SKScene.transition)
-            }
+        newLocalButton = ButtonNode("New Game", size: buttonSize)
+        {   [weak self] in
+                var newGame: GameModel
+                let newGameData = GameData()
+                if let _vsComputer = self?.vsComputer, _vsComputer {
+                    guard let vsCompGameModel = self?.savedGameModels[0] else { return }
+                    newGame = vsCompGameModel
+                    newGame.gameData = newGameData
+                    newGame.resetGame()
+                    newGame.setUpGame(from: newGameData)
+                    
+                    self?.view?.presentScene(AI_GameScene(fromSavedGames: self?.savedGameModels, gameType: .vsAI), transition: SKScene.transition)
+                } else {
+                    guard let vsCompHumanModel = self?.savedGameModels[1] else { return }
+                    newGame = vsCompHumanModel
+                    newGame.gameData = newGameData
+                    newGame.resetGame()
+                    newGame.setUpGame(from: newGameData)
+                    
+                    self?.view?.presentScene(GameScene(fromSavedGames: self?.savedGameModels, gameType: .vsHuman), transition: SKScene.transition)
+                }
         }
         
-        backButton = ButtonNode("Main Menu", size: buttonSize) {
-            self.returnToMenu()
+        backButton = ButtonNode("Main Menu", size: buttonSize)
+        { [weak self] in
+            
+            if let savedGames = self?.savedGameModels {
+                self?.view?.presentScene(MenuScene(with: savedGames), transition: SKScene.returnTransition)
+            } else {
+                fatalError("warning! returnToMenu from MenuScene_2 without savedGamesStore")
+            }
+            
+            //self?.returnToMenu()   //    TEMP ASB 5/06/20
         }
         
         runningYOffset += (buttonSize.height / 2)
@@ -216,7 +244,7 @@ class MenuScene_2: MenuScene {
             fatalError("warning! returnToMenu from MenuScene_2 without savedGamesStore")
         }
         
-        view?.presentScene(menuScene, transition: SKTransition.push(with: .down, duration: 0.3))
+        view?.presentScene(menuScene, transition: SKScene.returnTransition)
     }
     
 }//EoC

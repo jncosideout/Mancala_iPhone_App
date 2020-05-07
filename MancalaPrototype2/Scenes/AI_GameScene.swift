@@ -87,6 +87,19 @@ class AI_GameScene: GameScene {
         if UserDefaults.allowGradientAnimations {
             GradientNode.makeLinearNode(with: self, view: view!, linearGradientColors: GradientNode.sunsetPurples, animate: true)
             GradientNode.makeRadialNode(with: self, view: view!)
+        } else {
+            
+            let billiardFelt = SKSpriteNode(imageNamed: "Mancala-billiard-felt-")
+            billiardFelt.size = CGSize(
+                width: billiardFelt.size.width,
+                height: billiardFelt.size.height
+            )
+            billiardFelt.position = CGPoint(
+                x: viewWidth / 2,
+                y: viewHeight / 2
+            )
+            billiardFelt.zPosition = GameScene.NodeLayer.background.rawValue - 1
+            addChild(billiardFelt)
         }
         
         var runningYOffset: CGFloat = 0
@@ -127,16 +140,18 @@ class AI_GameScene: GameScene {
         
         //MARK: - Buttons
         let buttonSize = CGSize(width: 100, height: 50)
-        let menuButton = ButtonNode("Menu", size: buttonSize) {
-            self.returnToMenu()
+        let backButton = ButtonNode("Back", size: buttonSize)
+        {   [weak self] in
+            self?.returnToMenu()
         }
-        menuButton.position = CGPoint(
+        
+        backButton.position = CGPoint(
             x: sceneMargin / 3.0,
             y: viewHeight - safeAreaTopInset - sceneMargin / 2 - (buttonSize.height)
         )
-        menuButton.zPosition = NodeLayer.ui.rawValue
+        backButton.zPosition = NodeLayer.ui.rawValue
         
-        addChild(menuButton)
+        addChild(backButton)
         
         let computerWindowSize = CGSize(width: 100, height: 35)
         let plyWinTopText = "Computer"

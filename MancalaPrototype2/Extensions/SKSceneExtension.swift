@@ -18,9 +18,10 @@ import GameKit
  + The first solution was to make a new global reference to savedGameModels, which is considered a use of a singleton. Normally, when returning from an Online match, the GameScene prepares the MenuScene by passing its ```savedGameModels```. At this point the singleton savedGameModels in this SKScene extension was retrieved and substituted.
  + Now the best practice is access the appDelegate directly since the dependency we were injecting is referencing the instance in the appDelegate, and we don't want to have more than one floating around.
  */
-extension SKScene {
+extension SKScene: Alertable {
     
     static let transition = SKTransition.push(with: .up, duration: 0.3)
+    static let returnTransition = SKTransition.push(with: .down, duration: 0.3)
     //static var savedGameModels: [GameModel]?
     
     
@@ -34,20 +35,36 @@ extension SKScene {
 //        if let savedGameArray = SKScene.savedGameModels {
 //            SavedGameStore(withUpdated: savedGameArray)
 //        }
-        match.loadMatchData { (data, error) in
+        match.loadMatchData { [weak self] (data, error) in
             let model: GameModel
             if let theError = error {
                 print("ERROR: Could not load match\n" + theError.localizedDescription)
+                self?.errorLoadingMatch()
                 return
             }
             
             /// gkMatchData is the JSON representation of GameData stored in the GKTurnBasedMatch.
             if let gkMatchData = data {
-                /// Initialize the GameModel be deserializing gkMatchData
-                model = GameModel(fromGKMatch: gkMatchData)
+                // Deserialize data and convert to GameData
+                if !gkMatchData.isEmpty {
+                    do {
+                        let gameData = try JSONDecoder().decode(GameData.self, from: gkMatchData)
+                        /// Initialize the GameModel with the GameData
+                        model = GameModel(fromGKMatch: gameData)
+                    } catch {
+                        print("error deserializing gkMatchData: \(error.localizedDescription)")
+                        self?.errorLoadingMatch()
+                        return
+                    }
+                } else {
+                    print("gkMatchData was empty")
+                    model = GameModel(newGame: true)
+                }
+
             } else {
                 print("error loading gameData: \(String(describing: error))" )
-                model = GameModel(newGame: true)
+                self?.errorLoadingMatch()
+                return
             }
             
             /// Give the match to GameCenterHelper so that turn-handling can take place
@@ -73,7 +90,7 @@ extension SKScene {
                 let gameScene = GameScene(model: model)
                 gameScene.thisGameType = .vsOnline
             
-                self.view?.presentScene(gameScene, transition: SKScene.transition)
+                self?.view?.presentScene(gameScene, transition: SKScene.transition)
             } else {
                 // to find out if the local player is player 1 or 2
                 var activePlayer: Bool
@@ -91,14 +108,19 @@ extension SKScene {
                 } else {
                     activePlayer = false
                 }
-                self.view?.presentScene(ReplayScene(model_: model, activePlayer), transition: SKScene.transition)
+                self?.view?.presentScene(ReplayScene(model_: model, activePlayer), transition: SKScene.transition)
             }
             
         }
     }
+    
+    /// Helper for presenting a generic failure message
+    func errorLoadingMatch() {
+        showAlert(withTitle: "Error loading match data", message: "Please check your connection and try again.")
+    }
     //MARK: - notifications
     
-    /// Selector for "Your turn" notification observer
+    /// Selector for notifications sent or triggered by GKLocalPlayerListener.player(_:receivedTurnEventFor:didBecomeActive)
     @objc func presentGame(_ notification: Notification) {
          guard let match = notification.object as? GKTurnBasedMatch else {
              return
@@ -119,7 +141,7 @@ extension SKScene {
     @objc func presentSettings(_ notification: Notification) {
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         let allSavedGames = appDelegate?.savedGameModels
-        self.view?.presentScene(SettingsScene(vsComp: false, with: allSavedGames))
+        view?.presentScene(SettingsScene(vsComp: false, with: allSavedGames))
     }
     
     /// Registers an SKScene to receive and present "Unlocked new game mode" notifications

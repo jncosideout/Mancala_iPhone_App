@@ -226,16 +226,17 @@ class GameScene: SKScene {
         
         //MARK: - Buttons
         let buttonSize = CGSize(width: 125, height: 50)
-        let menuButton = ButtonNode("Menu", size: buttonSize) {
-            self.returnToMenu()
+        let backButton = ButtonNode("Back", size: buttonSize)
+        {   [weak self] in
+                self?.returnToMenu()
         }
-        menuButton.position = CGPoint(
+        backButton.position = CGPoint(
             x: sceneMargin / 3.0,
             y: viewHeight - safeAreaTopInset - sceneMargin / 2 - (buttonSize.height)
         )
-        menuButton.zPosition = NodeLayer.ui.rawValue
+        backButton.zPosition = NodeLayer.ui.rawValue
         
-        addChild(menuButton)
+        addChild(backButton)
         
         let playerWindowSize = CGSize(width: 75, height: 35)
         let plyWinTopText = model.playerPerspective == 1 ? "P2" : "P1"
@@ -567,26 +568,27 @@ class GameScene: SKScene {
     
     // MARK: - Helpers
     /**
-     Loads and displays the MenuScene with the ```savedGameModels```
+     Loads and displays the MenuScene (or MenuScene_2 depending on the context) with the ```savedGameModels```
       
      Either via keeping the dependency injection chain or retrieving from the appDelegate and reinjecting to MenuScene. This keeps the number of references to ```savedGameModels``` to only the shared instance in appDelegate or the one belonging to the current SKScene
      */
     func returnToMenu() {
-        var menuScene = MenuScene()//ASB TEMP 1/31/20
+        var menuScene: MenuScene
         if let savedGames = savedGameModels {
-
-            menuScene = MenuScene(with: savedGames)
+            let menuType = thisGameType == .vsAI
+            menuScene = MenuScene_2(vsComp: menuType, with: savedGames)
+            view?.presentScene(menuScene, transition: SKScene.returnTransition)
         } else {
             if thisGameType == .vsOnline {
                 let appDelegate = UIApplication.shared.delegate as? AppDelegate
                 let allSavedGames = appDelegate?.savedGameModels
                 menuScene = MenuScene(with: allSavedGames)
+                view?.presentScene(menuScene, transition: SKScene.returnTransition)
             } else {
                 print("warning! returnToMenu from GameScene without savedGamesStore")
             }
         }
         
-        view?.presentScene(menuScene, transition: SKTransition.push(with: .down, duration: 0.3))
     }
     
     /**
