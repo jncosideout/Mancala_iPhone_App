@@ -40,7 +40,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "0BAF0995-998D-48A3-A2CB-3CD297406009"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MancalaPrototype2/Helpers/GameCenterHelper.swift"
@@ -129,22 +129,6 @@
             startingLineNumber = "43"
             endingLineNumber = "43"
             landmarkName = "loadAndDisplay(match:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "24095114-53F1-4974-B295-9593C9A044C6"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MancalaPrototype2/Scenes/MenuScene_2.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "191"
-            endingLineNumber = "191"
-            landmarkName = "setUpScene(in:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

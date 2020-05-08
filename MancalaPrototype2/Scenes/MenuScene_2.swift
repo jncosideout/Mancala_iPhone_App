@@ -39,6 +39,7 @@
 
 import GameKit
 import SpriteKit
+import UserNotifications
 
 /**
  Sub-menu for choosing a new game or continuing the saved game.
@@ -50,7 +51,7 @@ class MenuScene_2: MenuScene {
     private var savedLocalButton: ButtonNode!
     private var newLocalButton: ButtonNode!
     var backButton: ButtonNode!
-    private var vsComputer: Bool
+    var vsComputer: Bool
     private var gameTypeNode: InformationNode!
     // MARK: - Init
     
@@ -90,6 +91,7 @@ class MenuScene_2: MenuScene {
     
     /// Add all the nodes to this scene. Configure the buttons and their actions. Trigger instructionsNode animation if required.
     private func setUpScene(in view: SKView?) {
+        removeAllChildren()
         guard viewWidth > 0 else {
             return
         }
@@ -151,49 +153,18 @@ class MenuScene_2: MenuScene {
         
         //MARK: - Buttons
         savedLocalButton = ButtonNode("Saved Game", size: buttonSize)
-        {   [weak self] in
-            if let _vsComputer = self?.vsComputer, _vsComputer {
-
-                    self?.view?.presentScene(AI_GameScene(fromSavedGames: self?.savedGameModels, gameType: .vsAI), transition: SKScene.transition)
-                } else {
-
-                    self?.view?.presentScene(GameScene(fromSavedGames: self?.savedGameModels, gameType: .vsHuman), transition: SKScene.transition)
-                }
+        {
+            self.launchLocalGame()
         }
         
         newLocalButton = ButtonNode("New Game", size: buttonSize)
-        {   [weak self] in
-                var newGame: GameModel
-                let newGameData = GameData()
-                if let _vsComputer = self?.vsComputer, _vsComputer {
-                    guard let vsCompGameModel = self?.savedGameModels[0] else { return }
-                    newGame = vsCompGameModel
-                    newGame.gameData = newGameData
-                    newGame.resetGame()
-                    newGame.setUpGame(from: newGameData)
-                    
-                    self?.view?.presentScene(AI_GameScene(fromSavedGames: self?.savedGameModels, gameType: .vsAI), transition: SKScene.transition)
-                } else {
-                    guard let vsCompHumanModel = self?.savedGameModels[1] else { return }
-                    newGame = vsCompHumanModel
-                    newGame.gameData = newGameData
-                    newGame.resetGame()
-                    newGame.setUpGame(from: newGameData)
-                    
-                    self?.view?.presentScene(GameScene(fromSavedGames: self?.savedGameModels, gameType: .vsHuman), transition: SKScene.transition)
-                }
+        {
+            self.launchNewLocalGame()
         }
         
         backButton = ButtonNode("Main Menu", size: buttonSize)
-        { [weak self] in
-            
-            if let savedGames = self?.savedGameModels {
-                self?.view?.presentScene(MenuScene(with: savedGames), transition: SKScene.returnTransition)
-            } else {
-                fatalError("warning! returnToMenu from MenuScene_2 without savedGamesStore")
-            }
-            
-            //self?.returnToMenu()   //    TEMP ASB 5/06/20
+        {
+            self.returnToMenu()
         }
         
         runningYOffset += (buttonSize.height / 2)
@@ -237,14 +208,34 @@ class MenuScene_2: MenuScene {
      Loads and displays the MenuScene with the reference to ```savedGameModels```
      */
     func returnToMenu() {
-        let menuScene: MenuScene
-        if let savedGames = savedGameModels {
-            menuScene = MenuScene(with: savedGames)
+        NotificationCenter.default.post(name: .showMenuScene, object: nil)
+    }
+    
+    func launchNewLocalGame() {
+        var newGame: GameModel
+        let newGameData = GameData()
+        if vsComputer {
+            guard let vsCompGameModel = savedGameModels?[0] else { return }
+            newGame = vsCompGameModel
+            
         } else {
-            fatalError("warning! returnToMenu from MenuScene_2 without savedGamesStore")
+            guard let vsCompHumanModel = savedGameModels?[1] else { return }
+            newGame = vsCompHumanModel
         }
+        // Overwrite the GameModel
+        newGame.gameData = newGameData
+        newGame.resetGame()
+        newGame.setUpGame(from: newGameData)
         
-        view?.presentScene(menuScene, transition: SKScene.returnTransition)
+        launchLocalGame()
+    }
+    
+    func launchLocalGame() {
+        if vsComputer {
+            NotificationCenter.default.post(name: .showAI_GameScene, object: nil)
+        } else {
+            NotificationCenter.default.post(name: .showGameScene, object: nil)
+        }
     }
     
 }//EoC

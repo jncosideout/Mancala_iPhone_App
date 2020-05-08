@@ -174,7 +174,7 @@ class GameScene: SKScene {
         guard viewWidth > 0 else {
             return
         }
-        
+        removeAllChildren()
         backgroundColor = .background
         if UserDefaults.allowGradientAnimations {
             GradientNode.makeLinearNode(with: self, view: view!, linearGradientColors: GradientNode.sunsetPurples, animate: true)
@@ -227,9 +227,10 @@ class GameScene: SKScene {
         //MARK: - Buttons
         let buttonSize = CGSize(width: 125, height: 50)
         let backButton = ButtonNode("Back", size: buttonSize)
-        {   [weak self] in
-                self?.returnToMenu()
+        {
+            self.returnToMenu()
         }
+        
         backButton.position = CGPoint(
             x: sceneMargin / 3.0,
             y: viewHeight - safeAreaTopInset - sceneMargin / 2 - (buttonSize.height)
@@ -573,22 +574,13 @@ class GameScene: SKScene {
      Either via keeping the dependency injection chain or retrieving from the appDelegate and reinjecting to MenuScene. This keeps the number of references to ```savedGameModels``` to only the shared instance in appDelegate or the one belonging to the current SKScene
      */
     func returnToMenu() {
-        var menuScene: MenuScene
-        if let savedGames = savedGameModels {
+        switch thisGameType {
+        case .vsHuman, .vsAI:
             let menuType = thisGameType == .vsAI
-            menuScene = MenuScene_2(vsComp: menuType, with: savedGames)
-            view?.presentScene(menuScene, transition: SKScene.returnTransition)
-        } else {
-            if thisGameType == .vsOnline {
-                let appDelegate = UIApplication.shared.delegate as? AppDelegate
-                let allSavedGames = appDelegate?.savedGameModels
-                menuScene = MenuScene(with: allSavedGames)
-                view?.presentScene(menuScene, transition: SKScene.returnTransition)
-            } else {
-                print("warning! returnToMenu from GameScene without savedGamesStore")
-            }
+            NotificationCenter.default.post(name: .showMenuScene_2, object: menuType)
+        case .vsOnline:
+            NotificationCenter.default.post(name: .showMenuScene, object: nil)
         }
-        
     }
     
     /**

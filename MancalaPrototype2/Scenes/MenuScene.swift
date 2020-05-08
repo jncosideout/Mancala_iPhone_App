@@ -40,7 +40,7 @@
 
 import GameKit
 import SpriteKit
-
+import UserNotifications
 /**
  The forefront menu of the app. First to assume responsibility for the major dependencies injected by the GameViewController.
  */
@@ -70,7 +70,7 @@ class MenuScene: SKScene {
     let numPagesWalkthrough = 4
     var walkthroughText: [String]?
     var showSlide = 0
-
+    var didMoveToViewFirstTime = true
     // MARK: - Init
     
     
@@ -110,17 +110,20 @@ class MenuScene: SKScene {
         feedbackGenerator.prepare()
         // Destroy the last Online GKTurnBasedMatch
         GameCenterHelper.helper.currentMatch = nil
-        // Add nodes to the scene
-        setUpScene(in: view)
-        // Register the scene to receive these types of notifications
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(authenticationChanged(_:)),
-            name: .authenticationChanged,
-            object: nil)
-        addObserverForPresentGame()
-        addObserverForPresentSettings()
         
+        if didMoveToViewFirstTime {
+            // Add nodes to the scene
+            setUpScene(in: view)
+            // Register the scene to receive these types of notifications
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(authenticationChanged(_:)),
+                name: .authenticationChanged,
+                object: nil)
+            addObserverForPresentGame()
+            addObserverForPresentSettings()
+        }
+        didMoveToViewFirstTime = false
     }
     
     override func didChangeSize(_ oldSize: CGSize) {
@@ -179,8 +182,9 @@ class MenuScene: SKScene {
         
         //MARK: - Buttons
         versusHumanButton = ButtonNode("2 Player\nMode", size: buttonSize)
-        {   [weak self] in
-                self?.view?.presentScene(MenuScene_2(vsComp: false, with: self?.savedGameModels), transition: SKScene.transition)
+        {
+            let vsComp = false
+            NotificationCenter.default.post(name: .showMenuScene_2, object: vsComp)
         }
         
         versusComputerButton = ButtonNode("Versus\nComputer", size: buttonSize)
@@ -276,6 +280,8 @@ class MenuScene: SKScene {
             onlineButton.isEnabled = notification.object as? Bool ?? false
         }
     }
+    
+    
     
     /// Initial purpose of this dictionary was selecting the appropriate images for this scene. This is outdated now that the "Launch Screen.storyboard" uses the same image set as the backgrounds in the SKScenes
     let modelMap : [ String : Model ] = [

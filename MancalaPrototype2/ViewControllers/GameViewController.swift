@@ -50,6 +50,12 @@ final class GameViewController: UIViewController {
     var savedGameModels: [GameModel]!
     var matchHistory: MatchHistory!
     
+    // These will be presented when a notification is reaceived
+    var menuScene: MenuScene!
+    var menuScene_2: MenuScene_2!
+    var gameScene: GameScene!
+    var ai_gameScene: AI_GameScene!
+    
     // Make sure our view is recognized as an SKView
     var skView: SKView {
         return view as! SKView
@@ -69,11 +75,80 @@ final class GameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Pass the savedGameModels dependency
-        skView.presentScene(MenuScene(with: savedGameModels))
+        // Register notification observers
+        addObserverForShowMenuScene_2()
+        addObserverForShowMenuScene()
+        addObserverForShowGameScene()
+        addObserverForShowAI_GameScene()
+        // Initialize the SKScenes
+        menuScene = MenuScene()
+        menuScene_2 = MenuScene_2(vsComp: false, with: savedGameModels)
+        ai_gameScene = AI_GameScene(fromSavedGames: savedGameModels, gameType: .vsAI)
+        gameScene = GameScene(fromSavedGames: savedGameModels, gameType: .vsHuman)
+        // present the main MenuScene
+        skView.presentScene(menuScene)
         // Set up the GameCenterHelper singleton
         GameCenterHelper.helper.viewController = self
         GameCenterHelper.helper.matchHistory = self.matchHistory
     }
+    
+    //MARK: - Notifications
+    
+    /// Selector function for ```showMenuScene``` notification.
+    @objc private func showMenuScene(_ notification: Notification) {
+        skView.presentScene(menuScene, transition: SKScene.transition)
+    }
+
+    /// Registers the GameViewController to receive ```showMenuScene```  notifications
+    func addObserverForShowMenuScene() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(showMenuScene(_:)),
+            name: .showMenuScene,
+            object: nil)
+    }
+    
+    /// Selector function for ```showMenuScene_2``` notification.
+    @objc private func showMenuScene_2(_ notification: Notification) {
+        menuScene_2.vsComputer = notification.object as! Bool
+        skView.presentScene(menuScene_2, transition: SKScene.transition)
+    }
+    
+    /// Registers the GameViewController to receive ```showMenuScene_2```  notifications
+    func addObserverForShowMenuScene_2() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(showMenuScene_2(_:)),
+            name: .showMenuScene_2,
+            object: nil)
+    }
+
+    /// Selector function for ```showGameScene``` notification.
+    @objc private func showGameScene(_ notification: Notification) {
+        skView.presentScene(gameScene, transition: SKScene.transition)
+    }
+
+    /// Registers the GameViewController to receive ```showGameScene```  notifications
+    func addObserverForShowGameScene() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(showGameScene(_:)),
+            name: .showGameScene,
+            object: nil)
+    }
+    
+    /// Selector function for ```showAI_GameScene``` notification.
+    @objc private func showAI_GameScene(_ notification: Notification) {
+        skView.presentScene(ai_gameScene, transition: SKScene.transition)
+    }
+
+    /// Registers the GameViewController to receive ```showAI_GameScene```  notifications
+    func addObserverForShowAI_GameScene() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(showAI_GameScene),
+            name: .showAI_GameScene,
+            object: nil)
+    }
+
 }

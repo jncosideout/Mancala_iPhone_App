@@ -19,5 +19,9 @@ import Foundation
 extension Notification.Name {
     static let presentGame = Notification.Name("presentGame")
     static let authenticationChanged = Notification.Name("authenticationChanged")
-    static let presentSettings = Notification.Name("presentSettingsd")
+    static let presentSettings = Notification.Name("presentSettings")
+    static let showMenuScene = Notification.Name("showMenuScene")
+    static let showMenuScene_2 = Notification.Name("showMenuScene_2")
+    static let showGameScene = Notification.Name("showGameScene")
+    static let showAI_GameScene = Notification.Name("showAI_GameScene")
 }
