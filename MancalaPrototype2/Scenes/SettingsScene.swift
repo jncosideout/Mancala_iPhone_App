@@ -44,7 +44,7 @@ import SpriteKit
 /**
  Provides an array of settings that can be toggled by the user. Also provides the slide shows for the "How to play" instructions and "Credits."
  */
-class SettingsScene: MenuScene_2 {
+class SettingsScene: MenuScene_2, Alertable {
     
     private var backGroundAnimationToggle: ButtonNode!
     private var instructionsButton: ButtonNode!
@@ -61,13 +61,20 @@ class SettingsScene: MenuScene_2 {
     let numCreditsPages = 3
     
     // MARK: - Init
+    override init() {
+        super.init()
+        didMoveToViewFirstTime = true
+    }
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     override func didMove(to view: SKView) {
-        setUpScene(in: view)
+        if didMoveToViewFirstTime {
+            setUpScene(in: view)
+        }
+        didMoveToViewFirstTime = false
         backGroundAnimationToggle.looksEnabled = UserDefaults.allowGradientAnimations
-        
-        addObserverForPresentGame()
-        addObserverForPresentSettings()
     }
     
     /// Add all the nodes to this scene. Configure the buttons and their actions.
@@ -129,7 +136,11 @@ class SettingsScene: MenuScene_2 {
              if UserDefaults.hasLaunchedFirstTime {
                  self.firstTimeWalkthroughToggle.looksEnabled = false
                  UserDefaults.set(hasLaunchedFirstTime: false)
-                self.showAlert(withTitle: "Walkthrough activated", message: "Go back to Main Menu to see the first-time walkthrough. Then and choose \"2 Player\" or \"Versus Computer\" to see the rest of the instructions.\nAfterward, you won't see them again until you press this button.")
+                self.showAlert(withTitle: "Walkthrough activated", message: "You will be taken back to the Main Menu to see the first-time walkthrough. Then choose \"2 Player\" or \"Versus Computer\" to see the rest of the instructions.\nAfterward, you won't see them again until you press this button.") {
+                    let didMoveToViewFirstTime = true
+                    NotificationCenter.default.post(name: .showMenuScene, object: didMoveToViewFirstTime)
+                }
+                
              } else {
                  self.firstTimeWalkthroughToggle.looksEnabled = true
                  UserDefaults.set(hasLaunchedFirstTime: true)

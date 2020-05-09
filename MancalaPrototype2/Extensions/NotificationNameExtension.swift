@@ -24,4 +24,5 @@ extension Notification.Name {
     static let showMenuScene_2 = Notification.Name("showMenuScene_2")
     static let showGameScene = Notification.Name("showGameScene")
     static let showAI_GameScene = Notification.Name("showAI_GameScene")
+    static let continueOnlineGame = Notification.Name("continueOnlineGame")
 }

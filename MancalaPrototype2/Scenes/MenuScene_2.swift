@@ -85,8 +85,6 @@ class MenuScene_2: MenuScene {
      */
     override func didMove(to view: SKView) {
         setUpScene(in: view)
-        addObserverForPresentGame()
-        addObserverForPresentSettings()
     }
     
     /// Add all the nodes to this scene. Configure the buttons and their actions. Trigger instructionsNode animation if required.
@@ -205,12 +203,15 @@ class MenuScene_2: MenuScene {
     // MARK: - Helpers
     
     /**
-     Loads and displays the MenuScene with the reference to ```savedGameModels```
+     Loads and displays the MenuScene with
      */
     func returnToMenu() {
         NotificationCenter.default.post(name: .showMenuScene, object: nil)
     }
     
+    /**
+     Setup a new GameModel, overwrite the appropriate element of ```savedGameModels```, then display the appropriate GameScene
+     */
     func launchNewLocalGame() {
         var newGame: GameModel
         let newGameData = GameData()
@@ -230,6 +231,9 @@ class MenuScene_2: MenuScene {
         launchLocalGame()
     }
     
+    /**
+     Display the appropriate GameScene
+     */
     func launchLocalGame() {
         if vsComputer {
             NotificationCenter.default.post(name: .showAI_GameScene, object: nil)

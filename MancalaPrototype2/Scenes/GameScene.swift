@@ -63,7 +63,7 @@ class GameScene: SKScene {
     }
     
     // MARK: - Properties
-    var model: GameModel
+    var model: GameModel!
     var boardNode: BoardNode!
     var messageNode: InformationNode!
 
@@ -81,7 +81,7 @@ class GameScene: SKScene {
     var globalActions = [SKAction]()
     var messageGlobalActions = [SKAction]()
     var thisGameType = GameType.vsHuman
-    var savedGameModels: [GameModel]!
+    
     var animationTimer: Timer?
     var animationsFinished = true
     var lastActivePlayer = 0
@@ -101,42 +101,18 @@ class GameScene: SKScene {
     }
     
     // MARK: - Init
-    /**
-     Carries the GameModel array of saved games for "2 Player Mode" (VS Human) and "VS Computer" mode. Used for dependency injection from AppDelegate.
-     
-     The entire system operates on the assumption that savedGames[1] contains the "VS Human" saved game and savedGames[0] contains the "VS Computer" saved game.
-     - Important: Do not use this initializer unless you have a loaded [GameModel] array to pass to it. Otherwise ```savedGameModels``` will be set nil
-     */
-    convenience init(fromSavedGames: [GameModel]?, gameType: GameType) {
-        let gameModel: GameModel
-        if let savedGames = fromSavedGames {
-            
-            switch gameType {
-            case .vsHuman:
-                gameModel = savedGames[1]
-            case .vsAI:
-                gameModel = savedGames[0]
-            //case .vsOnline:
-                //gameModel = savedGames[2]
-            default:
-                gameModel = GameModel(newGame: true)
-            }
-        } else {
-            gameModel = GameModel(newGame: true)
-        }
-        self.init(model: gameModel)
-        savedGameModels = fromSavedGames
-        thisGameType = gameType
+    
+    convenience init(model: GameModel) {
+        self.init()
+        self.model = model
     }
     
-    
-    init(model: GameModel) {
-        self.model = model
-        
+    override init() {
         super.init(size: .zero)
         
         scaleMode = .resizeFill
     }
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -152,8 +128,6 @@ class GameScene: SKScene {
         feedbackGenerator.prepare()
         
         setUpScene(in: view)
-        addObserverForPresentGame()
-        addObserverForPresentSettings()
         
         setupGameOverMessageActions(false)
         if model.winner != nil {
@@ -569,9 +543,7 @@ class GameScene: SKScene {
     
     // MARK: - Helpers
     /**
-     Loads and displays the MenuScene (or MenuScene_2 depending on the context) with the ```savedGameModels```
-      
-     Either via keeping the dependency injection chain or retrieving from the appDelegate and reinjecting to MenuScene. This keeps the number of references to ```savedGameModels``` to only the shared instance in appDelegate or the one belonging to the current SKScene
+     Loads and displays the MenuScene (or MenuScene_2 depending on the context)
      */
     func returnToMenu() {
         switch thisGameType {

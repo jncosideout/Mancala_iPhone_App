@@ -12,29 +12,21 @@ import Foundation
 import SpriteKit
 import GameKit
 /**
- The benefit of putting loadAndDisplay(match:) in an extension, is that it allows us to open a match from a local notification received in any scene in the app
- The trade off is that we no longer can use dependency injection with savedGameModels when moving to and from scenes and the Online Game.
+Contains the methods for loading and presenting an online match replay scene and game scene.
  
- + The first solution was to make a new global reference to savedGameModels, which is considered a use of a singleton. Normally, when returning from an Online match, the GameScene prepares the MenuScene by passing its ```savedGameModels```. At this point the singleton savedGameModels in this SKScene extension was retrieved and substituted.
+ + Uses the same pattern of "Notification Observer/ Selector'
  + Now the best practice is access the appDelegate directly since the dependency we were injecting is referencing the instance in the appDelegate, and we don't want to have more than one floating around.
  */
-extension SKScene: Alertable {
+extension GameViewController: Alertable {
     
     static let transition = SKTransition.push(with: .up, duration: 0.3)
     static let returnTransition = SKTransition.push(with: .down, duration: 0.3)
-    //static var savedGameModels: [GameModel]?
-    
     
     /// Implements the completion handler for GKTurnBasedMatch.loadMatchData(_:).  Sets up an Online game before presenting the ```ReplayScene``` or ```GameScene``` to the user.
     /// - Parameter match: Was either chosen by the user in GameCenter or loaded from a "Your Turn" notification.
     func loadAndDisplay(match: GKTurnBasedMatch) {
         
-        //save local games before loading online match
-        //UPDATE: using shared appDelegate instance to retrieve savedGamesArray after returning from online match
-        // No longer need to create this extra reference when leaving the current SKScene before loading a GKTurnBasedMatch
-//        if let savedGameArray = SKScene.savedGameModels {
-//            SavedGameStore(withUpdated: savedGameArray)
-//        }
+
         match.loadMatchData { [weak self] (data, error) in
             let model: GameModel
             if let theError = error {
@@ -87,10 +79,9 @@ extension SKScene: Alertable {
                 model.playerPerspective = model.playerTurn
                 model.gameData.oldPitsList = model.saveGameBoardToList(model.pits)
                 model.localPlayerNumber = 1
-                let gameScene = GameScene(model: model)
-                gameScene.thisGameType = .vsOnline
+                self?.onlineGameScene.model = model
             
-                self?.view?.presentScene(gameScene, transition: SKScene.transition)
+                self?.skView.presentScene(self!.onlineGameScene, transition: GameViewController.transition)
             } else {
                 // to find out if the local player is player 1 or 2
                 var activePlayer: Bool
@@ -108,7 +99,7 @@ extension SKScene: Alertable {
                 } else {
                     activePlayer = false
                 }
-                self?.view?.presentScene(ReplayScene(model_: model, activePlayer), transition: SKScene.transition)
+                self?.skView.presentScene(ReplayScene(model_: model, activePlayer), transition: GameViewController.transition)
             }
             
         }
@@ -139,9 +130,7 @@ extension SKScene: Alertable {
     
     /// Selector for "Unlocked new game mode" notification observer
     @objc func presentSettings(_ notification: Notification) {
-        let appDelegate = UIApplication.shared.delegate as? AppDelegate
-        let allSavedGames = appDelegate?.savedGameModels
-        view?.presentScene(SettingsScene(vsComp: false, with: allSavedGames))
+        skView.presentScene(SettingsScene())
     }
     
     /// Registers an SKScene to receive and present "Unlocked new game mode" notifications
@@ -150,6 +139,22 @@ extension SKScene: Alertable {
             self,
             selector: #selector(presentSettings(_:)),
             name: .presentSettings,
+            object: nil)
+    }
+    
+    /// Selector for "continueOnlineGame" notification observer
+    @objc func continueOnlineGame(_ notification: Notification) {
+        let onlineGameModel = notification.object as! GameModel
+        onlineGameScene.model = onlineGameModel
+        skView.presentScene(onlineGameScene, transition: GameViewController.transition)
+    }
+    
+    /// Registers an SKScene to receive   "continueOnlineGame" notifications and present the Online GameScene
+    func addObserverForContinueOnlineGame() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(continueOnlineGame(_:)),
+            name: .continueOnlineGame,
             object: nil)
     }
     

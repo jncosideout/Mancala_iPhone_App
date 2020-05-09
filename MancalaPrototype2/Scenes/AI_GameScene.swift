@@ -51,8 +51,9 @@ class AI_GameScene: GameScene {
     
     // MARK: - Init
     
-    override init(model: GameModel) {
-        super.init(model: model)
+    init(model: GameModel) {
+        super.init()
+        self.model = model
         self.model.vsAI = true
         thisGameType = .vsAI
         self.model.allPlayers = [model.mancalaPlayer1,model.mancalaPlayer2]
@@ -82,7 +83,7 @@ class AI_GameScene: GameScene {
         guard viewWidth > 0 else {
             return
         }
-        
+        removeAllChildren()
         backgroundColor = .background
         if UserDefaults.allowGradientAnimations {
             GradientNode.makeLinearNode(with: self, view: view!, linearGradientColors: GradientNode.sunsetPurples, animate: true)

@@ -39,6 +39,7 @@
 
 
 import SpriteKit
+import UserNotifications
 /**
  Replays the last player's move in an Online match. This scene is always presented exxept for on the first player's first turn
  */
@@ -57,7 +58,8 @@ final class ReplayScene: GameScene {
     init(model_: GameModel,_ activePlayer: Bool) {
         self.activePlayer = activePlayer
         actualModel = model_
-        super.init(model: GameModel(replayWith: actualModel.gameData))
+        super.init()
+        model = GameModel(replayWith: actualModel.gameData)
         // Used to personalize the game info text for the activePlayer
         model.localPlayerNumber = actualModel.localPlayerNumber
         model.vsOnline = true
@@ -71,9 +73,6 @@ final class ReplayScene: GameScene {
     override func didMove(to view: SKView) {
         successGenerator.prepare()
         feedbackGenerator.prepare()
-        
-        addObserverForPresentGame()
-        addObserverForPresentSettings()
         
         setUpScene(in: view)
         
@@ -228,10 +227,7 @@ final class ReplayScene: GameScene {
         // First, copy the current pits to the oldPitsList so that when/if the user takes their turn the pitsList will be updated and oldPitsList will refer to the previous turn.
         actualModel.gameData.oldPitsList = actualModel.saveGameBoardToList(actualModel.pits)
         
-        let gameScene = GameScene(model: actualModel)
-        gameScene.thisGameType = .vsOnline
-
-        view?.presentScene(gameScene, transition: SKTransition.push(with: .down, duration: 0.3))
+        NotificationCenter.default.post(name: .continueOnlineGame, object: actualModel)
     }
     
     

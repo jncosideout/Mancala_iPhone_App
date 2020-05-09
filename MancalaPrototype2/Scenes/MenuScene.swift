@@ -120,8 +120,6 @@ class MenuScene: SKScene {
                 selector: #selector(authenticationChanged(_:)),
                 name: .authenticationChanged,
                 object: nil)
-            addObserverForPresentGame()
-            addObserverForPresentSettings()
         }
         didMoveToViewFirstTime = false
     }
@@ -136,7 +134,7 @@ class MenuScene: SKScene {
         guard viewWidth > 0 else {
             return
         }
- 
+        removeAllChildren()
         backgroundColor = .background
         
         var runningYOffset = CGFloat(0.0)
@@ -145,8 +143,9 @@ class MenuScene: SKScene {
         let safeAreaTopInset = view?.window?.safeAreaInsets.top ?? 0
         let buttonSize = CGSize(width: buttonWidth, height: buttonWidth * 3 / 11)
         
-        settingsButton = ButtonNode(image: "settings-gear", size: buttonSize) {
-            self.view?.presentScene(SettingsScene(vsComp: false, with: self.savedGameModels), transition: SKScene.transition)
+        settingsButton = ButtonNode(image: "settings-gear", size: buttonSize)
+        {
+            NotificationCenter.default.post(name: .presentSettings, object: nil)
         }
         let settingsY_Offset = viewHeight - safeAreaTopInset - buttonSize.height/2 - sceneMargin
         let settingsX_Offset = viewWidth - safeAreaTopInset  - buttonSize.width/2 - sceneMargin
@@ -188,8 +187,9 @@ class MenuScene: SKScene {
         }
         
         versusComputerButton = ButtonNode("Versus\nComputer", size: buttonSize)
-        {   [weak self] in
-                self?.view?.presentScene(MenuScene_2(vsComp: true, with: self?.savedGameModels), transition: SKScene.transition)
+        {
+            let vsComp = true
+            NotificationCenter.default.post(name: .showMenuScene_2, object: vsComp)
         }
         
         onlineButton = ButtonNode("Online\nGame", size: buttonSize)

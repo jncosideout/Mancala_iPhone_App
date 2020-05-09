@@ -50,11 +50,32 @@ final class GameViewController: UIViewController {
     var savedGameModels: [GameModel]!
     var matchHistory: MatchHistory!
     
-    // These will be presented when a notification is reaceived
+    // These SKScenes will be presented when a notification is reaceived
     var menuScene: MenuScene!
-    var menuScene_2: MenuScene_2!
-    var gameScene: GameScene!
-    var ai_gameScene: AI_GameScene!
+    
+    lazy var onlineGameScene: GameScene = {
+        let _OL_GameSc = GameScene()
+        _OL_GameSc.thisGameType = .vsOnline
+        return _OL_GameSc
+    }()
+    
+    lazy var menuScene_2: MenuScene_2 = {
+        let menuSc_2 = MenuScene_2(vsComp: false, with: savedGameModels)
+        return menuSc_2
+    }()
+    
+    lazy var vsHumanGameScene: GameScene = {
+        let vsHGS = GameScene(model: savedGameModels[1])
+        vsHGS.thisGameType = .vsHuman
+        return vsHGS
+    }()
+    
+    lazy var ai_gameScene: AI_GameScene = {
+        let vsAI_GS = AI_GameScene(model: savedGameModels[0])
+        vsAI_GS.thisGameType = .vsAI
+        return vsAI_GS
+    }()
+
     
     // Make sure our view is recognized as an SKView
     var skView: SKView {
@@ -76,15 +97,17 @@ final class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Register notification observers
-        addObserverForShowMenuScene_2()
         addObserverForShowMenuScene()
+        addObserverForShowMenuScene_2()
         addObserverForShowGameScene()
         addObserverForShowAI_GameScene()
+        addObserverForPresentGame()
+        addObserverForPresentSettings()
+        addObserverForContinueOnlineGame()
+        
         // Initialize the SKScenes
         menuScene = MenuScene()
-        menuScene_2 = MenuScene_2(vsComp: false, with: savedGameModels)
-        ai_gameScene = AI_GameScene(fromSavedGames: savedGameModels, gameType: .vsAI)
-        gameScene = GameScene(fromSavedGames: savedGameModels, gameType: .vsHuman)
+
         // present the main MenuScene
         skView.presentScene(menuScene)
         // Set up the GameCenterHelper singleton
@@ -96,7 +119,11 @@ final class GameViewController: UIViewController {
     
     /// Selector function for ```showMenuScene``` notification.
     @objc private func showMenuScene(_ notification: Notification) {
-        skView.presentScene(menuScene, transition: SKScene.transition)
+        if let didMoveToViewFirstTime = notification.object as? Bool {
+            // If this notification was triggered in the SettingsScene.firstTimeWalkthroughToggle, we must reset didMoveToViewFirstTime
+            menuScene.didMoveToViewFirstTime = didMoveToViewFirstTime
+        }
+        skView.presentScene(menuScene, transition: GameViewController.transition)
     }
 
     /// Registers the GameViewController to receive ```showMenuScene```  notifications
@@ -111,7 +138,7 @@ final class GameViewController: UIViewController {
     /// Selector function for ```showMenuScene_2``` notification.
     @objc private func showMenuScene_2(_ notification: Notification) {
         menuScene_2.vsComputer = notification.object as! Bool
-        skView.presentScene(menuScene_2, transition: SKScene.transition)
+        skView.presentScene(menuScene_2, transition: GameViewController.transition)
     }
     
     /// Registers the GameViewController to receive ```showMenuScene_2```  notifications
@@ -125,7 +152,7 @@ final class GameViewController: UIViewController {
 
     /// Selector function for ```showGameScene``` notification.
     @objc private func showGameScene(_ notification: Notification) {
-        skView.presentScene(gameScene, transition: SKScene.transition)
+        skView.presentScene(vsHumanGameScene, transition: GameViewController.transition)
     }
 
     /// Registers the GameViewController to receive ```showGameScene```  notifications
@@ -139,7 +166,7 @@ final class GameViewController: UIViewController {
     
     /// Selector function for ```showAI_GameScene``` notification.
     @objc private func showAI_GameScene(_ notification: Notification) {
-        skView.presentScene(ai_gameScene, transition: SKScene.transition)
+        skView.presentScene(ai_gameScene, transition: GameViewController.transition)
     }
 
     /// Registers the GameViewController to receive ```showAI_GameScene```  notifications
