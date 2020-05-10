@@ -290,7 +290,7 @@ class GameModel: NSObject {//removed Codable ASB 06/29/19 //changed struct to cl
         mancalaPlayer1 = MancalaPlayer(player: 1)
         mancalaPlayer2 = MancalaPlayer(player: 2)
         _activePlayer = playerTurn == 1 ? mancalaPlayer1 : mancalaPlayer2//our opponent
-        pits = GameModel.initGameboard(from: gameData.oldPitsList)//coming from opponent
+        pits = GameModel.initGameboard(from: gameData.oldPitsList, copyOrLinkPitNodes: true)//coming from opponent
         turnNumber = gameData.turnNumber
         playerTurnText = gameData.playerTurnText
         lastMovesList = gameData.lastMovesList
@@ -303,9 +303,9 @@ class GameModel: NSObject {//removed Codable ASB 06/29/19 //changed struct to cl
      Mainly useful for loading saved games from a ```GameData``` source
      */
     convenience init(from gameData: GameData) {
-        self.init(newGame: true)
+        self.init(newGame: false)
         self.gameData = gameData
-        setUpGame(from: gameData)
+        setUpGame(from: gameData, copyPitsFromPitsList: false)
         
     }
     
@@ -336,9 +336,9 @@ class GameModel: NSObject {//removed Codable ASB 06/29/19 //changed struct to cl
      
      - Parameter gameData: If this GameData has a non-empty pitsList, it will be used to build the ```pits``` gameboard. Otherwise a new gameboard is created
      */
-    func setUpGame(from gameData: GameData) {
+    func setUpGame(from gameData: GameData, copyPitsFromPitsList: Bool) {
         if gameData.pitsList.count > 0 {
-            pits = GameModel.initGameboard(from: gameData.pitsList)
+            pits = GameModel.initGameboard(from: gameData.pitsList, copyOrLinkPitNodes: copyPitsFromPitsList)
         } else {
             pits = GameModel.buildGameboard(pitsPerPlayer: GameModel.pitsOnEachSideNotIncludingBase)
         }
@@ -410,7 +410,7 @@ class GameModel: NSObject {//removed Codable ASB 06/29/19 //changed struct to cl
             do {
                 let data = Data(referencing: nsData)
                 gameData = try JSONDecoder().decode(GameData.self, from: data)
-                pits = GameModel.initGameboard(from: gameData.pitsList)
+                pits = GameModel.initGameboard(from: gameData.pitsList, copyOrLinkPitNodes: false)
                 playerTurn = gameData.playerTurn
                 _activePlayer = playerTurn == 1 ? mancalaPlayer1 : mancalaPlayer2
                 playerTurnText = gameData.playerTurnText
@@ -720,11 +720,14 @@ class GameModel: NSObject {//removed Codable ASB 06/29/19 //changed struct to cl
     //MARK: board setup
     
     /**
-     Loads a ```pits``` gameboard with existing data in ```pitsList```
+     Loads and returns a gameboard with existing data in ```pitsList```
      
      - Important: The first index of ```pitsList``` must be equal to Player 2's "BASE" pit
+     - Parameters:
+     - pitsList: an array of ```PitNode```s to load into a gameboard of type ```CircularLinkedList<PitNode>```
+     - copyOrLinkPitNodes: if **true** then a copy of each ```PitNode``` in ```pitsList``` is inserted into the ```CircularLinkedList<PitNode>```. If **false** then the gameboard will reference the ```PitNode``` in ```pitsList``` directly.
      */
-    static func initGameboard(from pitsList: [PitNode]) -> CircularLinkedList<PitNode> {
+    static func initGameboard(from pitsList: [PitNode], copyOrLinkPitNodes: Bool) -> CircularLinkedList<PitNode> {
         let pitsCLL = CircularLinkedList<PitNode>()
         
         let checkPit = PitNode(player: 2, name: "BASE")
@@ -738,8 +741,12 @@ class GameModel: NSObject {//removed Codable ASB 06/29/19 //changed struct to cl
         }
         
         for pit in pitsList {
-            let copyOfPit = pit.copyPit()
-            pitsCLL.enqueue(copyOfPit)
+            if copyOrLinkPitNodes {
+                let copyOfPit = pit.copyPit()
+                pitsCLL.enqueue(copyOfPit)
+            } else {
+                pitsCLL.enqueue(pit)
+            }
         }
         if pitsCLL.length != 14 {
             fatalError("Expected pitsCLL length = 14, got \(pitsCLL.length)")
@@ -974,8 +981,6 @@ class GameModel: NSObject {//removed Codable ASB 06/29/19 //changed struct to cl
         gameData.playerTurnText = playerTurnText
         gameData.winner = winner
         gameData.winnerTextArray = winnerTextArray
-        gameData.pitsList.removeAll()
-        gameData.pitsList = saveGameBoardToList(pits)
         gameData.playerPerspective = playerPerspective
         gameData.lastMovesList = lastMovesList
         gameData.onlineGameOver = onlineGameOver

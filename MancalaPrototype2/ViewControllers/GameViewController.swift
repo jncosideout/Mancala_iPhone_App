@@ -60,9 +60,17 @@ final class GameViewController: UIViewController {
         return menuSc_2
     }()
     
-    var vsHumanGameScene: GameScene!
+    var vsHumanGameScene: GameScene {
+        let vsHumanGS = GameScene(model: savedGameModels[1])
+        vsHumanGS.thisGameType = .vsHuman
+        return vsHumanGS
+    }
     
-    var ai_gameScene: AI_GameScene!
+    var ai_gameScene: AI_GameScene {
+        let ai_GS = AI_GameScene(model: savedGameModels[0])
+        ai_GS.thisGameType = .vsAI
+        return ai_GS
+    }
 
     
     // Make sure our view is recognized as an SKView
@@ -89,6 +97,7 @@ final class GameViewController: UIViewController {
         addObserverForShowMenuScene_2()
         addObserverForShowGameScene()
         addObserverForShowAI_GameScene()
+        // Declared in GameViewControllerExtension.swift
         addObserverForPresentGame()
         addObserverForPresentSettings()
         addObserverForContinueOnlineGame()
@@ -140,8 +149,6 @@ final class GameViewController: UIViewController {
 
     /// Selector function for ```showGameScene``` notification.
     @objc private func showGameScene(_ notification: Notification) {
-        vsHumanGameScene = GameScene(model: savedGameModels[1])
-        vsHumanGameScene.thisGameType = .vsHuman
         skView.presentScene(vsHumanGameScene, transition: GameViewController.transition)
     }
 
@@ -156,8 +163,6 @@ final class GameViewController: UIViewController {
     
     /// Selector function for ```showAI_GameScene``` notification.
     @objc private func showAI_GameScene(_ notification: Notification) {
-        ai_gameScene = AI_GameScene(model: savedGameModels[0])
-        ai_gameScene.thisGameType = .vsAI
         skView.presentScene(ai_gameScene, transition: GameViewController.transition)
     }
 

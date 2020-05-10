@@ -226,7 +226,7 @@ class MenuScene_2: MenuScene {
         // Overwrite the GameModel
         newGame.gameData = newGameData
         newGame.resetGame()
-        newGame.setUpGame(from: newGameData)
+        newGame.setUpGame(from: newGameData, copyPitsFromPitsList: true)
         
         launchLocalGame()
     }

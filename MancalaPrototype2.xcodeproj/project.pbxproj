@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		89003EFC24672E5D00E38DE9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89003EFA24672D0100E38DE9 /* Assets.xcassets */; };
+		89003EFD24686DBE00E38DE9 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89A6239224437EE100062C39 /* Launch Screen.storyboard */; };
+		89003EFE24686DC500E38DE9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 897D141D244009F000BE05BE /* Main.storyboard */; };
 		89019C3F2384DF8E0012BE43 /* Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89019C3E2384DF8E0012BE43 /* Move.swift */; };
 		89019C422384E1520012BE43 /* Strategist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89019C412384E1520012BE43 /* Strategist.swift */; };
 		89054BD6231B1E2B00F1C027 /* PitNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89054BD5231B1E2B00F1C027 /* PitNode.swift */; };
@@ -20,7 +22,6 @@
 		89509502241AED8C00B90D38 /* DeviceModelID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89509501241AED8C00B90D38 /* DeviceModelID.swift */; };
 		89624D6724665AB100D6C915 /* GameViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89624D6624665AB100D6C915 /* GameViewControllerExtension.swift */; };
 		89792F6F23D40B1E00873467 /* SettingsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89792F6E23D40B1E00873467 /* SettingsScene.swift */; };
-		897D141F244009F000BE05BE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 897D141D244009F000BE05BE /* Main.storyboard */; };
 		89830419240065E80044BFFC /* UserDefaultsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89830418240065E80044BFFC /* UserDefaultsExtension.swift */; };
 		8983041D2402290C0044BFFC /* MancalaGameModel_GKAI-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8983041C2402290C0044BFFC /* MancalaGameModel_GKAI-Extension.swift */; };
 		8983041F2406E7C80044BFFC /* InstructionsNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8983041E2406E7C80044BFFC /* InstructionsNode.swift */; };
@@ -31,7 +32,6 @@
 		89A5CBF723C2CF3500968A0E /* UserNotificationsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A5CBF623C2CF3500968A0E /* UserNotificationsHelper.swift */; };
 		89A6238F244374FC00062C39 /* Alertable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A6238E244374FC00062C39 /* Alertable.swift */; };
 		89A62391244375DE00062C39 /* MenuSceneExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A62390244375DE00062C39 /* MenuSceneExtension.swift */; };
-		89A6239424437EE100062C39 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89A6239224437EE100062C39 /* Launch Screen.storyboard */; };
 		89A623982443990400062C39 /* firstTimeWalkthrough.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 89A623952443990400062C39 /* firstTimeWalkthrough.bundle */; };
 		89A623992443990400062C39 /* credits.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 89A623962443990400062C39 /* credits.bundle */; };
 		89A6239A2443990400062C39 /* instructions.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 89A623972443990400062C39 /* instructions.bundle */; };
@@ -441,9 +441,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89003EFE24686DC500E38DE9 /* Main.storyboard in Resources */,
+				89003EFD24686DBE00E38DE9 /* Launch Screen.storyboard in Resources */,
 				89003EFC24672E5D00E38DE9 /* Assets.xcassets in Resources */,
-				89A6239424437EE100062C39 /* Launch Screen.storyboard in Resources */,
-				897D141F244009F000BE05BE /* Main.storyboard in Resources */,
 				89A6239A2443990400062C39 /* instructions.bundle in Resources */,
 				89A623992443990400062C39 /* credits.bundle in Resources */,
 				89A623982443990400062C39 /* firstTimeWalkthrough.bundle in Resources */,
