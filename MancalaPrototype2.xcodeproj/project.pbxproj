@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		89003EFC24672E5D00E38DE9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89003EFA24672D0100E38DE9 /* Assets.xcassets */; };
 		89019C3F2384DF8E0012BE43 /* Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89019C3E2384DF8E0012BE43 /* Move.swift */; };
 		89019C422384E1520012BE43 /* Strategist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89019C412384E1520012BE43 /* Strategist.swift */; };
 		89054BD6231B1E2B00F1C027 /* PitNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89054BD5231B1E2B00F1C027 /* PitNode.swift */; };
@@ -17,10 +18,10 @@
 		8945318823B8268B0057008E /* AI_GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8945318723B8268B0057008E /* AI_GameScene.swift */; };
 		8945318A23B92DE60057008E /* MenuScene_2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8945318923B92DE50057008E /* MenuScene_2.swift */; };
 		89509502241AED8C00B90D38 /* DeviceModelID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89509501241AED8C00B90D38 /* DeviceModelID.swift */; };
+		89624D6724665AB100D6C915 /* GameViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89624D6624665AB100D6C915 /* GameViewControllerExtension.swift */; };
 		89792F6F23D40B1E00873467 /* SettingsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89792F6E23D40B1E00873467 /* SettingsScene.swift */; };
 		897D141F244009F000BE05BE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 897D141D244009F000BE05BE /* Main.storyboard */; };
 		89830419240065E80044BFFC /* UserDefaultsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89830418240065E80044BFFC /* UserDefaultsExtension.swift */; };
-		8983041B240068010044BFFC /* SKSceneExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8983041A240068010044BFFC /* SKSceneExtension.swift */; };
 		8983041D2402290C0044BFFC /* MancalaGameModel_GKAI-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8983041C2402290C0044BFFC /* MancalaGameModel_GKAI-Extension.swift */; };
 		8983041F2406E7C80044BFFC /* InstructionsNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8983041E2406E7C80044BFFC /* InstructionsNode.swift */; };
 		898673122426778E00D4DC33 /* DBAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898673112426778E00D4DC33 /* DBAlertController.swift */; };
@@ -37,7 +38,6 @@
 		89DEB48922F110F9004BCD88 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB48822F110F9004BCD88 /* AppDelegate.swift */; };
 		89DEB48F22F110F9004BCD88 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB48E22F110F9004BCD88 /* GameScene.swift */; };
 		89DEB49122F110F9004BCD88 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB49022F110F9004BCD88 /* GameViewController.swift */; };
-		89DEB49622F110FB004BCD88 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89DEB49522F110FB004BCD88 /* Assets.xcassets */; };
 		89DEB4A422F110FB004BCD88 /* MancalaPrototype2Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB4A322F110FB004BCD88 /* MancalaPrototype2Tests.swift */; };
 		89DEB4AF22F110FB004BCD88 /* MancalaPrototype2UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB4AE22F110FB004BCD88 /* MancalaPrototype2UITests.swift */; };
 		89DEB4BE22F11280004BCD88 /* GKTurnBasedMatch+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB4BD22F11280004BCD88 /* GKTurnBasedMatch+Additions.swift */; };
@@ -77,6 +77,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		89003EFA24672D0100E38DE9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		89019C3E2384DF8E0012BE43 /* Move.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Move.swift; sourceTree = "<group>"; };
 		89019C412384E1520012BE43 /* Strategist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strategist.swift; sourceTree = "<group>"; };
 		89054BD5231B1E2B00F1C027 /* PitNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitNode.swift; sourceTree = "<group>"; };
@@ -87,10 +88,10 @@
 		8945318723B8268B0057008E /* AI_GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AI_GameScene.swift; sourceTree = "<group>"; };
 		8945318923B92DE50057008E /* MenuScene_2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuScene_2.swift; sourceTree = "<group>"; };
 		89509501241AED8C00B90D38 /* DeviceModelID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceModelID.swift; sourceTree = "<group>"; };
+		89624D6624665AB100D6C915 /* GameViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameViewControllerExtension.swift; sourceTree = "<group>"; };
 		89792F6E23D40B1E00873467 /* SettingsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScene.swift; sourceTree = "<group>"; };
 		897D141E244009F000BE05BE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		89830418240065E80044BFFC /* UserDefaultsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsExtension.swift; sourceTree = "<group>"; };
-		8983041A240068010044BFFC /* SKSceneExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKSceneExtension.swift; sourceTree = "<group>"; };
 		8983041C2402290C0044BFFC /* MancalaGameModel_GKAI-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MancalaGameModel_GKAI-Extension.swift"; sourceTree = "<group>"; };
 		8983041E2406E7C80044BFFC /* InstructionsNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionsNode.swift; sourceTree = "<group>"; };
 		898673112426778E00D4DC33 /* DBAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBAlertController.swift; sourceTree = "<group>"; };
@@ -108,7 +109,6 @@
 		89DEB48822F110F9004BCD88 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		89DEB48E22F110F9004BCD88 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		89DEB49022F110F9004BCD88 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
-		89DEB49522F110FB004BCD88 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		89DEB49F22F110FB004BCD88 /* MancalaPrototype2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MancalaPrototype2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		89DEB4A322F110FB004BCD88 /* MancalaPrototype2Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MancalaPrototype2Tests.swift; sourceTree = "<group>"; };
 		89DEB4A522F110FB004BCD88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -238,7 +238,7 @@
 				89DEB4BD22F11280004BCD88 /* GKTurnBasedMatch+Additions.swift */,
 				89DEB4BF22F112D8004BCD88 /* SKTexture+Additions.swift */,
 				89DEB4C122F11302004BCD88 /* UIColor+Additions.swift */,
-				8983041A240068010044BFFC /* SKSceneExtension.swift */,
+				89624D6624665AB100D6C915 /* GameViewControllerExtension.swift */,
 				8924E66B24156A4F0059C9A5 /* NotificationNameExtension.swift */,
 				89A62390244375DE00062C39 /* MenuSceneExtension.swift */,
 				89A6238E244374FC00062C39 /* Alertable.swift */,
@@ -304,7 +304,7 @@
 			isa = PBXGroup;
 			children = (
 				897D141D244009F000BE05BE /* Main.storyboard */,
-				89DEB49522F110FB004BCD88 /* Assets.xcassets */,
+				89003EFA24672D0100E38DE9 /* Assets.xcassets */,
 				89DEB48822F110F9004BCD88 /* AppDelegate.swift */,
 				89A6239224437EE100062C39 /* Launch Screen.storyboard */,
 				89830418240065E80044BFFC /* UserDefaultsExtension.swift */,
@@ -441,12 +441,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89003EFC24672E5D00E38DE9 /* Assets.xcassets in Resources */,
 				89A6239424437EE100062C39 /* Launch Screen.storyboard in Resources */,
 				897D141F244009F000BE05BE /* Main.storyboard in Resources */,
 				89A6239A2443990400062C39 /* instructions.bundle in Resources */,
 				89A623992443990400062C39 /* credits.bundle in Resources */,
 				89A623982443990400062C39 /* firstTimeWalkthrough.bundle in Resources */,
-				89DEB49622F110FB004BCD88 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -473,6 +473,7 @@
 			files = (
 				89DEB4DB22F121AA004BCD88 /* InformationNode.swift in Sources */,
 				8983041D2402290C0044BFFC /* MancalaGameModel_GKAI-Extension.swift in Sources */,
+				89624D6724665AB100D6C915 /* GameViewControllerExtension.swift in Sources */,
 				89DEB4DD22F121D7004BCD88 /* TokenNode.swift in Sources */,
 				89DEB4BE22F11280004BCD88 /* GKTurnBasedMatch+Additions.swift in Sources */,
 				89A62391244375DE00062C39 /* MenuSceneExtension.swift in Sources */,
@@ -503,7 +504,6 @@
 				89DEB4CE22F11444004BCD88 /* NodeType.swift in Sources */,
 				893C390124608560002A3147 /* GameData.swift in Sources */,
 				89DEB4EC2308BEA5004BCD88 /* GradientGameScene.swift in Sources */,
-				8983041B240068010044BFFC /* SKSceneExtension.swift in Sources */,
 				89054BD6231B1E2B00F1C027 /* PitNode.swift in Sources */,
 				89792F6F23D40B1E00873467 /* SettingsScene.swift in Sources */,
 				8997300F231F0E3600619CBD /* CircularLinkedList.swift in Sources */,

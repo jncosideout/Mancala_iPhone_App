@@ -12,10 +12,9 @@ import Foundation
 import SpriteKit
 import GameKit
 /**
-Contains the methods for loading and presenting an online match replay scene and game scene.
+Contains the methods for loading and presenting an online match replay scene and game scene. Uses the same pattern of "Notification Observer/ Selector' found in GameViewController.
  
- + Uses the same pattern of "Notification Observer/ Selector'
- + Now the best practice is access the appDelegate directly since the dependency we were injecting is referencing the instance in the appDelegate, and we don't want to have more than one floating around.
+ + loadAndDisiplay is called by the selector for the presentGame notification
  */
 extension GameViewController: Alertable {
     
@@ -145,6 +144,8 @@ extension GameViewController: Alertable {
     /// Selector for "continueOnlineGame" notification observer
     @objc func continueOnlineGame(_ notification: Notification) {
         let onlineGameModel = notification.object as! GameModel
+        onlineGameScene = GameScene()
+        onlineGameScene.thisGameType = .vsOnline
         onlineGameScene.model = onlineGameModel
         skView.presentScene(onlineGameScene, transition: GameViewController.transition)
     }

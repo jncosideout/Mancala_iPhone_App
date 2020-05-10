@@ -201,8 +201,8 @@ class GameScene: SKScene {
         //MARK: - Buttons
         let buttonSize = CGSize(width: 125, height: 50)
         let backButton = ButtonNode("Back", size: buttonSize)
-        {
-            self.returnToMenu()
+        {   [weak self] in
+            self?.returnToMenu()
         }
         
         backButton.position = CGPoint(

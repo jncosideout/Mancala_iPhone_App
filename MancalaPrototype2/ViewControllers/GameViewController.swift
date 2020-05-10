@@ -53,28 +53,16 @@ final class GameViewController: UIViewController {
     // These SKScenes will be presented when a notification is reaceived
     var menuScene: MenuScene!
     
-    lazy var onlineGameScene: GameScene = {
-        let _OL_GameSc = GameScene()
-        _OL_GameSc.thisGameType = .vsOnline
-        return _OL_GameSc
-    }()
+    var onlineGameScene: GameScene!
     
     lazy var menuScene_2: MenuScene_2 = {
         let menuSc_2 = MenuScene_2(vsComp: false, with: savedGameModels)
         return menuSc_2
     }()
     
-    lazy var vsHumanGameScene: GameScene = {
-        let vsHGS = GameScene(model: savedGameModels[1])
-        vsHGS.thisGameType = .vsHuman
-        return vsHGS
-    }()
+    var vsHumanGameScene: GameScene!
     
-    lazy var ai_gameScene: AI_GameScene = {
-        let vsAI_GS = AI_GameScene(model: savedGameModels[0])
-        vsAI_GS.thisGameType = .vsAI
-        return vsAI_GS
-    }()
+    var ai_gameScene: AI_GameScene!
 
     
     // Make sure our view is recognized as an SKView
@@ -123,7 +111,7 @@ final class GameViewController: UIViewController {
             // If this notification was triggered in the SettingsScene.firstTimeWalkthroughToggle, we must reset didMoveToViewFirstTime
             menuScene.didMoveToViewFirstTime = didMoveToViewFirstTime
         }
-        skView.presentScene(menuScene, transition: GameViewController.transition)
+        skView.presentScene(menuScene, transition: GameViewController.returnTransition)
     }
 
     /// Registers the GameViewController to receive ```showMenuScene```  notifications
@@ -152,6 +140,8 @@ final class GameViewController: UIViewController {
 
     /// Selector function for ```showGameScene``` notification.
     @objc private func showGameScene(_ notification: Notification) {
+        vsHumanGameScene = GameScene(model: savedGameModels[1])
+        vsHumanGameScene.thisGameType = .vsHuman
         skView.presentScene(vsHumanGameScene, transition: GameViewController.transition)
     }
 
@@ -166,6 +156,8 @@ final class GameViewController: UIViewController {
     
     /// Selector function for ```showAI_GameScene``` notification.
     @objc private func showAI_GameScene(_ notification: Notification) {
+        ai_gameScene = AI_GameScene(model: savedGameModels[0])
+        ai_gameScene.thisGameType = .vsAI
         skView.presentScene(ai_gameScene, transition: GameViewController.transition)
     }
 

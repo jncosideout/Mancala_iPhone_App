@@ -141,14 +141,15 @@ final class ReplayScene: GameScene {
         //MARK: - Button actions
         let buttonSize = CGSize(width: 125, height: 50)
         let returnButton = ButtonNode("Continue", size: buttonSize)
-        {   [weak self] in
+        {   [weak self, weak _actualModel = self.actualModel] in
+            guard let _actualModel_ = _actualModel else { return }
             // The player who ends the match does call GameCenterHelper.endMatch()
             // The reason for this functionality is to send a notification to the other player when the match is over
             // by ending the turn instead of ending the match. Therefore, the next player has the responsibility of
             // truly ending the match. That is why we check model.onlineGameOver here.
             if let onlineGameOver = self?.model.onlineGameOver, onlineGameOver {
-                guard let _actualModel = self?.actualModel else { return }
-                GameCenterHelper.helper.endMatch(_actualModel, completion: { error in
+                
+                GameCenterHelper.helper.endMatch(_actualModel_, completion: { error in
                     defer {
                         self?.isSendingTurn = false
                     }
@@ -160,7 +161,16 @@ final class ReplayScene: GameScene {
                 })
                 self?.returnToMenu()
             } else {
-                self?.returnToGame()
+              /**
+               Return to the GameScene to play the current turn or go back to the menu from there.
+               
+               Perform any last minute saving and configuration here.
+               */
+                // First, copy the current pits to the oldPitsList so that when/if the user takes their turn the pitsList will be updated and oldPitsList will refer to the previous turn.
+                _actualModel_.gameData.oldPitsList = _actualModel_.saveGameBoardToList(_actualModel_.pits)
+                  
+                NotificationCenter.default.post(name: .continueOnlineGame, object: _actualModel_)
+              
             }
         }
         returnButton.position = CGPoint(
@@ -217,19 +227,6 @@ final class ReplayScene: GameScene {
     }
     
     // MARK: - Helpers
-    
-    /**
-     Return to the GameScene to play the current turn or go back to the menu from there.
-     
-     Perform any last minute saving and configuration here.
-     */
-    private func returnToGame() {
-        // First, copy the current pits to the oldPitsList so that when/if the user takes their turn the pitsList will be updated and oldPitsList will refer to the previous turn.
-        actualModel.gameData.oldPitsList = actualModel.saveGameBoardToList(actualModel.pits)
-        
-        NotificationCenter.default.post(name: .continueOnlineGame, object: actualModel)
-    }
-    
     
     /// Replays the last move according to the last player's actions stored in ```model.lastMovesList``` and the data in ```model.oldPitsList```
     ///
