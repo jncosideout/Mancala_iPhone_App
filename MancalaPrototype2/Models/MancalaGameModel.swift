@@ -11,7 +11,7 @@ import GameKit
 /**
     Encapsulates all game logic, game data and management of game data for saving and loading
  */
-class GameModel: NSObject {//removed Codable ASB 06/29/19 //changed struct to class, added NSCoding 7/27/19
+class GameModel: NSObject {
     ///Records the player who has won the game or 0 if tied
     var winner: Int?
     ///The gameboard that the game is played on
@@ -264,6 +264,7 @@ class GameModel: NSObject {//removed Codable ASB 06/29/19 //changed struct to cl
         
         if newGame {
             pits = GameModel.buildGameboard(pitsPerPlayer: GameModel.pitsOnEachSideNotIncludingBase)
+            gameData.pitsList = GameModel.saveGameBoardToList(pits, deepCopy: true)
         }
         turnNumber = gameData.turnNumber
         playerTurnText = gameData.playerTurnText
@@ -290,6 +291,7 @@ class GameModel: NSObject {//removed Codable ASB 06/29/19 //changed struct to cl
         mancalaPlayer1 = MancalaPlayer(player: 1)
         mancalaPlayer2 = MancalaPlayer(player: 2)
         _activePlayer = playerTurn == 1 ? mancalaPlayer1 : mancalaPlayer2//our opponent
+        // Shallow-copy the pits in gameboard "pits" to gameData.pitsList
         pits = GameModel.initGameboard(from: gameData.oldPitsList, copyOrLinkPitNodes: true)//coming from opponent
         turnNumber = gameData.turnNumber
         playerTurnText = gameData.playerTurnText
@@ -298,21 +300,22 @@ class GameModel: NSObject {//removed Codable ASB 06/29/19 //changed struct to cl
     }
     
     /**
-     Initializes a GameModel from completely from gameData.
+     Initializes a GameModel completely from gameData.
      
      Mainly useful for loading saved games from a ```GameData``` source
      */
     convenience init(from gameData: GameData) {
         self.init(newGame: false)
         self.gameData = gameData
-        setUpGame(from: gameData, copyPitsFromPitsList: false)
+        // Deep copy only
+        setUpGame(from: gameData, shallowCopyFromPitsList: false)
         
     }
     
     /**
      Initializes from GKTurnBasedMatch.matchData
      
-     Call this initializer in SKSCeneExtension.loadAndDisplay or whatever method gets a GKTurnBasedMatch object from receives a GKTurnBasedMatch object from GKLocalPlayerListener.player(_:receivedTurnEventFor:didBecomeActive)
+     Call this initializer in SKSCeneExtension.loadAndDisplay or whatever method receives a GKTurnBasedMatch object from GKLocalPlayerListener.player(_:receivedTurnEventFor:didBecomeActive)
      - Parameter gkMatchData: This is GameData that was deserialized from ```GKTurnBasedMatch.matchData``` after calling ```GKTurnBasedMatch.loadMatchData```
      */
     convenience init(fromGKMatch gkMatchData: GameData) {
@@ -326,7 +329,7 @@ class GameModel: NSObject {//removed Codable ASB 06/29/19 //changed struct to cl
      Sets most of the values of the GameModel. Allows a GameModel to be reused with new values coming from the ```gameData``` parameter
      
      Use ```resetGame``` after this to completely reset the GameModel and its MancalaPlayers
-     ## Assigns the following using ```gameData```:
+     ## Assigns the following using the provided gameData:
      * playerTurn
      * _activePlayer
      * playerPerspective
@@ -335,12 +338,14 @@ class GameModel: NSObject {//removed Codable ASB 06/29/19 //changed struct to cl
      * winnerTextArray
      
      - Parameter gameData: If this GameData has a non-empty pitsList, it will be used to build the ```pits``` gameboard. Otherwise a new gameboard is created
+     - Parameter copyPitsFromPitsList: if **true** then a copy of each ```PitNode``` in ```pitsList``` is inserted into the gameboard ```CircularLinkedList<PitNode>```. If **false** then the gameboard will reference the ```PitNode``` in ```pitsList``` directly.
      */
-    func setUpGame(from gameData: GameData, copyPitsFromPitsList: Bool) {
+    func setUpGame(from gameData: GameData, shallowCopyFromPitsList: Bool) {
         if gameData.pitsList.count > 0 {
-            pits = GameModel.initGameboard(from: gameData.pitsList, copyOrLinkPitNodes: copyPitsFromPitsList)
+            pits = GameModel.initGameboard(from: gameData.pitsList, copyOrLinkPitNodes: shallowCopyFromPitsList)
         } else {
             pits = GameModel.buildGameboard(pitsPerPlayer: GameModel.pitsOnEachSideNotIncludingBase)
+            self.gameData.pitsList = GameModel.saveGameBoardToList(pits, deepCopy: true)
         }
         playerTurn = gameData.playerTurn
         _activePlayer = playerTurn == 1 ? mancalaPlayer1 : mancalaPlayer2
@@ -392,7 +397,7 @@ class GameModel: NSObject {//removed Codable ASB 06/29/19 //changed struct to cl
      - Postcondition: The members of the model passed as an argument to this method are copied to the calling GameModel
     */
     func copyModel(from model: GameModel) {
-        pits = model._activePlayer.copyBoard(from: model.pits)
+        pits = MancalaPlayer.copyBoard(from: model.pits)
         playerTurn = model.playerTurn
         _activePlayer = playerTurn == 1 ? mancalaPlayer1 : mancalaPlayer2
         playerPerspective = model.playerPerspective
@@ -410,6 +415,7 @@ class GameModel: NSObject {//removed Codable ASB 06/29/19 //changed struct to cl
             do {
                 let data = Data(referencing: nsData)
                 gameData = try JSONDecoder().decode(GameData.self, from: data)
+                // Deep-copy the pits in gameboard "pits" to gameData.pitsList
                 pits = GameModel.initGameboard(from: gameData.pitsList, copyOrLinkPitNodes: false)
                 playerTurn = gameData.playerTurn
                 _activePlayer = playerTurn == 1 ? mancalaPlayer1 : mancalaPlayer2
@@ -791,7 +797,7 @@ class GameModel: NSObject {//removed Codable ASB 06/29/19 //changed struct to cl
     }
     
     /**
-    For debugging purposes only. Initializes a new ```pits``` gameboard to using preset values that are intended to be changed within this class method
+    For debugging purposes only. Initializes a new ```pits``` gameboard to using preset values that are intended to be changed by hardcoding values of beads within this class method definition
     */
     static func buildGameboardTEST(pitsPerPlayer: Int ) -> CircularLinkedList<PitNode> {
         let pits = CircularLinkedList<PitNode>()
@@ -865,7 +871,7 @@ class GameModel: NSObject {//removed Codable ASB 06/29/19 //changed struct to cl
     }
     
     /**
-    For debugging purposes only. Meant to simulate the last few moves of a game. Initializes a new ```pits``` gameboard to using preset values that are intended to be changed within this class method
+    For debugging purposes only. Meant to test the last few moves of a game. Initializes a new ```pits``` gameboard to using preset values that are intended to be changed by hardcoding values of beads within this class method definition
     */
     static func buildGameboardTEST_END_GAME(pitsPerPlayer: Int ) -> CircularLinkedList<PitNode> {
         let pits = CircularLinkedList<PitNode>()
@@ -960,7 +966,7 @@ class GameModel: NSObject {//removed Codable ASB 06/29/19 //changed struct to cl
     }
     
     /**
-     Must be called after every turn. The ```previousBeads``` array only works correctly if it is empty before each turn.  The```previousBeads``` array is just used for animating pits in a wrap-around scenario. This benefits the GameScene.
+     Must be called after every turn. The ```previousBeads``` array only works correctly if it is empty before each turn.  The```previousBeads``` array is just used for animating pits in a wrap-around scenario. This benefits the GameScene when animating
      */
     func clearAllPreviousBeads() {
         let boardIterator = pits.circIter
@@ -975,23 +981,28 @@ class GameModel: NSObject {//removed Codable ASB 06/29/19 //changed struct to cl
     
     /**
      Copies all major vars from this GameModel to its ```gameData```
+     - Parameter overwritePitsList: if true then gameboard ```pits``` will be shallow-copied to ```gameData.pitsList```
      */
-    func saveGameData() {
+    func saveGameData(overwritePitsList: Bool = false) {
         gameData.playerTurn = playerTurn
         gameData.playerTurnText = playerTurnText
         gameData.winner = winner
         gameData.winnerTextArray = winnerTextArray
+        if overwritePitsList {
+            gameData.pitsList.removeAll()
+            gameData.pitsList = GameModel.saveGameBoardToList(pits, deepCopy: false)
+        }
         gameData.playerPerspective = playerPerspective
         gameData.lastMovesList = lastMovesList
         gameData.onlineGameOver = onlineGameOver
     }
     
     /**
-     Saves the ```gameData``` of this individual GameModel. Primarily called by GameCenterHelper
+     Saves the ```gameData``` of this individual GameModel. Primarily called by GameCenterHelper for Online matches
      */
-    func saveDataToSend(overwriteAllGameData: Bool = true) -> Data {
+    func saveDataToSend(overwriteAllGameData: Bool = true, overwritePitsList: Bool = true) -> Data {
         if overwriteAllGameData {
-            saveGameData()
+            saveGameData(overwritePitsList: overwritePitsList)
         }
         var data = Data()
         print("saving gameboard to send to opponent")
@@ -1006,27 +1017,40 @@ class GameModel: NSObject {//removed Codable ASB 06/29/19 //changed struct to cl
     }
     
     /**
-     Used for saving a gameboard in a serializable form. Does not delete ```pits``` when finished.
+     Used for saving a gameboard in a serializable form. Does not delete the given ```pits``` when finished.
      - Parameter pits: a gameboard that will be copied to a list of ```PitNode```s
-     - Returns: A list of ```PitNode```s where the first ```PitNode``` should be Player 2's "BASE"
+     - Parameter deepCopy: if true then ```PitNode```s of the given ```pits``` gameboard are linked directly to the returned list of [```PitNode```]. If false then new instances of each ```PitNode``` are created as separate copies of the those in the given ```pits``` gameboard
+     - Returns: A list of ```PitNode```s where the first element should be Player 2's "BASE"
      */
-    func saveGameBoardToList(_ pits: CircularLinkedList<PitNode>) -> [PitNode] {
+    static func saveGameBoardToList(_ pits: CircularLinkedList<PitNode>, deepCopy: Bool) -> [PitNode] {
         guard pits.length > 0 else {
-            fatalError("in saveGameBoardToList(), pits.lenth = \(pits.length)")
+            fatalError("in \(#function), pits.lenth = \(pits.length)")
         }
-        let copiedBoard = _activePlayer.copyBoard(from: pits)
         var pitsList = [PitNode]()
-        var i = 0
-        while !pits.isEmpty || i < pits.length {
-            if let pit = copiedBoard.dequeue() {
-                pitsList.append(pit)
-            } else {
-                break
-            }
-            i += 1
-        }
-        _ = pitsList.popLast()
+
         
+        if deepCopy {
+            let iterator = pits.circIter
+            
+            for _ in 0...pits.length - 1 {
+                if let pitNode = *iterator {
+                    pitsList.append(pitNode)
+                }
+                ++iterator
+            }
+        } else {
+            let copiedBoard = MancalaPlayer.copyBoard(from: pits)
+            var i = 0
+            while !pits.isEmpty || i < pits.length {
+                if let pit = copiedBoard.dequeue() {
+                    pitsList.append(pit)
+                } else {
+                    break
+                }
+                i += 1
+            }
+            _ = pitsList.popLast()
+        }
         return pitsList
     }
     

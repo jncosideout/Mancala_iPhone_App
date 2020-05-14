@@ -30,9 +30,9 @@
             filePath = "MancalaPrototype2/Helpers/GameCenterHelper.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "433"
-            endingLineNumber = "433"
-            landmarkName = "player(_:receivedTurnEventFor:didBecomeActive:)"
+            startingLineNumber = "440"
+            endingLineNumber = "440"
+            landmarkName = "player(_:wantsToQuitMatch:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -46,9 +46,9 @@
             filePath = "MancalaPrototype2/Helpers/GameCenterHelper.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "432"
-            endingLineNumber = "432"
-            landmarkName = "player(_:receivedTurnEventFor:didBecomeActive:)"
+            startingLineNumber = "439"
+            endingLineNumber = "439"
+            landmarkName = "player(_:wantsToQuitMatch:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -65,6 +65,22 @@
             startingLineNumber = "133"
             endingLineNumber = "133"
             landmarkName = "setUpScene(in:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CF358BA7-E85A-4609-8979-2B8A4AF61595"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MancalaPrototype2/Helpers/GameCenterHelper.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "142"
+            endingLineNumber = "142"
+            landmarkName = "endTurn(_:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

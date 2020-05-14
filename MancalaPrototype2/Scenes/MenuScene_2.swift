@@ -60,6 +60,8 @@ class MenuScene_2: MenuScene {
     }
     
     /**
+     Deprecateds
+     
      The primary init that must be used for this class, since the player always launches a "local" game via this SKScene and therefore it must have access to the saved local game data.
      */
     required convenience init(vsComp: Bool, with savedGames: [GameModel]?) {
@@ -81,7 +83,7 @@ class MenuScene_2: MenuScene {
     /**
      Call setUpScene(in:) and do additional configurations.
      
-     Also adds notification observers.
+     All buttonNode closures defined here.
      */
     override func didMove(to view: SKView) {
         setUpScene(in: view)
@@ -203,14 +205,14 @@ class MenuScene_2: MenuScene {
     // MARK: - Helpers
     
     /**
-     Loads and displays the MenuScene with
+     Loads and displays the MenuScene
      */
     func returnToMenu() {
         NotificationCenter.default.post(name: .showMenuScene, object: nil)
     }
     
     /**
-     Setup a new GameModel, overwrite the appropriate element of ```savedGameModels```, then display the appropriate GameScene
+     Setups a new GameModel, overwriting the appropriate element of ```savedGameModels```, then displays the appropriate GameScene
      */
     func launchNewLocalGame() {
         var newGame: GameModel
@@ -223,10 +225,11 @@ class MenuScene_2: MenuScene {
             guard let vsCompHumanModel = savedGameModels?[1] else { return }
             newGame = vsCompHumanModel
         }
-        // Overwrite the GameModel
+        // Overwrite the GameModel properties
         newGame.gameData = newGameData
         newGame.resetGame()
-        newGame.setUpGame(from: newGameData, copyPitsFromPitsList: true)
+        // Deep-copy pits gameboard to newGame.gameData.pitlist (occurs regardless of shallowCopyFromPitsList parameter)
+        newGame.setUpGame(from: newGame.gameData, shallowCopyFromPitsList: false)
         
         launchLocalGame()
     }

@@ -182,14 +182,14 @@ class MenuScene: SKScene {
         //MARK: - Buttons
         versusHumanButton = ButtonNode("2 Player\nMode", size: buttonSize)
         {
-            let vsComp = false
-            NotificationCenter.default.post(name: .showMenuScene_2, object: vsComp)
+            let setup = (vsComp: false, transition: GameViewController.Transitions.Up)
+            NotificationCenter.default.post(name: .showMenuScene_2, object: setup)
         }
         
         versusComputerButton = ButtonNode("Versus\nComputer", size: buttonSize)
         {
-            let vsComp = true
-            NotificationCenter.default.post(name: .showMenuScene_2, object: vsComp)
+            let setup = (vsComp: true, transition: GameViewController.Transitions.Up)
+            NotificationCenter.default.post(name: .showMenuScene_2, object: setup)
         }
         
         onlineButton = ButtonNode("Online\nGame", size: buttonSize)

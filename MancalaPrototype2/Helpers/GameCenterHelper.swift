@@ -41,7 +41,7 @@
 import GameKit
 import UserNotifications
 /**
- Responsible for immediately authenticating the user to Game Center. Extends GKLocalPlayerListener to receive turn events remotely from Game Center. Presents the user interface for Game Center to the user and handles turn events triggered by the user.
+ Responsible for immediately authenticating the user to Game Center. Extends GKLocalPlayerListener to receive turn events remotely from Game Center. Presents the user interface for Game Center to the user and handles turn events triggered by the game.
  
  + Additional responsibilities:
      - After authenticating the user, check and updates MatchHistory to see if new game modes have been unlocked.
@@ -75,6 +75,10 @@ final class GameCenterHelper: NSObject, GKGameCenterControllerDelegate {
         return GKLocalPlayer.local.isAuthenticated
     }
     
+    /**
+     Authenticate the user to the GameCenter server, and present the GameCenterAuthenticationViewController if the user credentials are not saved from last session.
+     After authentication completes succesfully, check the outcomes of all the users online Game Center matches, either using the matchHistory Dictionary saved to disk or by getting the list of matches directly from the server.
+     */
     override init() {
         super.init()
         
@@ -100,6 +104,7 @@ final class GameCenterHelper: NSObject, GKGameCenterControllerDelegate {
         }
     }
     
+    /// Presents the GameCenter MatchMakerViewController, which lets the user browse the list of Active or Completed games, and allows the user to create a new match. A GKMatchRequest is created in this method in case the user decides to create a new match.
     func presentMatchMaker() {
         
         guard GKLocalPlayer.local.isAuthenticated else {
@@ -119,6 +124,10 @@ final class GameCenterHelper: NSObject, GKGameCenterControllerDelegate {
         viewController?.present(vc, animated: true)
     }
     
+    /// Saves the game data to the GKTurnBasedMatch object and sends it to the next player by calling GKTurnBasedMatch.endTurn()
+    /// - Parameters:
+    ///   - model: the model of the active online match being played
+    ///   - completion: mainly used to throw errors
     func endTurn(_ model: GameModel, completion: @escaping CompletionBlock) {
         
         guard let match = currentMatch else {
@@ -127,22 +136,35 @@ final class GameCenterHelper: NSObject, GKGameCenterControllerDelegate {
         }
 
         match.message = {
-                if model.lastPlayerCaptureText != nil {
-                    return model.lastPlayerCaptureText
-                } else if model.lastPlayerBonusText != nil {
-                    return model.lastPlayerBonusText
-                }
-            
-                return model.messageToDisplay }()
+            if model.lastPlayerCaptureText != nil {
+                return model.lastPlayerCaptureText
+            } else if model.lastPlayerBonusText != nil {
+                return model.lastPlayerBonusText
+            }
         
+            return model.messageToDisplay
+        }()
+        
+        var overwrite = true
+        let checkPits = model.pits.circIter
+        if let player2Base = *checkPits {
+            if model.gameData.pitsList.count > 0 {
+                let pitListPlayer2Base = model.gameData.pitsList[0]
+                overwrite = !(player2Base === pitListPlayer2Base)
+            }
+        }
         match.endTurn(
             withNextParticipants: match.others,
             turnTimeout: GKExchangeTimeoutDefault,
-            match: model.saveDataToSend(),
+            match: model.saveDataToSend(overwritePitsList: overwrite),
             completionHandler: completion)
-
     }
     
+    
+    /// In order to prompt the opponent with a Notification, use this method instead of calling endMatch() as soon as a player ends the game, since Notifications are only sent when calling GKTurnBasedMatch.endTurn()
+    /// - Parameters:
+    ///   - model: the model of the active online match being played
+    ///   - completion: mainly used to throw errors
     func sendFinalTurn(_ model: GameModel, completion: @escaping CompletionBlock) {
         guard let match = currentMatch else {
             completion(GameCenterHelperError.matchNotFound)
@@ -160,6 +182,10 @@ final class GameCenterHelper: NSObject, GKGameCenterControllerDelegate {
             completionHandler: completion)
     }
     
+    /// Officially ends the match, and is only called by the player who **does not** end the match, but rather who is notified by the other player who actually finished the match.
+    /// - Parameters:
+    ///   - model: the model of the active online match being played
+    ///   - completion: mainly used to throw errors
     func endMatch(_ model: GameModel, completion: @escaping CompletionBlock) {
         guard let match = currentMatch else {
             completion(GameCenterHelperError.matchNotFound)
@@ -186,6 +212,11 @@ final class GameCenterHelper: NSObject, GKGameCenterControllerDelegate {
         completionHandler: completion)
     }
     
+    /// Updates the GKTurnBasedMatch.participants.matchOutcomes based on the data in the GameModel.
+    /// Checks to see if new game modes have been unlocked
+    /// - Parameters:
+    ///   - match: to be checked and mutated
+    ///   - model: contains the data associated with the match
     func assignOutcomes(to match: GKTurnBasedMatch,_ model: GameModel) {
         guard let currParticipant = match.currentParticipant, let opponent = match.others.first else {
             print("""
@@ -202,6 +233,7 @@ final class GameCenterHelper: NSObject, GKGameCenterControllerDelegate {
             currParticipantOutcome = .tied
             currParticipant.matchOutcome = currParticipantOutcome
             opponent.matchOutcome = currParticipantOutcome
+            match.message = "Tied game."
         } else {
             let winnerIsCurrentParticipant = model.winner == lastPlayerTurn
             currParticipantOutcome = winnerIsCurrentParticipant ? .won : .lost
@@ -231,6 +263,7 @@ final class GameCenterHelper: NSObject, GKGameCenterControllerDelegate {
         self.matchHistory.evaluateUnlockGameModesEarned()
     }
     
+    /// When a player quits, the match outcomes and other data are not updated, so in this case the GKTurnBasedMatch must be updated manually.
     func playerForfeits(match: GKTurnBasedMatch, _ model: GameModel, quitter: GKTurnBasedParticipant, winner: GKTurnBasedParticipant, completion: @escaping CompletionBlock) {
 
         var winningPlayer = 1
@@ -272,7 +305,7 @@ final class GameCenterHelper: NSObject, GKGameCenterControllerDelegate {
         print("called gameCenterViewControllerDidFinish")
     }
     
-    // .none .quit .won .lost .tied
+    /// Checks the state of the GKTurnBasedMatch and assigns any of the following set: { .none .quit .won .lost .tied } to the local player's matchOutcome
     func checkOutcome(_ match: GKTurnBasedMatch,_ _model: GameModel? = nil) {
         printOutcomes(for: match)
         if let opponent = match.others.first, let localPlayer = match.localParticipant.first {
@@ -349,6 +382,7 @@ final class GameCenterHelper: NSObject, GKGameCenterControllerDelegate {
         }
     }
 
+    /// Helper function to translate the matchOutcome enum to a string
     func printOutcomes(for match: GKTurnBasedMatch) {
         if let opponent = match.others.first, let localPlayer = match.localParticipant.first {
             let oppoOutcome = opponent.matchOutcome

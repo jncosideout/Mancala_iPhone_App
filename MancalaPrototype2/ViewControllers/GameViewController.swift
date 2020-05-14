@@ -41,9 +41,9 @@ import UIKit
 import SpriteKit
 
 /**
- The root view controller. First point for dependency injections coming from ```appDelegate```.
+ The root view controller. First point for dependency injections coming from ```appDelegate```. Uses Notification Observer/Selector pattern to centralize dispatch of SKScenes.
 
- Initializes the view hierarchy to use SKScenes from this point on. Passes dependencies from ```appDelegate``` to the first SKScene. Sets up ```GameCenterHelper```
+ Initializes the view hierarchy to use SKScenes from this point on. Sets up ```GameCenterHelper```
  */
 final class GameViewController: UIViewController {
     
@@ -52,9 +52,7 @@ final class GameViewController: UIViewController {
     
     // These SKScenes will be presented when a notification is reaceived
     var menuScene: MenuScene!
-    
-    var onlineGameScene: GameScene!
-    
+        
     lazy var menuScene_2: MenuScene_2 = {
         let menuSc_2 = MenuScene_2(vsComp: false, with: savedGameModels)
         return menuSc_2
@@ -120,7 +118,7 @@ final class GameViewController: UIViewController {
             // If this notification was triggered in the SettingsScene.firstTimeWalkthroughToggle, we must reset didMoveToViewFirstTime
             menuScene.didMoveToViewFirstTime = didMoveToViewFirstTime
         }
-        skView.presentScene(menuScene, transition: GameViewController.returnTransition)
+        skView.presentScene(menuScene, transition: Transitions.Down.getValue())
     }
 
     /// Registers the GameViewController to receive ```showMenuScene```  notifications
@@ -134,8 +132,9 @@ final class GameViewController: UIViewController {
     
     /// Selector function for ```showMenuScene_2``` notification.
     @objc private func showMenuScene_2(_ notification: Notification) {
-        menuScene_2.vsComputer = notification.object as! Bool
-        skView.presentScene(menuScene_2, transition: GameViewController.transition)
+        let setup = notification.object as? (vsComp: Bool, transition: Transitions) ?? (vsComp: true, transition: Transitions.Up)
+        menuScene_2.vsComputer = setup.vsComp
+        skView.presentScene(menuScene_2, transition: setup.transition.getValue())
     }
     
     /// Registers the GameViewController to receive ```showMenuScene_2```  notifications
@@ -149,7 +148,7 @@ final class GameViewController: UIViewController {
 
     /// Selector function for ```showGameScene``` notification.
     @objc private func showGameScene(_ notification: Notification) {
-        skView.presentScene(vsHumanGameScene, transition: GameViewController.transition)
+        skView.presentScene(vsHumanGameScene, transition: Transitions.Up.getValue())
     }
 
     /// Registers the GameViewController to receive ```showGameScene```  notifications
@@ -163,7 +162,7 @@ final class GameViewController: UIViewController {
     
     /// Selector function for ```showAI_GameScene``` notification.
     @objc private func showAI_GameScene(_ notification: Notification) {
-        skView.presentScene(ai_gameScene, transition: GameViewController.transition)
+        skView.presentScene(ai_gameScene, transition: Transitions.Up.getValue())
     }
 
     /// Registers the GameViewController to receive ```showAI_GameScene```  notifications

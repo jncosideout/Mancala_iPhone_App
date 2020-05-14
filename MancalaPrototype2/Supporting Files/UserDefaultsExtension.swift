@@ -18,7 +18,7 @@ extension UserDefaults {
         let defaults = UserDefaults.standard
         
         if defaults.object(forKey: UserDefaults.Keys.AllowGradientAnimations) == nil {
-            UserDefaults.set(allowGradientAnimations: true)
+            UserDefaults.set(allowGradientAnimations: false)
         }
         
         return defaults.bool(forKey: UserDefaults.Keys.AllowGradientAnimations)

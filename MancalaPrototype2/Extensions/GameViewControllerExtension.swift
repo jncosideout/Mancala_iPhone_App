@@ -18,8 +18,30 @@ Contains the methods for loading and presenting an online match replay scene and
  */
 extension GameViewController: Alertable {
     
-    static let transition = SKTransition.push(with: .up, duration: 0.3)
-    static let returnTransition = SKTransition.push(with: .down, duration: 0.3)
+    public enum Transitions {
+        case Up
+        case Down
+        case Open
+        case Close
+        func getValue() -> SKTransition {
+            switch self {
+            case .Up:
+                return SKTrans._Up
+            case .Down:
+                return SKTrans._Down
+            case .Open:
+                return SKTrans._Open
+            case .Close:
+                return SKTrans._Close
+            }
+        }
+        private struct SKTrans {
+            static let _Up = SKTransition.push(with: .up, duration: 0.3)
+            static let _Down = SKTransition.push(with: .down, duration: 0.3)
+            static let _Open = SKTransition.doorsOpenVertical(withDuration: 0.3)
+            static let _Close = SKTransition.doorsCloseVertical(withDuration: 0.3)
+        }
+    }
     
     /// Implements the completion handler for GKTurnBasedMatch.loadMatchData(_:).  Sets up an Online game before presenting the ```ReplayScene``` or ```GameScene``` to the user.
     /// - Parameter match: Was either chosen by the user in GameCenter or loaded from a "Your Turn" notification.
@@ -76,11 +98,13 @@ extension GameViewController: Alertable {
             if model.turnNumber == 0 && model.playerTurn == 1 {
                 model.gameData.firstPlayerID = match.currentParticipant?.player?.playerID ?? ""
                 model.playerPerspective = model.playerTurn
-                model.gameData.oldPitsList = model.saveGameBoardToList(model.pits)
+                model.gameData.oldPitsList = GameModel.saveGameBoardToList(model.pits, deepCopy: false)
                 model.localPlayerNumber = 1
-                self?.onlineGameScene.model = model
+                let onlineGameScene = GameScene()
+                onlineGameScene.thisGameType = .vsOnline
+                onlineGameScene.model = model
             
-                self?.skView.presentScene(self!.onlineGameScene, transition: GameViewController.transition)
+                self?.skView.presentScene(onlineGameScene, transition: Transitions.Open.getValue())
             } else {
                 // to find out if the local player is player 1 or 2
                 var activePlayer: Bool
@@ -98,7 +122,7 @@ extension GameViewController: Alertable {
                 } else {
                     activePlayer = false
                 }
-                self?.skView.presentScene(ReplayScene(model_: model, activePlayer), transition: GameViewController.transition)
+                self?.skView.presentScene(ReplayScene(model_: model, activePlayer), transition: Transitions.Open.getValue())
             }
             
         }
@@ -129,7 +153,7 @@ extension GameViewController: Alertable {
     
     /// Selector for "Unlocked new game mode" notification observer
     @objc func presentSettings(_ notification: Notification) {
-        skView.presentScene(SettingsScene())
+        skView.presentScene(SettingsScene(), transition: Transitions.Up.getValue())
     }
     
     /// Registers an SKScene to receive and present "Unlocked new game mode" notifications
@@ -144,10 +168,10 @@ extension GameViewController: Alertable {
     /// Selector for "continueOnlineGame" notification observer
     @objc func continueOnlineGame(_ notification: Notification) {
         let onlineGameModel = notification.object as! GameModel
-        onlineGameScene = GameScene()
+        let onlineGameScene = GameScene()
         onlineGameScene.thisGameType = .vsOnline
         onlineGameScene.model = onlineGameModel
-        skView.presentScene(onlineGameScene, transition: GameViewController.transition)
+        skView.presentScene(onlineGameScene, transition: Transitions.Close.getValue())
     }
     
     /// Registers an SKScene to receive   "continueOnlineGame" notifications and present the Online GameScene

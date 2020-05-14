@@ -286,7 +286,8 @@ public class MancalaPlayer: NSObject, GKGameModelPlayer {
         return captured
     }
     
-    public func copyBoard(from originalBoard: CircularLinkedList<PitNode>) -> CircularLinkedList<PitNode> {
+    /// Returns a shallow copy of the given ```originalBoard```
+    static func copyBoard(from originalBoard: CircularLinkedList<PitNode>) -> CircularLinkedList<PitNode> {
         
         let myIter = originalBoard.circIter
         ++myIter

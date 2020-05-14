@@ -549,7 +549,8 @@ class GameScene: SKScene {
         switch thisGameType {
         case .vsHuman, .vsAI:
             let menuType = thisGameType == .vsAI
-            NotificationCenter.default.post(name: .showMenuScene_2, object: menuType)
+            let setup = (vsComp: menuType, transition: GameViewController.Transitions.Down)
+            NotificationCenter.default.post(name: .showMenuScene_2, object: setup)
         case .vsOnline:
             NotificationCenter.default.post(name: .showMenuScene, object: nil)
         }

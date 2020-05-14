@@ -167,7 +167,7 @@ final class ReplayScene: GameScene {
                Perform any last minute saving and configuration here.
                */
                 // First, copy the current pits to the oldPitsList so that when/if the user takes their turn the pitsList will be updated and oldPitsList will refer to the previous turn.
-                _actualModel_.gameData.oldPitsList = _actualModel_.saveGameBoardToList(_actualModel_.pits)
+                _actualModel_.gameData.oldPitsList = GameModel.saveGameBoardToList(_actualModel_.pits, deepCopy: false)
                   
                 NotificationCenter.default.post(name: .continueOnlineGame, object: _actualModel_)
               
@@ -242,12 +242,14 @@ final class ReplayScene: GameScene {
             _ = model.lastMovesList.popLast()
         }
         if model.winner != nil {
-            messageGlobalActions.popLast()
-            let congratulationMessage1 = messageNode.animateInfoNode(text: "Congratulations to", changeColorAction: changeMessageNodeBlue, duration: 1.5)
-            messageGlobalActions.append(congratulationMessage1)
-            let winnerPlayerAlias = actualModel.winnerTextArray[actualModel.winnerTextArray.endIndex - 1]
-            let congratulationMessage2 = messageNode.animateInfoNode(text: winnerPlayerAlias, changeColorAction: changeMessageNodeBlue, duration: 1.5)
-            messageGlobalActions.append(congratulationMessage2)
+            if model.winner != 0 {
+                messageGlobalActions.popLast()
+                let congratulationMessage1 = messageNode.animateInfoNode(text: "Congratulations to", changeColorAction: changeMessageNodeBlue, duration: 1.5)
+                messageGlobalActions.append(congratulationMessage1)
+                let winnerPlayerAlias = actualModel.winnerTextArray[actualModel.winnerTextArray.endIndex - 1]
+                let congratulationMessage2 = messageNode.animateInfoNode(text: winnerPlayerAlias, changeColorAction: changeMessageNodeBlue, duration: 1.5)
+                messageGlobalActions.append(congratulationMessage2)
+            }
         }
         let finalMessageAction1 = messageNode.animateInfoNode(text: "Press Continue when finished", changeColorAction: nil)
         let finalMessageAction2 = messageNode.animateInfoNode(text: "Press Replay to watch again", changeColorAction: nil)
