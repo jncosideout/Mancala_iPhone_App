@@ -159,7 +159,8 @@ class MenuScene_2: MenuScene {
         
         newLocalButton = ButtonNode("New Game", size: buttonSize)
         {
-            self.launchNewLocalGame()
+            [weak self] in
+            self?.launchNewLocalGame()
         }
         
         backButton = ButtonNode("Main Menu", size: buttonSize)
@@ -168,15 +169,15 @@ class MenuScene_2: MenuScene {
         }
         
         runningYOffset += (buttonSize.height / 2)
-        savedLocalButton.position = CGPoint(x: sceneMargin, y: runningYOffset)
+        savedLocalButton.position = CGPoint(x: viewWidth / 2 - buttonSize.width / 2, y: runningYOffset)
         savedLocalButton.zPosition = GameScene.NodeLayer.ui.rawValue
         addChild(savedLocalButton)
         
-        newLocalButton.position = CGPoint(x: viewWidth / 2 - buttonSize.width / 2, y: runningYOffset)
+        newLocalButton.position = CGPoint(x: viewWidth - sceneMargin  - buttonSize.width, y: runningYOffset)
         newLocalButton.zPosition = GameScene.NodeLayer.ui.rawValue
         addChild(newLocalButton)
         
-        backButton.position = CGPoint(x: viewWidth - sceneMargin  - buttonSize.width, y: runningYOffset)
+        backButton.position = CGPoint(x: sceneMargin, y: runningYOffset)
         backButton.zPosition = GameScene.NodeLayer.ui.rawValue
         addChild(backButton)
         

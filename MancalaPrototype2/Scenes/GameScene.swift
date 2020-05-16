@@ -215,27 +215,27 @@ class GameScene: SKScene {
         
         let playerWindowSize = CGSize(width: 75, height: 35)
         let plyWinTopText = model.playerPerspective == 1 ? "P2" : "P1"
-        let playerWindowTopRight = InformationNode(plyWinTopText, size: playerWindowSize, named: nil)
-        playerWindowTopRight.position = CGPoint(
-            x: viewWidth - sceneMargin / 3.0 - playerWindowSize.width,
+        let playerWindowTop = InformationNode(plyWinTopText, size: playerWindowSize, named: nil)
+        playerWindowTop.position = CGPoint(
+            x: sceneMargin / 3.0,
             y: runningYOffset + boardSideLength / 4 - playerWindowSize.height / 2
         )
-        playerWindowTopRight.zPosition = NodeLayer.ui.rawValue
+        playerWindowTop.zPosition = NodeLayer.ui.rawValue
         
-        addChild(playerWindowTopRight)
+        addChild(playerWindowTop)
         
         var plyWinBottomText = model.playerPerspective == 1 ? "P1" : "P2"
         if thisGameType == .vsOnline {
             plyWinBottomText = "You"
         }
-        let playerWindowBottomLeft = InformationNode(plyWinBottomText, size: playerWindowSize, named: nil)
-        playerWindowBottomLeft.position = CGPoint(
-            x: sceneMargin / 3.0,
+        let playerWindowBottom = InformationNode(plyWinBottomText, size: playerWindowSize, named: nil)
+        playerWindowBottom.position = CGPoint(
+            x: viewWidth - sceneMargin / 3.0 - playerWindowSize.width,
             y: runningYOffset - boardSideLength / 4 - playerWindowSize.height / 2
         )
-        playerWindowBottomLeft.zPosition = NodeLayer.ui.rawValue
+        playerWindowBottom.zPosition = NodeLayer.ui.rawValue
         
-        addChild(playerWindowBottomLeft)
+        addChild(playerWindowBottom)
         
         loadTokens()
     }

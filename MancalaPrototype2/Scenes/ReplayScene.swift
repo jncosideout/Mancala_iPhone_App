@@ -184,15 +184,7 @@ final class ReplayScene: GameScene {
         // Same setup as init(model_:,_:), but call replay() after
         let replayButton = ButtonNode("Replay", size: buttonSize)
         {   [weak self, weak _actualModel = self.actualModel] in
-            guard let _gameData = _actualModel?.gameData, let _localPlayer = _actualModel?.localPlayerNumber
-                else { return }
-            self?.model = GameModel(replayWith: _gameData)
-            self?.model.localPlayerNumber = _localPlayer
-            self?.model.vsOnline = true
-            self?.allTokenNodes = CircularLinkedList<TokenNode>()
-            self?.removeAllChildren()
-            self?.setUpScene(in: view)
-            self?.replay()
+            self?.view?.presentScene(ReplayScene(model_: _actualModel!, self?.activePlayer ?? true), transition: GameViewController.Transitions.Open.getValue())
         }
         replayButton.position = CGPoint(
             x: viewWidth - sceneMargin / 3.0 - buttonSize.width,
@@ -204,24 +196,24 @@ final class ReplayScene: GameScene {
         
         let playerWindowSize = CGSize(width: 75, height: 35)
         let plyWinTopText = model.playerPerspective == 1 ? "P2" : "P1"
-        let playerWindowTopRight = InformationNode(plyWinTopText, size: playerWindowSize, named: nil)
-        playerWindowTopRight.position = CGPoint(
-            x: viewWidth - sceneMargin / 3.0 - playerWindowSize.width,
+        let playerWindowTop = InformationNode(plyWinTopText, size: playerWindowSize, named: nil)
+        playerWindowTop.position = CGPoint(
+            x: sceneMargin / 3.0,
             y: runningYOffset + boardSideLength / 4 - playerWindowSize.height / 2
         )
-        playerWindowTopRight.zPosition = NodeLayer.ui.rawValue
+        playerWindowTop.zPosition = NodeLayer.ui.rawValue
         
-        addChild(playerWindowTopRight)
+        addChild(playerWindowTop)
         
         let plyWinBottomText = "You"
-        let playerWindowBottomLeft = InformationNode(plyWinBottomText, size: playerWindowSize, named: nil)
-        playerWindowBottomLeft.position = CGPoint(
-            x: sceneMargin / 3.0,
+        let playerWindowBottom = InformationNode(plyWinBottomText, size: playerWindowSize, named: nil)
+        playerWindowBottom.position = CGPoint(
+            x: viewWidth - sceneMargin / 3.0 - playerWindowSize.width,
             y: runningYOffset - boardSideLength / 4 - playerWindowSize.height / 2
         )
-        playerWindowBottomLeft.zPosition = NodeLayer.ui.rawValue
+        playerWindowBottom.zPosition = NodeLayer.ui.rawValue
         
-        addChild(playerWindowBottomLeft)
+        addChild(playerWindowBottom)
         
         loadTokens()
     }

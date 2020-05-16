@@ -156,25 +156,25 @@ class AI_GameScene: GameScene {
         
         let computerWindowSize = CGSize(width: 100, height: 35)
         let plyWinTopText = "Computer"
-        let playerWindowTopRight = InformationNode(plyWinTopText, size: computerWindowSize, named: nil)
-        playerWindowTopRight.position = CGPoint(
-            x: viewWidth - sceneMargin / 3.0 - computerWindowSize.width,
+        let playerWindowTop = InformationNode(plyWinTopText, size: computerWindowSize, named: nil)
+        playerWindowTop.position = CGPoint(
+            x: sceneMargin / 3.0,
             y: runningYOffset + boardSideLength / 4 - computerWindowSize.height / 2
         )
-        playerWindowTopRight.zPosition = NodeLayer.ui.rawValue
+        playerWindowTop.zPosition = NodeLayer.ui.rawValue
         
-        addChild(playerWindowTopRight)
+        addChild(playerWindowTop)
         
         let playerWindowSize = CGSize(width: 75, height: 35)
         let plyWinBottomText = "You"
-        let playerWindowBottomLeft = InformationNode(plyWinBottomText, size: playerWindowSize, named: nil)
-        playerWindowBottomLeft.position = CGPoint(
-            x: sceneMargin / 3.0,
+        let playerWindowBottom = InformationNode(plyWinBottomText, size: playerWindowSize, named: nil)
+        playerWindowBottom.position = CGPoint(
+            x: viewWidth - sceneMargin / 3.0 - computerWindowSize.width,
             y: runningYOffset - boardSideLength / 4 - playerWindowSize.height / 2
         )
-        playerWindowBottomLeft.zPosition = NodeLayer.ui.rawValue
+        playerWindowBottom.zPosition = NodeLayer.ui.rawValue
         
-        addChild(playerWindowBottomLeft)
+        addChild(playerWindowBottom)
         
         loadTokens()
     }

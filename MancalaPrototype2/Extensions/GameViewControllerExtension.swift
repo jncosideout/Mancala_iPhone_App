@@ -38,8 +38,8 @@ extension GameViewController: Alertable {
         private struct SKTrans {
             static let _Up = SKTransition.push(with: .up, duration: 0.3)
             static let _Down = SKTransition.push(with: .down, duration: 0.3)
-            static let _Open = SKTransition.doorsOpenVertical(withDuration: 0.3)
-            static let _Close = SKTransition.doorsCloseVertical(withDuration: 0.3)
+            static let _Open = SKTransition.doorsOpenVertical(withDuration: 0.6)
+            static let _Close = SKTransition.doorsCloseVertical(withDuration: 0.6)
         }
     }
     

@@ -163,6 +163,7 @@ class MatchHistory {
                 UserDefaults.set(numberOfWonGames: numWonGames)
             }
         }
+        print("numWonGames = \(numWonGames)")
         
     }
     
