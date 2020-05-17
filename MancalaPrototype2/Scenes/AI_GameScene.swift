@@ -48,7 +48,7 @@ class AI_GameScene: GameScene {
     // MARK: - Properties
     var strategist: Strategist!
     var aiProcessingMeter: BackgroundNode!
-    
+    static var sceneIsLeavingView = false
     // MARK: - Init
     
     init(model: GameModel) {
@@ -65,13 +65,25 @@ class AI_GameScene: GameScene {
     
     override func didMove(to view: SKView) {
         super.didMove(to: view)
-        
+        AI_GameScene.sceneIsLeavingView = false
         strategist = Strategist(board: model)
         strategist.board = model
         
         if model.playerTurn == 2 {
-            processAIMove()
+            if model.winner == nil {
+                processAIMove()
+            } else {
+                setupGameOverMessageActions(false)
+                if model.winner != nil {
+                    runMessageNodeActions()
+                }
+            }
         }
+    }
+    
+    override func willMove(from view: SKView) {
+        AI_GameScene.sceneIsLeavingView = true
+        self.removeAllActions()
     }
     
     // MARK: - Setup
@@ -203,28 +215,36 @@ class AI_GameScene: GameScene {
         let animationDelay = animationTimeCounter * animationWait + 2 * animationWait
         print("in \(#function), called by board \(model) ")
         
-        DispatchQueue.global().asyncAfter(deadline: .now() + animationDelay) { [unowned self] in
-            // Record the current time
-            let strategistTime = CFAbsoluteTimeGetCurrent()
-            print("in \(#function) DispatchQueue, called by board \(self.model) ")
-            // Calculate the "bestChoice" which contains the AI's move
-            guard let bestChoice = self.strategist.bestChoice else {
-                return
-            }
-            // Calculate the time it took to find the bestChoice
-            let delta = CFAbsoluteTimeGetCurrent() - strategistTime
-            let aiTimeCeiling = 0.75
-            let aiDelay = max(delta, aiTimeCeiling)
-            
-            let aiMessage = "Computer is thinking"
-            self.messageNode.run(self.messageNode.animateInfoNode(text: aiMessage, changeColorAction: nil))
-            // Animate the aiProcessingMeter
-            aiMeterAction = self.aiProcessingMeter.growWidth(over: aiDelay)
-            self.aiProcessingMeter.run(aiMeterAction)
-            DispatchQueue.main.asyncAfter(deadline: .now() + aiDelay) {
-                // Apply the move to the GameModel, animate the consequences of the 'bestChoice' move, update the GameModel and update the MessageNode (in otherwords, every responsibility that updateGameBoard() has normally
-                self.updateGameBoard(player: bestChoice.player, name: bestChoice.pit)
-                self.animationTimeCounter = 0
+        DispatchQueue.global().asyncAfter(deadline: .now() + animationDelay) { [weak self] in
+            // User may exit or take turn on an online match from an incoming notification which may interrupt the background thread here
+            if !AI_GameScene.sceneIsLeavingView {
+                // Record the current time
+                let strategistTime = CFAbsoluteTimeGetCurrent()
+                print("in \(#function) DispatchQueue, called by board \(self?.model) ")
+                // Calculate the "bestChoice" which contains the AI's move
+                guard let bestChoice = self?.strategist.bestChoice else {
+                    return
+                }
+                // Calculate the time it took to find the bestChoice
+                let delta = CFAbsoluteTimeGetCurrent() - strategistTime
+                let aiTimeCeiling = 0.75
+                let aiDelay = max(delta, aiTimeCeiling)
+                
+                let aiMessage = "Computer is thinking"
+                if let messageAction = self?.messageNode.animateInfoNode(text: aiMessage, changeColorAction: nil) {
+                    self?.messageNode.run(messageAction)
+                }
+                // Animate the aiProcessingMeter
+                if let aiMeterAction = self?.aiProcessingMeter.growWidth(over: aiDelay) {
+                    self?.aiProcessingMeter.run(aiMeterAction)
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + aiDelay) {
+                    // Apply the move to the GameModel, animate the consequences of the 'bestChoice' move, update the GameModel and update the MessageNode (in otherwords, every responsibility that updateGameBoard() has normally
+                    if !AI_GameScene.sceneIsLeavingView {
+                        self?.updateGameBoard(player: bestChoice.player, name: bestChoice.pit)
+                        self?.animationTimeCounter = 0
+                    }
+                }
             }
         }
     }
