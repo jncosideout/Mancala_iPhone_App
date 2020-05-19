@@ -258,7 +258,6 @@ public class MancalaPlayer: NSObject, GKGameModelPlayer {
                 captured = pit_oppo.beads
                 pit_oppo.beads = 0
                 captured = captured + 1 //the one bead that initiated capture gets added
-                //yourPit.beads = yourPit.beads - 1//bc have not finished fillHoles, last bead will go here, but it was included in capture
                 
                 //add captured to our base
                 do {

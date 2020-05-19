@@ -123,7 +123,9 @@ final class GameCenterHelper: NSObject, GKGameCenterControllerDelegate {
         currentMatchMakerVC = vc
         viewController?.present(vc, animated: true)
     }
-    
+
+    //MARK: - Turn handling
+
     /// Saves the game data to the GKTurnBasedMatch object and sends it to the next player by calling GKTurnBasedMatch.endTurn()
     /// - Parameters:
     ///   - model: the model of the active online match being played
@@ -212,6 +214,39 @@ final class GameCenterHelper: NSObject, GKGameCenterControllerDelegate {
         completionHandler: completion)
     }
     
+    /// Saves the game data to the GKTurnBasedMatch object and sends it to GameCenter but does not pass play to the next player
+    /// - Parameters:
+    ///   - model: the model of the active online match being played
+    ///   - completion: mainly used to throw errors
+    func updateButDontEndTurn(_ model: GameModel, completion: @escaping CompletionBlock) {
+        
+        guard let match = currentMatch else {
+            completion(GameCenterHelperError.matchNotFound)
+            return
+        }
+
+        match.message = model.messageToDisplay
+        
+        var overwrite = true
+        let checkPits = model.pits.circIter
+        if let player2Base = *checkPits {
+            if model.gameData.pitsList.count > 0 {
+                let pitListPlayer2Base = model.gameData.pitsList[0]
+                overwrite = !(player2Base === pitListPlayer2Base)
+            }
+        }
+        //before saveCurrentTurn() is called, save lastMovesList separately
+        //otherwise lastMovesList overwritten will only contain the last move if the player got a bonus turn, but hasn't finished their full turn
+        let tempMovesList = model.gameData.lastMovesList
+        model.saveGameData()
+        model.gameData.lastMovesList = tempMovesList
+        
+        let matchData = model.saveDataToSend(overwritePitsList: overwrite)
+        match.saveCurrentTurn(withMatch: matchData, completionHandler: completion)
+    }
+    
+    //MARK: - Update match
+
     /// Updates the GKTurnBasedMatch.participants.matchOutcomes based on the data in the GameModel.
     /// Checks to see if new game modes have been unlocked
     /// - Parameters:
@@ -304,6 +339,8 @@ final class GameCenterHelper: NSObject, GKGameCenterControllerDelegate {
     func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
         print("called gameCenterViewControllerDidFinish")
     }
+    
+    //MARK: - Helpers
     
     /// Checks the state of the GKTurnBasedMatch and assigns any of the following set: { .none .quit .won .lost .tied } to the local player's matchOutcome
     func checkOutcome(_ match: GKTurnBasedMatch,_ _model: GameModel? = nil) {

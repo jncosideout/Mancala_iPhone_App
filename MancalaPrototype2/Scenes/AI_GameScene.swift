@@ -210,7 +210,7 @@ class AI_GameScene: GameScene {
      The AI runs its calculations on the global background queue. When it is finished the time taken to perform that task is used to animate the ```aiProcessingMeter``` to give the illution of thinking. Then on the main thread we schedule the AI player's move and update the board with it
      */
      fileprivate func processAIMove() {
-        var aiMeterAction = SKAction()
+        
         // The AI must be delayed for at least the amount of time taken to animate the human (player 1)'s move
         let animationDelay = animationTimeCounter * animationWait + 2 * animationWait
         print("in \(#function), called by board \(model) ")
@@ -223,20 +223,32 @@ class AI_GameScene: GameScene {
                 print("in \(#function) DispatchQueue, called by board \(self?.model) ")
                 // Calculate the "bestChoice" which contains the AI's move
                 guard let bestChoice = self?.strategist.bestChoice else {
+                    print("self is \(self)")
+                    print("AI was interrupted by skscene change")
                     return
                 }
+                                        
                 // Calculate the time it took to find the bestChoice
                 let delta = CFAbsoluteTimeGetCurrent() - strategistTime
-                let aiTimeCeiling = 0.75
-                let aiDelay = max(delta, aiTimeCeiling)
+                let randomSet: Set = [0.75, 1.0, 1.25]
+                let aiTimeCeiling = randomSet.randomElement()
+                let aiDelay = max(delta, aiTimeCeiling ?? 0.75)
                 
                 let aiMessage = "Computer is thinking"
                 if let messageAction = self?.messageNode.animateInfoNode(text: aiMessage, changeColorAction: nil) {
                     self?.messageNode.run(messageAction)
+                } else {
+                    print("self is \(self)")
+                    print("AI was interrupted by skscene change")
+                    return
                 }
                 // Animate the aiProcessingMeter
                 if let aiMeterAction = self?.aiProcessingMeter.growWidth(over: aiDelay) {
                     self?.aiProcessingMeter.run(aiMeterAction)
+                } else {
+                    print("self is \(self)")
+                    print("AI was interrupted by skscene change")
+                    return
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + aiDelay) {
                     // Apply the move to the GameModel, animate the consequences of the 'bestChoice' move, update the GameModel and update the MessageNode (in otherwords, every responsibility that updateGameBoard() has normally
@@ -253,7 +265,7 @@ class AI_GameScene: GameScene {
         // Run updateGameBoard() regardless of which player it is
         super.updateGameBoard(player: player, name: name)
         // The AI (player 2) will use processAIMove() to call updateGameBoard(player:name:) recursively
-        if model._activePlayer.player == 2 {
+        if model._activePlayer.player == 2, model.winner == nil {
             processAIMove()
         }
     }    

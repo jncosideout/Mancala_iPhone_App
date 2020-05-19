@@ -105,7 +105,7 @@
 		89A623952443990400062C39 /* firstTimeWalkthrough.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = firstTimeWalkthrough.bundle; sourceTree = "<group>"; };
 		89A623962443990400062C39 /* credits.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = credits.bundle; sourceTree = "<group>"; };
 		89A623972443990400062C39 /* instructions.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = instructions.bundle; sourceTree = "<group>"; };
-		89DEB48522F110F9004BCD88 /* Mancala World.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mancala World.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		89DEB48522F110F9004BCD88 /* Mancala Fantasy - Online.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mancala Fantasy - Online.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		89DEB48822F110F9004BCD88 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		89DEB48E22F110F9004BCD88 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		89DEB49022F110F9004BCD88 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -189,7 +189,7 @@
 		89DEB48622F110F9004BCD88 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				89DEB48522F110F9004BCD88 /* Mancala World.app */,
+				89DEB48522F110F9004BCD88 /* Mancala Fantasy - Online.app */,
 				89DEB49F22F110FB004BCD88 /* MancalaPrototype2Tests.xctest */,
 				89DEB4AA22F110FB004BCD88 /* MancalaPrototype2UITests.xctest */,
 			);
@@ -346,7 +346,7 @@
 			);
 			name = "Mancala World";
 			productName = MancalaPrototype2;
-			productReference = 89DEB48522F110F9004BCD88 /* Mancala World.app */;
+			productReference = 89DEB48522F110F9004BCD88 /* Mancala Fantasy - Online.app */;
 			productType = "com.apple.product-type.application";
 		};
 		89DEB49E22F110FB004BCD88 /* MancalaPrototype2Tests */ = {
@@ -689,7 +689,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-2";
 				CODE_SIGN_ENTITLEMENTS = MancalaPrototype2/MancalaPrototype2.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.2.4;
+				CURRENT_PROJECT_VERSION = 1.2.5;
 				DEVELOPMENT_TEAM = 82FUG9A524;
 				INFOPLIST_FILE = MancalaPrototype2/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
@@ -698,7 +698,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.Beaty.MancalaPrototype2;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Mancala Fantasy - Online";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -711,7 +711,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-2";
 				CODE_SIGN_ENTITLEMENTS = MancalaPrototype2/MancalaPrototype2.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.2.4;
+				CURRENT_PROJECT_VERSION = 1.2.5;
 				DEVELOPMENT_TEAM = 82FUG9A524;
 				INFOPLIST_FILE = MancalaPrototype2/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
@@ -720,7 +720,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.Beaty.MancalaPrototype2;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Mancala Fantasy - Online";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

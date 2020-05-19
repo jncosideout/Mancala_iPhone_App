@@ -553,14 +553,15 @@ class GameModel: NSObject {
                 playerTurnText = message1 + "\n" + message2 +  "\n\n"
                 print(playerTurnText)
                 
-                if 0 == sum1{
-                    clearingPlayerTakesAll(from: 2)
-                    pit_base1.beads += sum2
-                } else {
-                    clearingPlayerTakesAll(from: 1)
-                    pit_base2.beads += sum1
+                if !(sum1 == 0 && sum2 == 0) {
+                    if 0 == sum1{
+                        clearingPlayerTakesAll(from: 2)
+                        pit_base1.beads += sum2
+                    } else {
+                        clearingPlayerTakesAll(from: 1)
+                        pit_base2.beads += sum1
+                    }
                 }
-                
                 if pit_base1.beads == pit_base2.beads {
                     //tie
                     winner = 0
@@ -620,7 +621,7 @@ class GameModel: NSObject {
     }
     
     /**
-     Removes all beads from ```player```'s pits and adds them to the other player's "BASE"
+     Removes all beads from ```player```'s pits. The total should later be added to the other player's "BASE", after calling this function.
      
      When one player ends the game by clearing his side (he has no more moves to make), the tradition of Kalah/Mancala is to remove all the beads from the pits of the remaining player and add them to the base of the player whose side has been emptied first.
      

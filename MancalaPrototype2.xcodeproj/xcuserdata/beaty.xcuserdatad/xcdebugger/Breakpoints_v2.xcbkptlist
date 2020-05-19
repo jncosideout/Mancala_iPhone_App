@@ -32,8 +32,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "467"
             endingLineNumber = "467"
-            landmarkName = "player(_:wantsToQuitMatch:)"
-            landmarkType = "7">
+            landmarkName = "GameCenterHelper"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -48,7 +48,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "466"
             endingLineNumber = "466"
-            landmarkName = "player(_:wantsToQuitMatch:)"
+            landmarkName = "printOutcomes(for:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -99,15 +99,15 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "CA2375DC-7789-4E1A-B5D1-AF936AC0FB74"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             condition = "AI_GameScene.sceneIsLeavingView == true"
             continueAfterRunningActions = "No"
             filePath = "MancalaPrototype2/Scenes/AI_GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "244"
-            endingLineNumber = "244"
+            startingLineNumber = "250"
+            endingLineNumber = "250"
             landmarkName = "processAIMove()"
             landmarkType = "7">
          </BreakpointContent>
@@ -116,9 +116,26 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "12E33C94-4CDE-4355-A57B-C168964D910F"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             condition = "AI_GameScene.sceneIsLeavingView == true"
+            continueAfterRunningActions = "No"
+            filePath = "MancalaPrototype2/Scenes/AI_GameScene.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "226"
+            endingLineNumber = "226"
+            landmarkName = "processAIMove()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4638DD40-8201-40BC-AABE-1C965BA72ED6"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            condition = "self == nil"
             continueAfterRunningActions = "No"
             filePath = "MancalaPrototype2/Scenes/AI_GameScene.swift"
             startingColumnNumber = "9223372036854775807"
@@ -132,17 +149,118 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "4638DD40-8201-40BC-AABE-1C965BA72ED6"
-            shouldBeEnabled = "Yes"
+            uuid = "74DB9502-7797-4BEE-AA72-1149B8ECDF29"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
-            condition = "self == nil"
+            condition = "AI_GameScene.sceneIsLeavingView == false"
             continueAfterRunningActions = "No"
             filePath = "MancalaPrototype2/Scenes/AI_GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "222"
-            endingLineNumber = "222"
+            startingLineNumber = "249"
+            endingLineNumber = "249"
             landmarkName = "processAIMove()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9794B0CC-71A0-4CB4-85F6-DEE0B885F145"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            condition = "AI_GameScene.sceneIsLeavingView == true"
+            continueAfterRunningActions = "No"
+            filePath = "MancalaPrototype2/Scenes/AI_GameScene.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "242"
+            endingLineNumber = "242"
+            landmarkName = "processAIMove()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CB76183D-A14C-46E1-9AE3-83041066B4DB"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            condition = "AI_GameScene.sceneIsLeavingView == false"
+            continueAfterRunningActions = "No"
+            filePath = "MancalaPrototype2/Scenes/AI_GameScene.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "227"
+            endingLineNumber = "227"
+            landmarkName = "processAIMove()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D358AD89-7C94-46C9-8621-12F4BBC14A8B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            condition = "AI_GameScene.sceneIsLeavingView == false"
+            continueAfterRunningActions = "No"
+            filePath = "MancalaPrototype2/Scenes/AI_GameScene.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "241"
+            endingLineNumber = "241"
+            landmarkName = "processAIMove()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C5397756-8166-4F31-B49F-82A256948FCD"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            condition = "AI_GameScene.sceneIsLeavingView == true"
+            continueAfterRunningActions = "No"
+            filePath = "MancalaPrototype2/Scenes/AI_GameScene.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "256"
+            endingLineNumber = "256"
+            landmarkName = "processAIMove()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0C4312F8-C7FF-479D-B05B-228F3C5339FA"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            condition = "aiDelay &gt; 0.75"
+            continueAfterRunningActions = "No"
+            filePath = "MancalaPrototype2/Scenes/AI_GameScene.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "236"
+            endingLineNumber = "236"
+            landmarkName = "processAIMove()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D6AF1B61-CFD9-47C6-9721-D7FFDDA11DBC"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MancalaPrototype2/Scenes/ReplayScene.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "268"
+            endingLineNumber = "268"
+            landmarkName = "processGameUpdate()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

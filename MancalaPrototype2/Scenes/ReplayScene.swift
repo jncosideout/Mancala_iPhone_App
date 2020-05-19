@@ -224,6 +224,7 @@ final class ReplayScene: GameScene {
     ///
     /// Each replayed turn is animated and handled the same way as a real game by ```updateGameBoard(player:,name:)```. This causes the ```globalActions``` and ```messageGlobalActions``` to be populated implicitly. 
     private func replay() {
+        print("Begin replay")
         let wait = SKAction.wait(forDuration: 4.5 * animationWait)
         messageGlobalActions.append(wait)
         
@@ -262,43 +263,16 @@ final class ReplayScene: GameScene {
         updateGameBoard(player: player, name: name)
     }
     
-    /// This implementation of ```processGameUpdate``` strips out the GameCenterHelper method calls and does not run the ```globalActions``` or ```messageGlobalActions``` because we are running them in ```replay()```. Otherwise, it is the same.
-    ///
-    /// This override preserves the original structure of checking ```model.lastPlayerBonusTurn``` before ```model.winner``` whereas the base class version has reorganized that logic.
+    /// This implementation of ```processGameUpdate``` strips out the GameCenterHelper method calls Otherwise, it is the same.
     override func processGameUpdate(){
-        
-        if model.lastPlayerBonusTurn {
-            successGenerator.notificationOccurred(.success)
-            successGenerator.prepare()
-        } else {
-            feedbackGenerator.impactOccurred()
-            feedbackGenerator.prepare()
-            
-            isSendingTurn = true
-            
-            if model.lastPlayerCaptured {
-                successGenerator.notificationOccurred(.success)
-                successGenerator.prepare()
-                
-            }
-            
-            if model.winner != nil {
-                var nonClearingPlayer = 0
-                if 0 == model.sum1 {
-                    nonClearingPlayer = 2
-                } else {
-                    nonClearingPlayer = 1
-                }
-                
-                animateClearingPlayerTakesAll(from: nonClearingPlayer)
-                
-            } else {
-                
-                if model.playerTurn == 1 {
-                    model.gameData.turnNumber += 1
-                }   
-            }
-        }
+        // Temporarily change game type before calling super.processGameUpdate()
+        thisGameType = .vsHuman
+        super.processGameUpdate()
+        thisGameType = .vsOnline
     }
     
+    /// This override returns nothing and does nothig on purpose because  we are running  ```globalActions``` and ```messageGlobalActions```  in ```replay()```. 
+    override func configureAndRunActions() {
+        return
+    }
 }//EoC

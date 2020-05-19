@@ -122,6 +122,11 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                     print(error.localizedDescription)
                 }
             }
+            // Dismiss the GameCenter MatchMaker ViewController if it is present
+            if let vc = GameCenterHelper.helper.currentMatchMakerVC {
+                GameCenterHelper.helper.currentMatch = nil
+                vc.dismiss(animated: true)
+            }
             
         case "IGNORE_TURN":
             break

@@ -46,7 +46,7 @@ import SpriteKit
  Based on code from the tutorial found at https:www.raywenderlich.com/7544-game-center-for-ios-building-a-turn-based-game#
  By Ryan Ackerman
  */
-class GameScene: SKScene {
+class GameScene: SKScene, Alertable {
     
     // MARK: - Enums
     enum GameType: Int {
@@ -712,36 +712,41 @@ class GameScene: SKScene {
         if let _winner = model.winner {
             
             isSendingTurn = true
-
-            var nonClearingPlayer = 0
-            if 0 == model.sum1 {
-                nonClearingPlayer = 2
-            } else {
-                nonClearingPlayer = 1
-            }
-            
             //must not run animateClearingPlayerTakesAll(from:)
-            //if game ends by capturing 
-            let winnerBasePit = PitNode(player: _winner, name: "BASE")
-            let basePitIterator = findTokenNode(with: winnerBasePit, in: allTokenNodes)
-            let basePitToken = *basePitIterator
-            let basePit = basePitToken?.pit
-            
-            
-            if let _basePit = basePit {
-                let prevBeads = _basePit.mostRecentBeads
-                if prevBeads < _basePit.beads {
-                    animateClearingPlayerTakesAll(from: nonClearingPlayer)
+            //if game ends by capturing
+            if !(model.sum1 == 0 && model.sum2 == 0) {
+                var nonClearingPlayer = 0
+                if 0 == model.sum1 {
+                    nonClearingPlayer = 2
+                } else {
+                    nonClearingPlayer = 1
+                }
+                
+                
+                let winnerBasePit = PitNode(player: _winner, name: "BASE")
+                let basePitIterator = findTokenNode(with: winnerBasePit, in: allTokenNodes)
+                let basePitToken = *basePitIterator
+                let basePit = basePitToken?.pit
+                
+                
+                if let _basePit = basePit {
+                    let prevBeads = _basePit.mostRecentBeads
+                    if prevBeads < _basePit.beads {
+                        animateClearingPlayerTakesAll(from: nonClearingPlayer)
+                    }
                 }
             }
             
             if thisGameType == .vsOnline {
-                GameCenterHelper.helper.sendFinalTurn(model) { error in
+                GameCenterHelper.helper.sendFinalTurn(model) { [weak self] error in
                     defer {
-                        self.isSendingTurn = false
+                        self?.isSendingTurn = false
                     }
                     if let e = error {
-                        print("Error winning match: \(e.localizedDescription)")
+                        print("Error ending match: \(e.localizedDescription)")
+                        self?.showAlert(withTitle: "Error ending match", message: "Check your connection and try again.") {
+                            self?.returnToMenu()
+                        }
                     }
                     
                 }
@@ -751,6 +756,20 @@ class GameScene: SKScene {
         if model.hasBonusTurn {
             successGenerator.notificationOccurred(.success)
             successGenerator.prepare()
+            if thisGameType == .vsOnline {
+                GameCenterHelper.helper.updateButDontEndTurn(model) { [weak self] error in
+                    defer {
+                        self?.isSendingTurn = false
+                    }
+                    
+                    if let e = error {
+                        print("Error saving match data: \(e.localizedDescription)")
+                        self?.showAlert(withTitle: "Error saving match data", message: "Check your connection and try again.") {
+                            self?.returnToMenu()
+                        }
+                    }
+                }
+            }
         } else {
             feedbackGenerator.impactOccurred()
             feedbackGenerator.prepare()
@@ -768,20 +787,26 @@ class GameScene: SKScene {
             }
             
             if thisGameType == .vsOnline {
-                GameCenterHelper.helper.endTurn(model, completion: { error in
+                GameCenterHelper.helper.endTurn(model) { [weak self] error in
                     defer {
-                        self.isSendingTurn = false
+                        self?.isSendingTurn = false
                     }
                     
                     if let e = error {
                         print("Error ending turn: \(e.localizedDescription)")
+                        self?.showAlert(withTitle: "Error ending turn", message: "Check your connection and try again.") {
+                            self?.returnToMenu()
+                        }
                     }
                     
-                })
+                }
             }
-            
         }
         
+        configureAndRunActions()
+    }
+    
+    func configureAndRunActions() {
         animationsFinished = false
         var timerScheduledInterval = animationTimeCounter * animationWait
         
