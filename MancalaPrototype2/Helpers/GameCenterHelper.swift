@@ -56,9 +56,17 @@ final class GameCenterHelper: NSObject, GKGameCenterControllerDelegate {
     static let helper = GameCenterHelper()
     var viewController: UIViewController?
     var currentMatchMakerVC: GKTurnBasedMatchmakerViewController?
-    var currentMatch: GKTurnBasedMatch?
+    var currentMatch: GKTurnBasedMatch? {
+        willSet {
+            if let matchID = newValue?.matchID {
+                currentMatchID = matchID
+            }
+        }
+    }
+    
     var matchHistory: MatchHistory!
-     
+    var currentMatchID = "FIRST_LAUNCHED"
+    
     var canTakeTurnForCurrentMatch: Bool {
         guard let match = currentMatch else {
             return true
@@ -237,9 +245,13 @@ final class GameCenterHelper: NSObject, GKGameCenterControllerDelegate {
         }
         //before saveCurrentTurn() is called, save lastMovesList separately
         //otherwise lastMovesList overwritten will only contain the last move if the player got a bonus turn, but hasn't finished their full turn
-        let tempMovesList = model.gameData.lastMovesList
-        model.saveGameData()
-        model.gameData.lastMovesList = tempMovesList
+//        let tempMovesList = model.gameData.lastMovesList
+//        model.saveGameData()
+        
+//        if !(model.gameData.lastMovesList.elementsEqual(tempMovesList)) {
+//            model.gameData.lastMovesList = tempMovesList
+//            model.gameData.lastMovesList.append(contentsOf: model.lastMovesList)
+//        }
         
         let matchData = model.saveDataToSend(overwritePitsList: overwrite)
         match.saveCurrentTurn(withMatch: matchData, completionHandler: completion)
@@ -501,7 +513,9 @@ extension GameCenterHelper: GKLocalPlayerListener {
     
     func player(_ player: GKPlayer, receivedTurnEventFor match: GKTurnBasedMatch, didBecomeActive: Bool) {
         guard didBecomeActive else {
-            UserNotificationsHelper.scheduleNotifications(for: match, player)
+            if match.isLocalPlayersTurn {
+                UserNotificationsHelper.scheduleNotifications(for: match, player)
+            }
             return
         }
         

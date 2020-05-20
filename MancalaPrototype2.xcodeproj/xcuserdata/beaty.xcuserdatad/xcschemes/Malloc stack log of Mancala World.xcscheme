@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "89DEB48422F110F9004BCD88"
-               BuildableName = "Mancala World.app"
+               BuildableName = "Mancala Fantasy - Online.app"
                BlueprintName = "Mancala World"
                ReferencedContainer = "container:MancalaPrototype2.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "89DEB48422F110F9004BCD88"
-            BuildableName = "Mancala World.app"
+            BuildableName = "Mancala Fantasy - Online.app"
             BlueprintName = "Mancala World"
             ReferencedContainer = "container:MancalaPrototype2.xcodeproj">
          </BuildableReference>
@@ -74,7 +74,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "89DEB48422F110F9004BCD88"
-            BuildableName = "Mancala World.app"
+            BuildableName = "Mancala Fantasy - Online.app"
             BlueprintName = "Mancala World"
             ReferencedContainer = "container:MancalaPrototype2.xcodeproj">
          </BuildableReference>

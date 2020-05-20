@@ -155,7 +155,11 @@ final class ReplayScene: GameScene {
                     }
                     
                     if let e = error {
-                        print("Error ending turn: \(e.localizedDescription)")
+                        let errorMsg = e.localizedDescription
+                        print("Error ending match: \(errorMsg)")
+                        self?.showConnectionError(errorMsg) {
+                            self?.returnToMenu()
+                        }
                     }
                     
                 })
@@ -220,7 +224,7 @@ final class ReplayScene: GameScene {
     
     // MARK: - Helpers
     
-    /// Replays the last move according to the last player's actions stored in ```model.lastMovesList``` and the data in ```model.oldPitsList```
+    /// Replays the last move according to the last player's actions stored in ```model.lastMovesList``` starting frmo the state of the board in ```model.oldPitsList```
     ///
     /// Each replayed turn is animated and handled the same way as a real game by ```updateGameBoard(player:,name:)```. This causes the ```globalActions``` and ```messageGlobalActions``` to be populated implicitly. 
     private func replay() {

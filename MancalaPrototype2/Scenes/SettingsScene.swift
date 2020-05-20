@@ -44,7 +44,7 @@ import SpriteKit
 /**
  Provides an array of settings that can be toggled by the user. Also provides the slide shows for the "How to play" instructions and "Credits."
  */
-class SettingsScene: MenuScene_2, Alertable {
+class SettingsScene: MenuScene_2 {
     
     private var backGroundAnimationToggle: ButtonNode!
     private var instructionsButton: ButtonNode!

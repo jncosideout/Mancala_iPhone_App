@@ -55,3 +55,5 @@ extension Alertable {
         alertController.show(animated: true, completion: completion)
     }
 }
+
+extension SKScene: Alertable {}

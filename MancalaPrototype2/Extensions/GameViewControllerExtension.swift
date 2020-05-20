@@ -51,8 +51,9 @@ extension GameViewController: Alertable {
         match.loadMatchData { [weak self] (data, error) in
             let model: GameModel
             if let theError = error {
-                print("ERROR: Could not load match\n" + theError.localizedDescription)
-                self?.errorLoadingMatch()
+                let errMsg = theError.localizedDescription
+                print("ERROR: Could not load match\n" + errMsg)
+                self?.errorLoadingMatch(errMsg)
                 return
             }
             
@@ -64,9 +65,10 @@ extension GameViewController: Alertable {
                         let gameData = try JSONDecoder().decode(GameData.self, from: gkMatchData)
                         /// Initialize the GameModel with the GameData
                         model = GameModel(fromGKMatch: gameData)
-                    } catch {
-                        print("error deserializing gkMatchData: \(error.localizedDescription)")
-                        self?.errorLoadingMatch()
+                    } catch (let anError) {
+                        let errMsg = anError.localizedDescription
+                        print("error deserializing gkMatchData:\n" + errMsg)
+                        self?.errorLoadingMatch(errMsg)
                         return
                     }
                 } else {
@@ -75,8 +77,8 @@ extension GameViewController: Alertable {
                 }
 
             } else {
-                print("error loading gameData: \(String(describing: error))" )
-                self?.errorLoadingMatch()
+                print("error loading gameData: gkMatchData was nil" )
+                self?.errorLoadingMatch("Please try again later")
                 return
             }
             
@@ -129,8 +131,8 @@ extension GameViewController: Alertable {
     }
     
     /// Helper for presenting a generic failure message
-    func errorLoadingMatch() {
-        showAlert(withTitle: "Error loading match data", message: "Please check your connection and try again.")
+    func errorLoadingMatch(_ error: String, completionBlock: (() -> Void)? = nil) {
+        showAlert(withTitle: "Error loading match data", message: error, completion: completionBlock)
     }
     //MARK: - notifications
     

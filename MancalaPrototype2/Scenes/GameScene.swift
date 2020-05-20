@@ -46,7 +46,7 @@ import SpriteKit
  Based on code from the tutorial found at https:www.raywenderlich.com/7544-game-center-for-ios-building-a-turn-based-game#
  By Ryan Ackerman
  */
-class GameScene: SKScene, Alertable {
+class GameScene: SKScene {
     
     // MARK: - Enums
     enum GameType: Int {
@@ -613,6 +613,12 @@ class GameScene: SKScene, Alertable {
         }
     }
     
+    func showConnectionError(_ error: String, completionBlock: (() -> Void)? = nil) {
+        showAlert(withTitle: "Server Error", message: error, completion: completionBlock)
+    }
+    
+    // MARK: - Game logic
+    
     /// Exectutes a player's turn. All gameplay logic is activated in this method and the state of the board is animated after. Finally, the message to display to the player is determined based on the state of the GameModel and the rest of the gameplay logic is executed for this turn.
     ///
     /// In order to uncouple this method, the parameters have been set to reflect the data of the pit the player chose, instead of passing the pit directly to this method.
@@ -743,17 +749,16 @@ class GameScene: SKScene, Alertable {
                         self?.isSendingTurn = false
                     }
                     if let e = error {
-                        print("Error ending match: \(e.localizedDescription)")
-                        self?.showAlert(withTitle: "Error ending match", message: "Check your connection and try again.") {
+                        let errorMsg = e.localizedDescription
+                        print("Error sendFinalTurn: \(errorMsg)")
+                        self?.showConnectionError(errorMsg) {
                             self?.returnToMenu()
                         }
                     }
                     
                 }
             }
-        }
-        
-        if model.hasBonusTurn {
+        } else if model.hasBonusTurn {
             successGenerator.notificationOccurred(.success)
             successGenerator.prepare()
             if thisGameType == .vsOnline {
@@ -763,8 +768,9 @@ class GameScene: SKScene, Alertable {
                     }
                     
                     if let e = error {
-                        print("Error saving match data: \(e.localizedDescription)")
-                        self?.showAlert(withTitle: "Error saving match data", message: "Check your connection and try again.") {
+                        let errorMsg = e.localizedDescription
+                        print("Error saving match data: \(errorMsg)")
+                        self?.showConnectionError(errorMsg) {
                             self?.returnToMenu()
                         }
                     }
@@ -793,8 +799,9 @@ class GameScene: SKScene, Alertable {
                     }
                     
                     if let e = error {
-                        print("Error ending turn: \(e.localizedDescription)")
-                        self?.showAlert(withTitle: "Error ending turn", message: "Check your connection and try again.") {
+                        let errorMsg = e.localizedDescription
+                        print("Error ending turn: \(errorMsg)")
+                        self?.showConnectionError(errorMsg) {
                             self?.returnToMenu()
                         }
                     }

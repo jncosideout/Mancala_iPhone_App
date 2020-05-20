@@ -91,12 +91,15 @@ class UserNotificationsHelper: NSObject {
         center.getNotificationSettings() { settings in
             guard settings.authorizationStatus == .authorized else { return }
             
-            let content = UNMutableNotificationContent()
-            content.title = "\(player.alias)'s turn to play"
-            if let opponentName = match.others[0].player?.alias {
-                content.body = "vs " + opponentName
-            }
             let matchID = match.matchID
+            let lastMatchID = GameCenterHelper.helper.currentMatchID
+            let inAnotherMatch = lastMatchID == matchID || lastMatchID == "FIRST_LAUNCHED" ? "" : " in another match"
+            let content = UNMutableNotificationContent()
+            content.title = "Your turn to play"
+            if let opponentName = match.others[0].player?.alias {
+                content.body = "vs " + opponentName + inAnotherMatch
+            }
+            
             content.userInfo = ["MATCH_ID" : matchID]
             content.categoryIdentifier = "TAKE_ACTIVE_TURN"
             

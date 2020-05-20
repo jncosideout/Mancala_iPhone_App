@@ -490,12 +490,14 @@ class GameModel: NSObject {
             playerTurnText = ""
             playerTurnText += "Player \(playerTurn)'s turn."
             print(playerTurnText)
+            
+            var playerTextToDisplay = playerTurnText
             if vsAI {
-                playerTurnText = replaceTextAI(for: playerTurn, in: playerTurnText)
+                playerTextToDisplay = replaceTextAI(for: playerTurn, in: playerTurnText)
             } else if vsOnline, playerTurn == localPlayerNumber {
-                playerTurnText = replaceTextOnlineMatch(for: localPlayerNumber, in: playerTurnText)
+                playerTextToDisplay = replaceTextOnlineMatch(for: localPlayerNumber, in: playerTurnText)
             }
-            return playerTurnText
+            return playerTextToDisplay
         }
     }
     
@@ -515,7 +517,7 @@ class GameModel: NSObject {
     }
     
     /**
-     Only called when the game has ended. Do not use this to determine whether the game has ended.
+     Resolves the end-state of the game. Only call this when the game has ended. Do not use this to determine whether the game has ended.
      
      + Postcondition:Has three outcomes:
      1. ```winnerTextArray``` is populated
