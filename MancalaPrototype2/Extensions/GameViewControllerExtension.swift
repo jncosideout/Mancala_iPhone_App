@@ -96,6 +96,8 @@ extension GameViewController: Alertable {
             }
             
             model.vsOnline = true
+            
+            
             /// If the player is starting a new match, set up the game for the first player and go directly to the GameScene
             if model.turnNumber == 0 && model.playerTurn == 1 {
                 model.gameData.firstPlayerID = match.currentParticipant?.player?.playerID ?? ""
@@ -105,8 +107,12 @@ extension GameViewController: Alertable {
                 let onlineGameScene = GameScene()
                 onlineGameScene.thisGameType = .vsOnline
                 onlineGameScene.model = model
-            
-                self?.skView.presentScene(onlineGameScene, transition: Transitions.Open.getValue())
+                
+                if UserDefaults.backgroundAnimationType != .none {
+                    self?.skView.presentScene(onlineGameScene)
+                } else {
+                    self?.skView.presentScene(onlineGameScene, transition: Transitions.Open.getValue())
+                }
             } else {
                 // to find out if the local player is player 1 or 2
                 var activePlayer: Bool
@@ -124,7 +130,13 @@ extension GameViewController: Alertable {
                 } else {
                     activePlayer = false
                 }
-                self?.skView.presentScene(ReplayScene(model_: model, activePlayer), transition: Transitions.Open.getValue())
+                
+                let replayScene = ReplayScene(model_: model, activePlayer)
+                if UserDefaults.backgroundAnimationType != .none {
+                    self?.skView.presentScene(replayScene)
+                } else {
+                    self?.skView.presentScene(replayScene, transition:  Transitions.Open.getValue())
+                }
             }
             
         }
@@ -137,7 +149,7 @@ extension GameViewController: Alertable {
     //MARK: - notifications
     
     /// Selector for notifications sent or triggered by GKLocalPlayerListener.player(_:receivedTurnEventFor:didBecomeActive)
-    @objc func presentGame(_ notification: Notification) {
+    @objc func presentOnlineGame(_ notification: Notification) {
          guard let match = notification.object as? GKTurnBasedMatch else {
              return
          }
@@ -148,14 +160,17 @@ extension GameViewController: Alertable {
     func addObserverForPresentGame() {
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(presentGame(_:)),
-            name: .presentGame,
+            selector: #selector(presentOnlineGame(_:)),
+            name: .presentOnlineGame,
             object: nil)
     }
     
     /// Selector for "Unlocked new game mode" notification observer
     @objc func presentSettings(_ notification: Notification) {
         let settingsScene: SettingsScene
+        // If this selector is called because of the "unlock new game mode notification,
+        // it will include a ButtonBitmask that will animate the SettingsScene when presented
+        // to show the new button 'start with X beads'
         if let buttonsToFade = notification.object as? ButtonBitmask {
             settingsScene = SettingsScene(buttonsToFade)
         } else {
@@ -179,7 +194,12 @@ extension GameViewController: Alertable {
         let onlineGameScene = GameScene()
         onlineGameScene.thisGameType = .vsOnline
         onlineGameScene.model = onlineGameModel
-        skView.presentScene(onlineGameScene, transition: Transitions.Close.getValue())
+        
+        if UserDefaults.backgroundAnimationType != .none {
+            skView.presentScene(onlineGameScene)
+        } else {
+            skView.presentScene(onlineGameScene, transition: Transitions.Close.getValue())
+        }
     }
     
     /// Registers an SKScene to receive   "continueOnlineGame" notifications and present the Online GameScene

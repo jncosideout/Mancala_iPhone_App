@@ -370,8 +370,8 @@
             filePath = "MancalaPrototype2/Extensions/GameViewControllerExtension.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "158"
-            endingLineNumber = "158"
+            startingLineNumber = "170"
+            endingLineNumber = "170"
             landmarkName = "presentSettings(_:)"
             landmarkType = "7">
          </BreakpointContent>

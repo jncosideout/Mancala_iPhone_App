@@ -148,7 +148,11 @@ final class GameViewController: UIViewController {
 
     /// Selector function for ```showGameScene``` notification.
     @objc private func showGameScene(_ notification: Notification) {
-        skView.presentScene(vsHumanGameScene, transition: Transitions.Up.getValue())
+        if UserDefaults.backgroundAnimationType != .none {
+            skView.presentScene(vsHumanGameScene)
+        } else {
+            skView.presentScene(vsHumanGameScene, transition: Transitions.Up.getValue())
+        }
     }
 
     /// Registers the GameViewController to receive ```showGameScene```  notifications
@@ -162,7 +166,11 @@ final class GameViewController: UIViewController {
     
     /// Selector function for ```showAI_GameScene``` notification.
     @objc private func showAI_GameScene(_ notification: Notification) {
-        skView.presentScene(ai_gameScene, transition: Transitions.Up.getValue())
+        if UserDefaults.backgroundAnimationType != .none {
+            skView.presentScene(ai_gameScene)
+        } else {
+            skView.presentScene(ai_gameScene, transition: Transitions.Up.getValue())
+        }
     }
 
     /// Registers the GameViewController to receive ```showAI_GameScene```  notifications

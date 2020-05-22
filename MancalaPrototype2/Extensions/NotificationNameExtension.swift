@@ -17,7 +17,7 @@ import Foundation
  By Ryan Ackerman
  */
 extension Notification.Name {
-    static let presentGame = Notification.Name("presentGame")
+    static let presentOnlineGame = Notification.Name("presentOnlineGame")
     static let authenticationChanged = Notification.Name("authenticationChanged")
     static let presentSettings = Notification.Name("presentSettings")
     static let showMenuScene = Notification.Name("showMenuScene")

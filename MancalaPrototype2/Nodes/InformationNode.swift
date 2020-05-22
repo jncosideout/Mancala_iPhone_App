@@ -67,7 +67,7 @@ final class InformationNode: TouchNode {
         }
         set {
             if newValue != "" {
-                let nsAttrString = NSAttributedString(string: newValue, attributes: [
+                let nsAttrString = NSMutableAttributedString(string: newValue, attributes: [
                     .font : UIFont.systemFont(ofSize: 18, weight: .semibold)
                     ])
                 

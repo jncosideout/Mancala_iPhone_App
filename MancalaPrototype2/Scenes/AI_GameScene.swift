@@ -97,9 +97,9 @@ class AI_GameScene: GameScene {
         }
         removeAllChildren()
         backgroundColor = .background
-        if UserDefaults.allowGradientAnimations {
+        if UserDefaults.backgroundAnimationType != .none {
             GradientNode.makeLinearNode(with: self, view: view!, linearGradientColors: GradientNode.sunsetPurples, animate: true)
-            GradientNode.makeRadialNode(with: self, view: view!, colors: GradientNode.orangePulse)
+            GradientNode.makeRadialNode(with: self, view: view!, colors: UserDefaults.backgroundAnimationType.getColorArray() ?? GradientNode.billiardFelt)
         } else {
             
             let billiardFelt = SKSpriteNode(imageNamed: "Mancala-billiard-felt-")

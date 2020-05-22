@@ -117,7 +117,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             let matchID = userInfo["MATCH_ID"] as! String
             GKTurnBasedMatch.load(withID: matchID) { (match, error) in
                 if let match = match {
-                    NotificationCenter.default.post(name: .presentGame, object: match)
+                    NotificationCenter.default.post(name: .presentOnlineGame, object: match)
                 } else if let error = error {
                     print(error.localizedDescription)
                 }

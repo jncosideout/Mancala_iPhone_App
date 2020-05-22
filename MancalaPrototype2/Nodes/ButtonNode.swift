@@ -49,7 +49,7 @@ class ButtonNode: TouchNode {
     private let backgroundNode: BackgroundNode
     private let labelNode: SKLabelNode
     private let shadowNode: SKLabelNode
-    
+    var title: String
     /**
      Specifies an image to be displayed as a button. The ```labelNode``` and ```shadowNode``` are initialized but unused.
      */
@@ -74,7 +74,7 @@ class ButtonNode: TouchNode {
             x: size.width / 2,
             y: size.height / 2
         )
-        
+        title = ""
         super.init()
         addChild(buttonImageNode)
         self.actionBlock = actionBlock
@@ -124,7 +124,7 @@ class ButtonNode: TouchNode {
             x: labelNode.position.x + 2,
             y: labelNode.position.y - 2
         )
-        
+        title = text
         super.init()
         
         addChild(backgroundNode)

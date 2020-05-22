@@ -1,2 +1,2 @@
-Your Game Center "Friends" list only contains people you have played a game with before, either Mancala World or any other app that uses Game Center.
+Your Game Center "Friends" list only contains people you have played a game with before, either Mancala Fantasy or any other app that uses Game Center.
 When you choose "Contacts" or "Friends," you can include a message that is sent to that player, and if they do not have the game they will get a link to install the app.

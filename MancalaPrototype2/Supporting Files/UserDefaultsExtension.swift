@@ -14,20 +14,21 @@ import Foundation
  */
 extension UserDefaults {
     
-    class var allowGradientAnimations: Bool {
+    class var backgroundAnimationType: BackgroundAnimationType {
         let defaults = UserDefaults.standard
         
-        if defaults.object(forKey: UserDefaults.Keys.AllowGradientAnimations) == nil {
-            UserDefaults.set(allowGradientAnimations: false)
+        if defaults.object(forKey: UserDefaults.Keys.BackgroundAnimationType) == nil {
+            UserDefaults.set(backgroundAnimationType: .none)
         }
         
-        return defaults.bool(forKey: UserDefaults.Keys.AllowGradientAnimations)
+        let storedValue = defaults.integer(forKey: UserDefaults.Keys.BackgroundAnimationType)
+        return BackgroundAnimationType(rawValue: storedValue) ?? .none
     }
     
-    class func set(allowGradientAnimations: Bool) {
+    class func set(backgroundAnimationType: BackgroundAnimationType ) {
         let defaults = UserDefaults.standard
 
-        defaults.set(allowGradientAnimations, forKey: UserDefaults.Keys.AllowGradientAnimations)
+        defaults.set(backgroundAnimationType.rawValue, forKey: UserDefaults.Keys.BackgroundAnimationType)
     }
     
     class var numberOfWonGames: Int {
@@ -111,7 +112,7 @@ extension UserDefaults {
     
     struct Keys {
         private init(){}
-        static let AllowGradientAnimations = "allowGradientAnimations"
+        static let BackgroundAnimationType = "backgroundAnimationType"
         static let NumberOfWonGames = "numberOfWonGames"
         static let UnlockFiveBeadsStarting = "unlockFiveBeadsStarting"
         static let UnlockSixBeadsStarting = "unlockSixBeadsStarting"

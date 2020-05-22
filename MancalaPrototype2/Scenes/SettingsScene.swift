@@ -55,6 +55,7 @@ class SettingsScene: MenuScene_2 {
     private var firstTimeWalkthroughToggle: ButtonNode!
     private var externalSettings: ButtonNode!
     private var fadeButtonsOnDidMove: ButtonBitmask?
+    private var backgroundAnimationTypeInitial = UserDefaults.backgroundAnimationType
     let instructionsFilePath = Bundle.main.resourcePath! + "/instructions.bundle/Instructions"
     let numInstructionPages = 7
     let creditsFilePath = Bundle.main.resourcePath! + "/credits.bundle/Credits"
@@ -74,16 +75,13 @@ class SettingsScene: MenuScene_2 {
     init(_ buttonBitmask: ButtonBitmask? = nil) {
         super.init()
         fadeButtonsOnDidMove = buttonBitmask
-        didMoveToViewFirstTime = true
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     override func didMove(to view: SKView) {
-        if didMoveToViewFirstTime {
-            setUpScene(in: view)
-        }
+        setUpScene(in: view)
         
         if let buttonsToFade = fadeButtonsOnDidMove {
             scene?.run(SKAction.sequence([
@@ -95,8 +93,8 @@ class SettingsScene: MenuScene_2 {
             ]))
             
         }
-        didMoveToViewFirstTime = false
-        backGroundAnimationToggle.looksEnabled = UserDefaults.allowGradientAnimations
+        
+        backGroundAnimationToggle.looksEnabled = backgroundAnimationTypeInitial != .none
     }
     
     /// Add all the nodes to this scene. Configure the buttons and their actions.
@@ -129,15 +127,34 @@ class SettingsScene: MenuScene_2 {
         addChild(billiardFelt)
         
         //MARK: - backGroundAnimationToggle
-        backGroundAnimationToggle = ButtonNode("Background\nAnimations", size: buttonSize) {
-             if UserDefaults.allowGradientAnimations {
-                 self.backGroundAnimationToggle.looksEnabled = false
-                 UserDefaults.set(allowGradientAnimations: false)
-             } else {
-                 self.backGroundAnimationToggle.looksEnabled = true
-                 UserDefaults.set(allowGradientAnimations: true)
+        var backGroundButtonTitle = "Background\nAnimation"
+        
+        backGroundAnimationToggle = ButtonNode(backGroundButtonTitle, size: buttonSize) {
+            let title = self.backGroundAnimationToggle.title
+             switch UserDefaults.backgroundAnimationType {
+             case .none:
+                self.backGroundAnimationToggle.looksEnabled = true
+                UserDefaults.set(backgroundAnimationType: .billiardFelt)
+             case .billiardFelt:
+                UserDefaults.set(backgroundAnimationType: .midnightSky)
+             case .midnightSky:
+                UserDefaults.set(backgroundAnimationType: .orangePulse)
+             case .orangePulse:
+                UserDefaults.set(backgroundAnimationType: .none)
+                self.backGroundAnimationToggle.text = title
+                self.backGroundAnimationToggle.looksEnabled = false
              }
+            if UserDefaults.backgroundAnimationType != .none {
+                self.backGroundAnimationToggle.text = title + " \(UserDefaults.backgroundAnimationType.rawValue)"
+            } else {
+                self.backGroundAnimationToggle.text = title
+            }
         }
+        if backgroundAnimationTypeInitial != .none {
+            backGroundAnimationToggle.text = backGroundButtonTitle + " \(backgroundAnimationTypeInitial.rawValue)"
+        }// else {
+//            backGroundAnimationToggle.text =
+//        }
         
         runningYOffset += (buttonSize.height / 2)
         backGroundAnimationToggle.position = CGPoint(x: sceneMargin, y: runningYOffset)
@@ -307,6 +324,11 @@ class SettingsScene: MenuScene_2 {
         if bitmask.contains(.externalSettings) { externalSettings.run(SKAction.fadeAlpha(to: value, duration: 1)) }
         if bitmask.contains(.backMainMenu) { backButton.run(SKAction.fadeAlpha(to: value, duration: 1)) }
     }
+    
+    /// Because SettingsScene is relying on functionality of its super class for its "How To Play" instructionsNode, we must override this method to refer to SettingsScene buttons
+    override func fadeAllButtonsAlpha(to value: CGFloat) {
+        fadeButtonsAlpha(to: value)
+    }
   
 }//EoC
 
@@ -322,4 +344,25 @@ struct ButtonBitmask: OptionSet {
     static let backMainMenu =         ButtonBitmask(rawValue: 1 << 6)
     
     static let allButtons: ButtonBitmask = [.backGround, .firstTime, .instructions, .beadNumber, .credits, .externalSettings, .externalSettings, .backMainMenu]
+}
+
+enum BackgroundAnimationType: Int {
+    
+    case none
+    case billiardFelt
+    case midnightSky
+    case orangePulse
+    
+    func getColorArray() -> [UIColor]? {
+        switch self {
+        case .none:
+            return nil
+        case .billiardFelt:
+            return GradientNode.billiardFelt
+        case .midnightSky:
+            return GradientNode.midnightSky
+        case .orangePulse:
+            return GradientNode.orangePulse
+        }
+    }
 }

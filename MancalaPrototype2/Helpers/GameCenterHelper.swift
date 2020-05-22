@@ -523,7 +523,7 @@ extension GameCenterHelper: GKLocalPlayerListener {
             currentMatchMakerVC = nil
             vc.dismiss(animated: true)
         }
-        NotificationCenter.default.post(name: .presentGame, object: match)
+        NotificationCenter.default.post(name: .presentOnlineGame, object: match)
     }
     
     func player(_ player: GKPlayer, matchEnded match: GKTurnBasedMatch) {

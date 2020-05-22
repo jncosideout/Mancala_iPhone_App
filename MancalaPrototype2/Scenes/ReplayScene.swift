@@ -91,9 +91,9 @@ final class ReplayScene: GameScene {
         }
         
         backgroundColor = .background
-        if UserDefaults.allowGradientAnimations {
+        if UserDefaults.backgroundAnimationType != .none {
             GradientNode.makeLinearNode(with: self, view: view!, linearGradientColors: GradientNode.sunsetPurples, animate: true)
-            GradientNode.makeRadialNode(with: self, view: view!, colors: GradientNode.midnightSky)
+            GradientNode.makeRadialNode(with: self, view: view!, colors: UserDefaults.backgroundAnimationType.getColorArray() ?? GradientNode.billiardFelt)            
         } else {
               let billiardFelt = SKSpriteNode(imageNamed: "Mancala-billiard-felt-")
               billiardFelt.size = CGSize(
@@ -187,9 +187,18 @@ final class ReplayScene: GameScene {
         
         // Same setup as init(model_:,_:), but call replay() after
         let replayButton = ButtonNode("Replay", size: buttonSize)
-        {   [weak self, weak _actualModel = self.actualModel] in
-            self?.view?.presentScene(ReplayScene(model_: _actualModel!, self?.activePlayer ?? true), transition: GameViewController.Transitions.Open.getValue())
+        {
+            [weak self, weak _actualModel = self.actualModel] in
+            
+            let replayScene = ReplayScene(model_: _actualModel!, self?.activePlayer ?? true)
+            
+            if UserDefaults.backgroundAnimationType != .none {
+                self?.view?.presentScene(replayScene)
+            } else {
+                self?.view?.presentScene(replayScene, transition: GameViewController.Transitions.Open.getValue())
+            }
         }
+        
         replayButton.position = CGPoint(
             x: viewWidth - sceneMargin / 3.0 - buttonSize.width,
             y: viewHeight - safeAreaTopInset - sceneMargin / 2 - (buttonSize.height)

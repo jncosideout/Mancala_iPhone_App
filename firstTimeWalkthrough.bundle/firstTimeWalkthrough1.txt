@@ -1,5 +1,5 @@
-Welcome to Mancala World!
-To learn how to play, press the "Settings" gear in the upper right corner.
+Welcome to Mancala Fatasy - Online!
+To learn how to play, press the "Settings" gear in the upper right corner and choose "How to Play."
 Press “2 Player Mode” to play a game with a friend sitting next to you using the same device,
 or, press "Versus Computer" to play against the computer.
-The background animations can be turned off in the Settings Menu.
+The background animations can be cycled through in the Settings Menu.
