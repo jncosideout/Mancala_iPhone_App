@@ -64,7 +64,7 @@ class MenuScene_2: MenuScene {
      
      The primary init that must be used for this class, since the player always launches a "local" game via this SKScene and therefore it must have access to the saved local game data.
      */
-    required convenience init(vsComp: Bool, with savedGames: [GameModel]?) {
+    convenience init(vsComp: Bool, with savedGames: [GameModel]?) {
         self.init()
         vsComputer = vsComp
         if let newSavedGames = savedGames {

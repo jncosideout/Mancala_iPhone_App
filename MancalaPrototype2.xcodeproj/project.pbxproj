@@ -17,6 +17,7 @@
 		8924E66C24156A500059C9A5 /* NotificationNameExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8924E66B24156A4F0059C9A5 /* NotificationNameExtension.swift */; };
 		893C38FF24608516002A3147 /* MancalaGameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893C38FE24608516002A3147 /* MancalaGameModel.swift */; };
 		893C390124608560002A3147 /* GameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893C390024608560002A3147 /* GameData.swift */; };
+		893E560A24772D9400DA98C6 /* GradientNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893E560924772D9400DA98C6 /* GradientNode.swift */; };
 		8945318823B8268B0057008E /* AI_GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8945318723B8268B0057008E /* AI_GameScene.swift */; };
 		8945318A23B92DE60057008E /* MenuScene_2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8945318923B92DE50057008E /* MenuScene_2.swift */; };
 		89509502241AED8C00B90D38 /* DeviceModelID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89509501241AED8C00B90D38 /* DeviceModelID.swift */; };
@@ -52,7 +53,6 @@
 		89DEB4DD22F121D7004BCD88 /* TokenNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB4DC22F121D7004BCD88 /* TokenNode.swift */; };
 		89DEB4DF22F12221004BCD88 /* TouchNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB4DE22F12221004BCD88 /* TouchNode.swift */; };
 		89DEB4E222F122C7004BCD88 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB4E122F122C7004BCD88 /* MenuScene.swift */; };
-		89DEB4EC2308BEA5004BCD88 /* GradientGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB4EB2308BEA5004BCD88 /* GradientGameScene.swift */; };
 		89DEB4EE2308BEF8004BCD88 /* SKTexture+Gradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB4ED2308BEF7004BCD88 /* SKTexture+Gradient.swift */; };
 		89DEB4F12309CA2B004BCD88 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89DEB4F02309CA2B004BCD88 /* GameKit.framework */; };
 		89DEB4F42309EE2F004BCD88 /* GameCenterHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DEB4F32309EE2F004BCD88 /* GameCenterHelper.swift */; };
@@ -85,6 +85,7 @@
 		8924E66B24156A4F0059C9A5 /* NotificationNameExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationNameExtension.swift; sourceTree = "<group>"; };
 		893C38FE24608516002A3147 /* MancalaGameModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MancalaGameModel.swift; sourceTree = "<group>"; };
 		893C390024608560002A3147 /* GameData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameData.swift; sourceTree = "<group>"; };
+		893E560924772D9400DA98C6 /* GradientNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientNode.swift; sourceTree = "<group>"; };
 		8945318723B8268B0057008E /* AI_GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AI_GameScene.swift; sourceTree = "<group>"; };
 		8945318923B92DE50057008E /* MenuScene_2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuScene_2.swift; sourceTree = "<group>"; };
 		89509501241AED8C00B90D38 /* DeviceModelID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceModelID.swift; sourceTree = "<group>"; };
@@ -128,7 +129,6 @@
 		89DEB4DE22F12221004BCD88 /* TouchNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchNode.swift; sourceTree = "<group>"; };
 		89DEB4E122F122C7004BCD88 /* MenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 		89DEB4E722F123E9004BCD88 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		89DEB4EB2308BEA5004BCD88 /* GradientGameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientGameScene.swift; sourceTree = "<group>"; };
 		89DEB4ED2308BEF7004BCD88 /* SKTexture+Gradient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SKTexture+Gradient.swift"; sourceTree = "<group>"; };
 		89DEB4F02309CA2B004BCD88 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		89DEB4F22309CA34004BCD88 /* MancalaPrototype2.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MancalaPrototype2.entitlements; sourceTree = "<group>"; };
@@ -275,6 +275,7 @@
 		89DEB4D322F120BA004BCD88 /* Nodes */ = {
 			isa = PBXGroup;
 			children = (
+				893E560924772D9400DA98C6 /* GradientNode.swift */,
 				89DEB4D422F120D5004BCD88 /* BackgroundNode.swift */,
 				8983041E2406E7C80044BFFC /* InstructionsNode.swift */,
 				89DEB4D622F120F6004BCD88 /* BoardNode.swift */,
@@ -293,7 +294,6 @@
 				8945318723B8268B0057008E /* AI_GameScene.swift */,
 				89792F6E23D40B1E00873467 /* SettingsScene.swift */,
 				89E6057B233813AB009A59F3 /* ReplayScene.swift */,
-				89DEB4EB2308BEA5004BCD88 /* GradientGameScene.swift */,
 				89DEB48E22F110F9004BCD88 /* GameScene.swift */,
 				89DEB4E122F122C7004BCD88 /* MenuScene.swift */,
 			);
@@ -487,6 +487,7 @@
 				8924E66C24156A500059C9A5 /* NotificationNameExtension.swift in Sources */,
 				89A07F6423D92C9D002EAB5B /* SavedGameStore.swift in Sources */,
 				898673122426778E00D4DC33 /* DBAlertController.swift in Sources */,
+				893E560A24772D9400DA98C6 /* GradientNode.swift in Sources */,
 				89A5CBF723C2CF3500968A0E /* UserNotificationsHelper.swift in Sources */,
 				89DEB49122F110F9004BCD88 /* GameViewController.swift in Sources */,
 				89830419240065E80044BFFC /* UserDefaultsExtension.swift in Sources */,
@@ -503,7 +504,6 @@
 				8945318823B8268B0057008E /* AI_GameScene.swift in Sources */,
 				89DEB4CE22F11444004BCD88 /* NodeType.swift in Sources */,
 				893C390124608560002A3147 /* GameData.swift in Sources */,
-				89DEB4EC2308BEA5004BCD88 /* GradientGameScene.swift in Sources */,
 				89054BD6231B1E2B00F1C027 /* PitNode.swift in Sources */,
 				89792F6F23D40B1E00873467 /* SettingsScene.swift in Sources */,
 				8997300F231F0E3600619CBD /* CircularLinkedList.swift in Sources */,

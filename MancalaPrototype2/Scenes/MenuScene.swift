@@ -69,7 +69,7 @@ class MenuScene: SKScene {
     let firstTimeWalkthroughFilePath = Bundle.main.resourcePath! + "/firstTimeWalkthrough.bundle/firstTimeWalkthrough"
     let numPagesWalkthrough = 4
     var walkthroughText: [String]?
-    var showSlide = 0
+    var slideToShow = 0
     var didMoveToViewFirstTime = true
     // MARK: - Init
     
@@ -239,14 +239,14 @@ class MenuScene: SKScene {
                 SKAction.fadeAlpha(to: 0, duration: 1),
                 SKAction.run {
                     // Show the next slide
-                    self.showSlide += 1
-                    if self.showSlide < self.instructionsNode.instructions.count {
-                        self.instructionsNode.plainText = self.instructionsNode.instructions[self.showSlide]
+                    self.slideToShow += 1
+                    if self.slideToShow < self.instructionsNode.instructions.count {
+                        self.instructionsNode.plainText = self.instructionsNode.instructions[self.slideToShow]
                     } else {
                         // When we reach the last slide, remove the node and fade the buttons back in
                         self.instructionsNode.removeFromParent()
                         self.fadeAllButtonsAlpha(to: 1.0)
-                        self.showSlide = 0
+                        self.slideToShow = 0
                     }
                 },
                 // Always fade out the Instructions node

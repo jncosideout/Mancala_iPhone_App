@@ -130,7 +130,8 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         case "IGNORE_TURN":
             break
         case "SEE_UNLOCKED":
-            NotificationCenter.default.post(name: .presentSettings, object: nil)
+            let bitmask = ButtonBitmask.allButtons.subtracting(.beadNumber)
+            NotificationCenter.default.post(name: .presentSettings, object: bitmask)
         default:
             break
         }

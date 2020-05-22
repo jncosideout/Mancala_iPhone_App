@@ -155,7 +155,13 @@ extension GameViewController: Alertable {
     
     /// Selector for "Unlocked new game mode" notification observer
     @objc func presentSettings(_ notification: Notification) {
-        skView.presentScene(SettingsScene(), transition: Transitions.Up.getValue())
+        let settingsScene: SettingsScene
+        if let buttonsToFade = notification.object as? ButtonBitmask {
+            settingsScene = SettingsScene(buttonsToFade)
+        } else {
+            settingsScene = SettingsScene()
+        }
+        skView.presentScene(settingsScene, transition: Transitions.Up.getValue())
     }
     
     /// Registers an SKScene to receive and present "Unlocked new game mode" notifications

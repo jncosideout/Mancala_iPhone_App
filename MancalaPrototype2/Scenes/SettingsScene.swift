@@ -54,15 +54,26 @@ class SettingsScene: MenuScene_2 {
     private var numberOfBeads = NumStartingBeads(rawValue: UserDefaults.numberOfStartingBeads)
     private var firstTimeWalkthroughToggle: ButtonNode!
     private var externalSettings: ButtonNode!
-
+    private var fadeButtonsOnDidMove: ButtonBitmask?
     let instructionsFilePath = Bundle.main.resourcePath! + "/instructions.bundle/Instructions"
     let numInstructionPages = 7
     let creditsFilePath = Bundle.main.resourcePath! + "/credits.bundle/Credits"
     let numCreditsPages = 3
     
+    let gameModesUnlockedMessage: String = {
+        let baseString = "Click the button at the top to switch between 4"
+        var middleString = " and 5 beads per pit"
+        
+        if UserDefaults.unlockSixBeadsStarting {
+            middleString = ", 5 and 6 beads per pit"
+        }
+        return baseString + middleString + " when starting a new game."
+    }()
+    
     // MARK: - Init
-    override init() {
+    init(_ buttonBitmask: ButtonBitmask? = nil) {
         super.init()
+        fadeButtonsOnDidMove = buttonBitmask
         didMoveToViewFirstTime = true
     }
     
@@ -72,6 +83,17 @@ class SettingsScene: MenuScene_2 {
     override func didMove(to view: SKView) {
         if didMoveToViewFirstTime {
             setUpScene(in: view)
+        }
+        
+        if let buttonsToFade = fadeButtonsOnDidMove {
+            scene?.run(SKAction.sequence([
+                SKAction.run { self.fadeButtonsAlpha(to: 0.25, bitmask: buttonsToFade) },
+                SKAction.wait(forDuration: 3.0),
+                SKAction.run { self.fadeButtonsAlpha(to: 1.0) },
+                SKAction.wait(forDuration: 2.0),
+                SKAction.run { self.showAlert(withTitle: "You've unlocked a new game mode!", message: self.gameModesUnlockedMessage) }
+            ]))
+            
         }
         didMoveToViewFirstTime = false
         backGroundAnimationToggle.looksEnabled = UserDefaults.allowGradientAnimations
@@ -168,7 +190,7 @@ class SettingsScene: MenuScene_2 {
             self.addInstructionsNode(to: view ?? SKView(), instructionsTexts ?? [String]())
             self.instructionsNode.isHidden = false
             self.instructionsNode.animatePopUpFadeIn()
-            self.fadeAllButtonsAlpha(to: 0.25)
+            self.fadeButtonsAlpha(to: 0.25)
         }
         
         instructionsButton.position = CGPoint(
@@ -187,7 +209,7 @@ class SettingsScene: MenuScene_2 {
             self.addCreditsNode(to: view ?? SKView(), creditsTexts ?? [String]())
             self.creditsNode.isHidden = false
             self.creditsNode.animatePopUpFadeIn()
-            self.fadeAllButtonsAlpha(to: 0.25)
+            self.fadeButtonsAlpha(to: 0.25)
         }
         
         creditsButton.position = CGPoint(
@@ -246,17 +268,17 @@ class SettingsScene: MenuScene_2 {
                     SKAction.fadeAlpha(to: 0, duration: 1),
                     // Show the next slide
                     SKAction.run {
-                        self.showSlide += 1
-                        if self.showSlide < self.creditsNode.instructions.count {
-                            self.creditsNode.plainText = self.creditsNode.instructions[self.showSlide]
+                        self.slideToShow += 1
+                        if self.slideToShow < self.creditsNode.instructions.count {
+                            self.creditsNode.plainText = self.creditsNode.instructions[self.slideToShow]
                         } else {
                             // When we reach the last slide, remove the node and fade the buttons back in
                             self.creditsNode.removeFromParent()
-                            self.fadeAllButtonsAlpha(to: 1.0)
-                            self.showSlide = 0
+                            self.fadeButtonsAlpha(to: 1.0)
+                            self.slideToShow = 0
                         }
                     },
-                    // Always fade out the Instructions node
+                    // Always fade in the Instructions node
                     SKAction.fadeAlpha(to: 1, duration: 1)
                 ]))
         }
@@ -276,13 +298,28 @@ class SettingsScene: MenuScene_2 {
     
     /// Animate the buttons in this scene to fade. Initial purpose of this method was to unobstruct the view when either ```creditsNode``` or ```instructionsNode``` is animated.
     /// Overriden to take care of the buttons unique to this SKScene
-    override func fadeAllButtonsAlpha(to value: CGFloat) {
-        backGroundAnimationToggle.run(SKAction.fadeAlpha(to: value, duration: 1))
-        instructionsButton.run(SKAction.fadeAlpha(to: value, duration: 1))
-        creditsButton.run(SKAction.fadeAlpha(to: value, duration: 1))
-        beadNumberToggle.run(SKAction.fadeAlpha(to: value, duration: 1))
-        firstTimeWalkthroughToggle.run(SKAction.fadeAlpha(to: value, duration: 1))
-        backButton.run(SKAction.fadeAlpha(to: value, duration: 1))
-        externalSettings.run(SKAction.fadeAlpha(to: value, duration: 1))
+    private func fadeButtonsAlpha(to value: CGFloat, bitmask: ButtonBitmask = ButtonBitmask.allButtons) {
+        if bitmask.contains(.backGround) { backGroundAnimationToggle.run(SKAction.fadeAlpha(to: value, duration: 1)) }
+        if bitmask.contains(.firstTime) { firstTimeWalkthroughToggle.run(SKAction.fadeAlpha(to: value, duration: 1)) }
+        if bitmask.contains(.instructions) { instructionsButton.run(SKAction.fadeAlpha(to: value, duration: 1)) }
+        if bitmask.contains(.beadNumber) { beadNumberToggle.run(SKAction.fadeAlpha(to: value, duration: 1)) }
+        if bitmask.contains(.credits) { creditsButton.run(SKAction.fadeAlpha(to: value, duration: 1)) }
+        if bitmask.contains(.externalSettings) { externalSettings.run(SKAction.fadeAlpha(to: value, duration: 1)) }
+        if bitmask.contains(.backMainMenu) { backButton.run(SKAction.fadeAlpha(to: value, duration: 1)) }
     }
+  
 }//EoC
+
+struct ButtonBitmask: OptionSet {
+    let rawValue: Int
+    
+    static let backGround =           ButtonBitmask(rawValue: 1 << 0)
+    static let firstTime =            ButtonBitmask(rawValue: 1 << 1)
+    static let instructions =         ButtonBitmask(rawValue: 1 << 2)
+    static let beadNumber =           ButtonBitmask(rawValue: 1 << 3)
+    static let credits =              ButtonBitmask(rawValue: 1 << 4)
+    static let externalSettings =     ButtonBitmask(rawValue: 1 << 5)
+    static let backMainMenu =         ButtonBitmask(rawValue: 1 << 6)
+    
+    static let allButtons: ButtonBitmask = [.backGround, .firstTime, .instructions, .beadNumber, .credits, .externalSettings, .externalSettings, .backMainMenu]
+}

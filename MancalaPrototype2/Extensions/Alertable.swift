@@ -10,6 +10,7 @@
 
 import SpriteKit
 
+// Default arguments aren't allowed in a protocol method, thus all methods are placed in an extension
 protocol Alertable {}
 
 /**
