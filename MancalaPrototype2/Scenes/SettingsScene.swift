@@ -56,6 +56,7 @@ class SettingsScene: MenuScene_2 {
     private var externalSettings: ButtonNode!
     private var fadeButtonsOnDidMove: ButtonBitmask?
     private var backgroundAnimationTypeInitial = UserDefaults.backgroundAnimationType
+    private var valueForValueButton: ButtonNode!
     let instructionsFilePath = Bundle.main.resourcePath! + "/instructions.bundle/Instructions"
     let numInstructionPages = 7
     let creditsFilePath = Bundle.main.resourcePath! + "/credits.bundle/Credits"
@@ -127,9 +128,10 @@ class SettingsScene: MenuScene_2 {
         addChild(billiardFelt)
         
         //MARK: - backGroundAnimationToggle
-        var backGroundButtonTitle = "Background\nAnimation"
+        let backGroundButtonTitle = "Background\nAnimation"
         
-        backGroundAnimationToggle = ButtonNode(backGroundButtonTitle, size: buttonSize) {
+        backGroundAnimationToggle = ButtonNode(backGroundButtonTitle, size: buttonSize)
+        {
             let title = self.backGroundAnimationToggle.title
              switch UserDefaults.backgroundAnimationType {
              case .none:
@@ -152,9 +154,7 @@ class SettingsScene: MenuScene_2 {
         }
         if backgroundAnimationTypeInitial != .none {
             backGroundAnimationToggle.text = backGroundButtonTitle + " \(backgroundAnimationTypeInitial.rawValue)"
-        }// else {
-//            backGroundAnimationToggle.text =
-//        }
+        }
         
         runningYOffset += (buttonSize.height / 2)
         backGroundAnimationToggle.position = CGPoint(x: sceneMargin, y: runningYOffset)
@@ -171,7 +171,8 @@ class SettingsScene: MenuScene_2 {
         addChild(backButton)
         
         //MARK: - firstTimeWalkthroughToggle
-        firstTimeWalkthroughToggle = ButtonNode("First time\nWalkthrough", size: buttonSize) {
+        firstTimeWalkthroughToggle = ButtonNode("First time\nWalkthrough", size: buttonSize)
+        {
              if UserDefaults.hasLaunchedFirstTime {
                  self.firstTimeWalkthroughToggle.looksEnabled = false
                  UserDefaults.set(hasLaunchedFirstTime: false)
@@ -203,7 +204,8 @@ class SettingsScene: MenuScene_2 {
         //MARK: - instructionsButton
         // Get the "How to play" text pages from the bundle
         let instructionsTexts = getContent(numPages: numInstructionPages, filePath: instructionsFilePath)
-        instructionsButton = ButtonNode("How to play", size: buttonSize) {
+        instructionsButton = ButtonNode("How to play", size: buttonSize)
+        {
             self.addInstructionsNode(to: view ?? SKView(), instructionsTexts ?? [String]())
             self.instructionsNode.isHidden = false
             self.instructionsNode.animatePopUpFadeIn()
@@ -221,7 +223,8 @@ class SettingsScene: MenuScene_2 {
         // Get the "Credits" text pages from the bundle
         // Each time the creditsButton is pressed a new creditsNode is added to the scene
         let creditsTexts = getContent(numPages: numCreditsPages, filePath: creditsFilePath)
-        creditsButton = ButtonNode("Credits", size: buttonSize) {
+        creditsButton = ButtonNode("Credits", size: buttonSize)
+        {
             // Add the hidden creditsNode to the scene.
             self.addCreditsNode(to: view ?? SKView(), creditsTexts ?? [String]())
             self.creditsNode.isHidden = false
@@ -240,7 +243,8 @@ class SettingsScene: MenuScene_2 {
         // If the user has unlocked at least "five beads starting," this button will be displayed.
         var numBeadsString = String(numberOfBeads?.rawValue ?? 4)
         var beadToggleString = "Start with\n" + numBeadsString + " beads"
-        beadNumberToggle = ButtonNode(beadToggleString, size: buttonSize) {
+        beadNumberToggle = ButtonNode(beadToggleString, size: buttonSize)
+        {
             // Cycle through the unlocked game modes that are available
             switch self.numberOfBeads {
             case .four:
@@ -271,6 +275,24 @@ class SettingsScene: MenuScene_2 {
         )
         beadNumberToggle.zPosition = GameScene.NodeLayer.ui.rawValue
         addChild(beadNumberToggle)
+        
+        
+        //MARK: - Value4Value
+        valueForValueButton = ButtonNode("Value For Value", size: buttonSize)
+        {
+            let donateAction = UIAlertAction(title: "Donate", style: .default) { _ in
+                let url: URL! = URL(string: "https://www.google.com")
+                UIApplication.shared.open(url)
+            }
+            self.showAlert(withTitle: "Enjoyed Mancala Fantasy?", message: "If you have enjoyed playing Mancala Fantasy and would like to support my work, please donate whatever you think the game was worth to you. Thanks!", extraAction: donateAction)
+        }
+        
+        valueForValueButton.position = CGPoint(
+            x: viewWidth/2 - buttonSize.width/2,
+            y: safeAreaTopInset + buttonSize.height/2
+        )
+        valueForValueButton.zPosition = GameScene.NodeLayer.ui.rawValue
+        addChild(valueForValueButton)
     }
     
     /// Configure the ```creditsNode``` and add it to the scene. This allows for the ```creditsNode``` text-slide show animation to be set here instead of in setUpScene(in:)

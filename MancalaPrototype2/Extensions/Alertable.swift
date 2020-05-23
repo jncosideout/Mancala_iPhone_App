@@ -20,7 +20,7 @@ protocol Alertable {}
 extension Alertable {
     
     /// Shows a generic info alert  with "OK" action
-    func showAlert(withTitle title: String, message: String, completion: (()->Void)? = nil) {
+    func showAlert(withTitle title: String, message: String, extraAction: UIAlertAction? = nil, completion: (()->Void)? = nil) {
         
         // Provides a alertViewController on its own UIWindow
         let alertController = DBAlertController(title: title, message: message, preferredStyle: .alert)
@@ -29,6 +29,9 @@ extension Alertable {
             completion?()
         }
         alertController.addAction(okAction)
+        if let anotherAction = extraAction {
+            alertController.addAction(anotherAction)
+        }
         
         alertController.show(animated: true, completion: nil)
     }

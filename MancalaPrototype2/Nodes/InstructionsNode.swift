@@ -58,22 +58,21 @@ class InstructionsNode : TouchNode {
 
     private let backgroundNode: BackgroundNode
     private let textLabelNode: SKLabelNode
-    var instructions: [String] {
-        didSet{
-            instructionsCount = instructions.count
-            plainText = instructions[0]
-        }
-    }
-    private var instructionsCount = 0
+    var instructions: [String]
     private var showSlide = 0
     
     /// Sets the text to be shown on the InstructionsNode
     var plainText: String? {
         get {
-            return textLabelNode.text
+            return textLabelNode.attributedText?.string
         }
         set {
-            textLabelNode.text = newValue
+            let nsAttrString = NSMutableAttributedString(string: newValue ?? "", attributes: [
+                .font : UIFont.systemFont(ofSize: 18, weight: .semibold),
+                .foregroundColor : UIColor.init(white: 1, alpha: 1)
+                ])
+            
+            textLabelNode.attributedText = nsAttrString
         }
     }
     
@@ -101,18 +100,18 @@ class InstructionsNode : TouchNode {
         super.init()
         let safeAreaInset = self.inputView?.window?.safeAreaInsets.right ?? 30
 
-        textLabelNode.fontSize = font.pointSize
-        textLabelNode.fontColor = .white
         textLabelNode.numberOfLines = 0
         textLabelNode.lineBreakMode = NSLineBreakMode.byWordWrapping
-        textLabelNode.text = instructions[0]
+        textLabelNode.attributedText = NSMutableAttributedString(string: instructions[0], attributes: [
+                .font : UIFont.systemFont(ofSize: 18, weight: .semibold),
+                .foregroundColor : UIColor.init(white: 1, alpha: 1)
+                ])
         textLabelNode.preferredMaxLayoutWidth = size.width - safeAreaInset
         textLabelNode.verticalAlignmentMode = .center
         textLabelNode.horizontalAlignmentMode = .center
-        textLabelNode.alpha = 0
         textLabelNode.position = CGPoint(
             x: size.width / 2,
-            y: size.height / 2// - textLabelNode.frame.height / 2
+            y: size.height / 2
         )
         
         
