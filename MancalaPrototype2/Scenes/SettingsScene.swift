@@ -281,10 +281,10 @@ class SettingsScene: MenuScene_2 {
         valueForValueButton = ButtonNode("Value For Value", size: buttonSize)
         {
             let donateAction = UIAlertAction(title: "Donate", style: .default) { _ in
-                let url: URL! = URL(string: "https://www.google.com")
+                let url: URL! = URL(string: "https://paypal.me/MancalaDev")
                 UIApplication.shared.open(url)
             }
-            self.showAlert(withTitle: "Enjoyed Mancala Fantasy?", message: "If you have enjoyed playing Mancala Fantasy and would like to support my work, please donate whatever you think the game was worth to you. Thanks!", extraAction: donateAction)
+            self.showAlert(withTitle: "Enjoyed Mancala Fantasy?", message: "If you had fun playing Mancala Fantasy and would like to support my work, please donate whatever you think the game was worth to you. Thanks!", extraAction: donateAction)
         }
         
         valueForValueButton.position = CGPoint(
@@ -338,13 +338,14 @@ class SettingsScene: MenuScene_2 {
     /// Animate the buttons in this scene to fade. Initial purpose of this method was to unobstruct the view when either ```creditsNode``` or ```instructionsNode``` is animated.
     /// Overriden to take care of the buttons unique to this SKScene
     private func fadeButtonsAlpha(to value: CGFloat, bitmask: ButtonBitmask = ButtonBitmask.allButtons) {
-        if bitmask.contains(.backGround) { backGroundAnimationToggle.run(SKAction.fadeAlpha(to: value, duration: 1)) }
-        if bitmask.contains(.firstTime) { firstTimeWalkthroughToggle.run(SKAction.fadeAlpha(to: value, duration: 1)) }
-        if bitmask.contains(.instructions) { instructionsButton.run(SKAction.fadeAlpha(to: value, duration: 1)) }
-        if bitmask.contains(.beadNumber) { beadNumberToggle.run(SKAction.fadeAlpha(to: value, duration: 1)) }
-        if bitmask.contains(.credits) { creditsButton.run(SKAction.fadeAlpha(to: value, duration: 1)) }
+        if bitmask.contains(.backGround)       { backGroundAnimationToggle.run(SKAction.fadeAlpha(to: value, duration: 1)) }
+        if bitmask.contains(.firstTime)        { firstTimeWalkthroughToggle.run(SKAction.fadeAlpha(to: value, duration: 1)) }
+        if bitmask.contains(.instructions)     { instructionsButton.run(SKAction.fadeAlpha(to: value, duration: 1)) }
+        if bitmask.contains(.beadNumber)       { beadNumberToggle.run(SKAction.fadeAlpha(to: value, duration: 1)) }
+        if bitmask.contains(.credits)          { creditsButton.run(SKAction.fadeAlpha(to: value, duration: 1)) }
         if bitmask.contains(.externalSettings) { externalSettings.run(SKAction.fadeAlpha(to: value, duration: 1)) }
-        if bitmask.contains(.backMainMenu) { backButton.run(SKAction.fadeAlpha(to: value, duration: 1)) }
+        if bitmask.contains(.backMainMenu)     { backButton.run(SKAction.fadeAlpha(to: value, duration: 1)) }
+        if bitmask.contains(.valueForValue)    { valueForValueButton.run(SKAction.fadeAlpha(to: value, duration: 1)) }
     }
     
     /// Because SettingsScene is relying on functionality of its super class for its "How To Play" instructionsNode, we must override this method to refer to SettingsScene buttons
@@ -364,8 +365,9 @@ struct ButtonBitmask: OptionSet {
     static let credits =              ButtonBitmask(rawValue: 1 << 4)
     static let externalSettings =     ButtonBitmask(rawValue: 1 << 5)
     static let backMainMenu =         ButtonBitmask(rawValue: 1 << 6)
+    static let valueForValue =        ButtonBitmask(rawValue: 1 << 7)
     
-    static let allButtons: ButtonBitmask = [.backGround, .firstTime, .instructions, .beadNumber, .credits, .externalSettings, .externalSettings, .backMainMenu]
+    static let allButtons: ButtonBitmask = [.backGround, .firstTime, .instructions, .beadNumber, .credits, .externalSettings, .externalSettings, .backMainMenu, .valueForValue]
 }
 
 enum BackgroundAnimationType: Int {

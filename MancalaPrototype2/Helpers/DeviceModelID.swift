@@ -149,7 +149,7 @@ public extension UIDevice {
             "iPhone12,5" : .iPhone11ProMax
         ]
 
-    if let model = modelMap[String.init(validatingUTF8: modelCode!)!] {
+        if let model = modelMap[String.init(validatingUTF8: modelCode!)!] {
             return model
         }
         return Model.unrecognized

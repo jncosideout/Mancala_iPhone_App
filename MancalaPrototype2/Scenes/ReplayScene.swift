@@ -207,26 +207,70 @@ final class ReplayScene: GameScene {
         
         addChild(replayButton)
         
-        let playerWindowSize = CGSize(width: 75, height: 35)
-        let plyWinTopText = model.playerPerspective == 1 ? "P2" : "P1"
-        let playerWindowTop = InformationNode(plyWinTopText, size: playerWindowSize, named: nil)
-        playerWindowTop.position = CGPoint(
-            x: sceneMargin / 3.0,
-            y: runningYOffset + boardSideLength / 4 - playerWindowSize.height / 2
+        let playerLabelSize = CGSize(width: 75, height: 35)
+        
+        let playerLabel_TopText = model.playerPerspective == 1 ? "P2" : "P1"
+        var playerLabel_TopSize = getSizeConstraintsFor(string: playerLabel_TopText, minSize: playerLabelSize)
+        playerLabel_TopSize.width *= 1.5
+        playerLabel_TopSize.height *= 1.5
+
+        let playerLabel_Top = InformationNode(playerLabel_TopText, size: playerLabel_TopSize, named: nil)
+        
+        // Use lineNodes of boardNode to place the "top" player label adjacent to the player2 mid-point lineNode
+        var x: CGFloat
+        var y: CGFloat
+        var positionInScene: CGPoint?
+        if let node = boardNode.player2LineNode, let parent = node.parent {
+            positionInScene = node.scene?.convert(node.position, from: parent)
+        }
+        
+        // Place playerLabel_Top just below the middle of the mid-lineNode on player 2's side of the board
+        if let posInScene = positionInScene {
+            y = posInScene.y - playerLabel_TopSize.height * 1.75 + 3 // + 3 because of lineWidth on lineNode
+            x = posInScene.x - playerLabel_TopSize.width / 2
+        } else {
+            // Otherwise, place playerLabel_Top outside the top-left corner of the board
+            y = runningYOffset + boardSideLength / 4
+            x = sceneMargin / 2
+        }
+        
+        playerLabel_Top.position = CGPoint(
+            x: x,
+            y: y
         )
-        playerWindowTop.zPosition = NodeLayer.ui.rawValue
+        playerLabel_Top.zPosition = NodeLayer.background.rawValue
         
-        addChild(playerWindowTop)
+        addChild(playerLabel_Top)
         
-        let plyWinBottomText = "You"
-        let playerWindowBottom = InformationNode(plyWinBottomText, size: playerWindowSize, named: nil)
-        playerWindowBottom.position = CGPoint(
-            x: viewWidth - sceneMargin / 3.0 - playerWindowSize.width,
-            y: runningYOffset - boardSideLength / 4 - playerWindowSize.height / 2
+        let playerLabel_BottomText = "You"
+        var playerLabel_BottomSize = getSizeConstraintsFor(string: playerLabel_BottomText, minSize: playerLabelSize)
+        playerLabel_BottomSize.width *= 1.5
+        playerLabel_BottomSize.height *= 1.5
+        
+        let playerLabel_Bottom = InformationNode(playerLabel_BottomText, size: playerLabel_BottomSize, named: nil)
+        
+        // Use lineNodes of boardNode to place playerLabel_Bottom adjacent to the player1 mid-point lineNode
+        if let node = boardNode.player1LineNode, let parent = node.parent {
+            positionInScene = node.scene?.convert(node.position, from: parent)
+        }
+        
+        // Place playerLabel_Bottom just above the middle of the mid-lineNode on player 1's side of the board
+        if let posInScene = positionInScene {
+            y = posInScene.y + playerLabel_BottomSize.height * 0.75 - 3 // - 3 because of lineWidth on lineNode
+            x = posInScene.x - playerLabel_BottomSize.width / 2
+        } else {
+            // Otherwise, place playerLabel_Bottom outside the bottom-right corner of the board
+            y = runningYOffset - boardSideLength / 4 - playerLabelSize.height / 2
+            x = viewWidth - sceneMargin - playerLabelSize.width
+        }
+        
+        playerLabel_Bottom.position = CGPoint(
+            x: x,
+            y: y
         )
-        playerWindowBottom.zPosition = NodeLayer.ui.rawValue
+        playerLabel_Bottom.zPosition = NodeLayer.background.rawValue
         
-        addChild(playerWindowBottom)
+        addChild(playerLabel_Bottom)
         
         loadTokens()
     }

@@ -173,11 +173,11 @@ class MatchHistory {
     ///  2. boolean will unhide new game mode button in SettingsScene
     ///     + it will also change the num beads in pits in GameModel initGameboard(from: PitList) et al
     func evaluateUnlockGameModesEarned() {
-        if UserDefaults.numberOfWonGames > 11 && !UserDefaults.unlockFiveBeadsStarting {
+        if UserDefaults.numberOfWonGames > 20 && !UserDefaults.unlockFiveBeadsStarting {
             UserDefaults.set(unlockFiveBeadsStarting: true)
             UserNotificationsHelper.scheduleUnlockGameNotification(after: 5.0, for: .fiveBeads)
         }
-        if UserDefaults.numberOfWonGames > 13 && !UserDefaults.unlockSixBeadsStarting {
+        if UserDefaults.numberOfWonGames > 40 && !UserDefaults.unlockSixBeadsStarting {
             UserDefaults.set(unlockSixBeadsStarting: true)
             UserNotificationsHelper.scheduleUnlockGameNotification(after: 6.0, for: .sixBeads)
         }

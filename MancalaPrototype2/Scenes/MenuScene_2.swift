@@ -134,13 +134,9 @@ class MenuScene_2: MenuScene {
         addChild(billiardFelt)
         
         let gameTypeText = vsComputer ? "Versus Computer" : "2 Player Mode"
-        let gameTypeNSAString = NSAttributedString(string: gameTypeText,
-                                              attributes: [
-                                              .font : UIFont.systemFont(ofSize: 18, weight: .semibold)
-                                              ])
-        var stringSizeConstraint = CGSize(width: buttonWidth, height: buttonSize.height)
-        let gameTypeNodeSize = gameTypeNSAString.boundingRect(with: stringSizeConstraint, options: [], context: nil)
-        stringSizeConstraint = CGSize(width: gameTypeNodeSize.width, height: gameTypeNodeSize.height)
+        
+        var stringSizeConstraint = getSizeConstraintsFor(string: gameTypeText, minSize: buttonSize)
+        // Give some space for margin around text
         stringSizeConstraint.width += sceneMargin
         stringSizeConstraint.height *= 1.5
         gameTypeNode = InformationNode(gameTypeText, size: stringSizeConstraint, named: nil)

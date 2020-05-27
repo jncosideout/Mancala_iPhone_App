@@ -56,8 +56,9 @@ final class BoardNode: SKNode {
     
     private let sideLength: CGFloat
     private let halfNumberOfPits: CGFloat
-    
-    
+    var player1LineNode: SKNode? = nil
+    var player2LineNode: SKNode? = nil
+
     /// Creates the ```containerNode``` for the board, creates the board point nodes on the ```containerNode``` and adds it to the scene.
     ///
     /// - Important: initializing the BoardNode does not load TokenNodes onto itself. You must do that separately using BoardNode.node(at:named:) and other helper functions in the GameScene
@@ -182,6 +183,12 @@ final class BoardNode: SKNode {
                 x: (position.x + nextPosition.x) / 2,
                 y: (position.y + nextPosition.y) / 2
             )
+            // Store the lineNodes that are on opposite sides of the board, so they can be referenced later to place "player labels" on the GameScene
+            if index == Int(halfNumberOfPits) - 4 {
+                player1LineNode = lineNode
+            } else if index == Int(halfNumberOfPits) * 2 - 4 {
+                player2LineNode = lineNode
+            }
             
             lineNode.strokeColor = boardPointNode.strokeColor
             lineNode.zPosition = NodeLayer.line.rawValue

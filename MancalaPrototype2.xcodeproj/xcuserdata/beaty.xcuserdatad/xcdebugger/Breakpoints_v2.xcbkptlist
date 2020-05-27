@@ -26,8 +26,8 @@
             filePath = "MancalaPrototype2/Scenes/AI_GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "250"
-            endingLineNumber = "250"
+            startingLineNumber = "291"
+            endingLineNumber = "291"
             landmarkName = "processAIMove()"
             landmarkType = "7">
          </BreakpointContent>
@@ -43,8 +43,8 @@
             filePath = "MancalaPrototype2/Scenes/AI_GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "226"
-            endingLineNumber = "226"
+            startingLineNumber = "267"
+            endingLineNumber = "267"
             landmarkName = "processAIMove()"
             landmarkType = "7">
          </BreakpointContent>
@@ -60,8 +60,8 @@
             filePath = "MancalaPrototype2/Scenes/AI_GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "225"
-            endingLineNumber = "225"
+            startingLineNumber = "266"
+            endingLineNumber = "266"
             landmarkName = "processAIMove()"
             landmarkType = "7">
          </BreakpointContent>
@@ -77,8 +77,8 @@
             filePath = "MancalaPrototype2/Scenes/AI_GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "249"
-            endingLineNumber = "249"
+            startingLineNumber = "290"
+            endingLineNumber = "290"
             landmarkName = "processAIMove()"
             landmarkType = "7">
          </BreakpointContent>
@@ -94,8 +94,8 @@
             filePath = "MancalaPrototype2/Scenes/AI_GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "242"
-            endingLineNumber = "242"
+            startingLineNumber = "283"
+            endingLineNumber = "283"
             landmarkName = "processAIMove()"
             landmarkType = "7">
          </BreakpointContent>
@@ -111,8 +111,8 @@
             filePath = "MancalaPrototype2/Scenes/AI_GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "227"
-            endingLineNumber = "227"
+            startingLineNumber = "268"
+            endingLineNumber = "268"
             landmarkName = "processAIMove()"
             landmarkType = "7">
          </BreakpointContent>
@@ -128,8 +128,8 @@
             filePath = "MancalaPrototype2/Scenes/AI_GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "241"
-            endingLineNumber = "241"
+            startingLineNumber = "282"
+            endingLineNumber = "282"
             landmarkName = "processAIMove()"
             landmarkType = "7">
          </BreakpointContent>
@@ -145,8 +145,8 @@
             filePath = "MancalaPrototype2/Scenes/AI_GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "256"
-            endingLineNumber = "256"
+            startingLineNumber = "297"
+            endingLineNumber = "297"
             landmarkName = "processAIMove()"
             landmarkType = "7">
          </BreakpointContent>
@@ -162,8 +162,8 @@
             filePath = "MancalaPrototype2/Scenes/AI_GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "236"
-            endingLineNumber = "236"
+            startingLineNumber = "277"
+            endingLineNumber = "277"
             landmarkName = "processAIMove()"
             landmarkType = "7">
          </BreakpointContent>
@@ -178,8 +178,8 @@
             filePath = "MancalaPrototype2/Scenes/GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "752"
-            endingLineNumber = "752"
+            startingLineNumber = "796"
+            endingLineNumber = "796"
             landmarkName = "processGameUpdate()"
             landmarkType = "7">
          </BreakpointContent>
@@ -194,8 +194,8 @@
             filePath = "MancalaPrototype2/Scenes/GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "772"
-            endingLineNumber = "772"
+            startingLineNumber = "816"
+            endingLineNumber = "816"
             landmarkName = "processGameUpdate()"
             landmarkType = "7">
          </BreakpointContent>
@@ -210,8 +210,8 @@
             filePath = "MancalaPrototype2/Scenes/GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "803"
-            endingLineNumber = "803"
+            startingLineNumber = "847"
+            endingLineNumber = "847"
             landmarkName = "processGameUpdate()"
             landmarkType = "7">
          </BreakpointContent>
@@ -226,8 +226,8 @@
             filePath = "MancalaPrototype2/Scenes/GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "745"
-            endingLineNumber = "745"
+            startingLineNumber = "789"
+            endingLineNumber = "789"
             landmarkName = "processGameUpdate()"
             landmarkType = "7">
          </BreakpointContent>
@@ -242,8 +242,8 @@
             filePath = "MancalaPrototype2/Scenes/GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "763"
-            endingLineNumber = "763"
+            startingLineNumber = "807"
+            endingLineNumber = "807"
             landmarkName = "processGameUpdate()"
             landmarkType = "7">
          </BreakpointContent>
@@ -258,8 +258,8 @@
             filePath = "MancalaPrototype2/Scenes/GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "719"
-            endingLineNumber = "719"
+            startingLineNumber = "763"
+            endingLineNumber = "763"
             landmarkName = "processGameUpdate()"
             landmarkType = "7">
          </BreakpointContent>
@@ -322,8 +322,8 @@
             filePath = "MancalaPrototype2/Scenes/GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "632"
-            endingLineNumber = "632"
+            startingLineNumber = "676"
+            endingLineNumber = "676"
             landmarkName = "updateGameBoard(player:name:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -338,8 +338,8 @@
             filePath = "MancalaPrototype2/Scenes/GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "675"
-            endingLineNumber = "675"
+            startingLineNumber = "719"
+            endingLineNumber = "719"
             landmarkName = "updateGameBoard(player:name:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -373,6 +373,54 @@
             startingLineNumber = "170"
             endingLineNumber = "170"
             landmarkName = "presentSettings(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C023AAEE-9A62-4057-88BC-B913E6E752B6"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MancalaPrototype2/Nodes/BoardNode.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "188"
+            endingLineNumber = "188"
+            landmarkName = "createBoardPoints(on:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E03DA93E-FD64-4E17-BF63-5B79A6F882D1"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MancalaPrototype2/Nodes/BoardNode.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "196"
+            endingLineNumber = "196"
+            landmarkName = "createBoardPoints(on:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E40D9136-0252-4416-912E-C6FF2B23E084"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MancalaPrototype2/Nodes/BoardNode.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "190"
+            endingLineNumber = "190"
+            landmarkName = "createBoardPoints(on:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

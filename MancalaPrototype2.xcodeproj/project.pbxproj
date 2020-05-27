@@ -18,6 +18,7 @@
 		893C38FF24608516002A3147 /* MancalaGameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893C38FE24608516002A3147 /* MancalaGameModel.swift */; };
 		893C390124608560002A3147 /* GameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893C390024608560002A3147 /* GameData.swift */; };
 		893E560A24772D9400DA98C6 /* GradientNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893E560924772D9400DA98C6 /* GradientNode.swift */; };
+		893E560E247EC53000DA98C6 /* SKSceneExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893E560D247EC53000DA98C6 /* SKSceneExtension.swift */; };
 		8945318823B8268B0057008E /* AI_GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8945318723B8268B0057008E /* AI_GameScene.swift */; };
 		8945318A23B92DE60057008E /* MenuScene_2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8945318923B92DE50057008E /* MenuScene_2.swift */; };
 		89509502241AED8C00B90D38 /* DeviceModelID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89509501241AED8C00B90D38 /* DeviceModelID.swift */; };
@@ -32,7 +33,6 @@
 		89A07F6423D92C9D002EAB5B /* SavedGameStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A07F6323D92C9D002EAB5B /* SavedGameStore.swift */; };
 		89A5CBF723C2CF3500968A0E /* UserNotificationsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A5CBF623C2CF3500968A0E /* UserNotificationsHelper.swift */; };
 		89A6238F244374FC00062C39 /* Alertable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A6238E244374FC00062C39 /* Alertable.swift */; };
-		89A62391244375DE00062C39 /* MenuSceneExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A62390244375DE00062C39 /* MenuSceneExtension.swift */; };
 		89A623982443990400062C39 /* firstTimeWalkthrough.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 89A623952443990400062C39 /* firstTimeWalkthrough.bundle */; };
 		89A623992443990400062C39 /* credits.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 89A623962443990400062C39 /* credits.bundle */; };
 		89A6239A2443990400062C39 /* instructions.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 89A623972443990400062C39 /* instructions.bundle */; };
@@ -86,6 +86,7 @@
 		893C38FE24608516002A3147 /* MancalaGameModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MancalaGameModel.swift; sourceTree = "<group>"; };
 		893C390024608560002A3147 /* GameData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameData.swift; sourceTree = "<group>"; };
 		893E560924772D9400DA98C6 /* GradientNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientNode.swift; sourceTree = "<group>"; };
+		893E560D247EC53000DA98C6 /* SKSceneExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKSceneExtension.swift; sourceTree = "<group>"; };
 		8945318723B8268B0057008E /* AI_GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AI_GameScene.swift; sourceTree = "<group>"; };
 		8945318923B92DE50057008E /* MenuScene_2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuScene_2.swift; sourceTree = "<group>"; };
 		89509501241AED8C00B90D38 /* DeviceModelID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceModelID.swift; sourceTree = "<group>"; };
@@ -101,7 +102,6 @@
 		89A07F6323D92C9D002EAB5B /* SavedGameStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedGameStore.swift; sourceTree = "<group>"; };
 		89A5CBF623C2CF3500968A0E /* UserNotificationsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationsHelper.swift; sourceTree = "<group>"; };
 		89A6238E244374FC00062C39 /* Alertable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alertable.swift; sourceTree = "<group>"; };
-		89A62390244375DE00062C39 /* MenuSceneExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSceneExtension.swift; sourceTree = "<group>"; };
 		89A6239324437EE100062C39 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = "Base.lproj/Launch Screen.storyboard"; sourceTree = "<group>"; };
 		89A623952443990400062C39 /* firstTimeWalkthrough.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = firstTimeWalkthrough.bundle; sourceTree = "<group>"; };
 		89A623962443990400062C39 /* credits.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = credits.bundle; sourceTree = "<group>"; };
@@ -237,10 +237,10 @@
 				89DEB4ED2308BEF7004BCD88 /* SKTexture+Gradient.swift */,
 				89DEB4BD22F11280004BCD88 /* GKTurnBasedMatch+Additions.swift */,
 				89DEB4BF22F112D8004BCD88 /* SKTexture+Additions.swift */,
+				893E560D247EC53000DA98C6 /* SKSceneExtension.swift */,
 				89DEB4C122F11302004BCD88 /* UIColor+Additions.swift */,
 				89624D6624665AB100D6C915 /* GameViewControllerExtension.swift */,
 				8924E66B24156A4F0059C9A5 /* NotificationNameExtension.swift */,
-				89A62390244375DE00062C39 /* MenuSceneExtension.swift */,
 				89A6238E244374FC00062C39 /* Alertable.swift */,
 			);
 			path = Extensions;
@@ -476,7 +476,7 @@
 				89624D6724665AB100D6C915 /* GameViewControllerExtension.swift in Sources */,
 				89DEB4DD22F121D7004BCD88 /* TokenNode.swift in Sources */,
 				89DEB4BE22F11280004BCD88 /* GKTurnBasedMatch+Additions.swift in Sources */,
-				89A62391244375DE00062C39 /* MenuSceneExtension.swift in Sources */,
+				893E560E247EC53000DA98C6 /* SKSceneExtension.swift in Sources */,
 				89DEB4E222F122C7004BCD88 /* MenuScene.swift in Sources */,
 				89DEB4EE2308BEF8004BCD88 /* SKTexture+Gradient.swift in Sources */,
 				89DEB48F22F110F9004BCD88 /* GameScene.swift in Sources */,
@@ -689,7 +689,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-2";
 				CODE_SIGN_ENTITLEMENTS = MancalaPrototype2/MancalaPrototype2.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.2.5;
+				CURRENT_PROJECT_VERSION = 1.2.6;
 				DEVELOPMENT_TEAM = 82FUG9A524;
 				INFOPLIST_FILE = MancalaPrototype2/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
@@ -711,7 +711,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-2";
 				CODE_SIGN_ENTITLEMENTS = MancalaPrototype2/MancalaPrototype2.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.2.5;
+				CURRENT_PROJECT_VERSION = 1.2.6;
 				DEVELOPMENT_TEAM = 82FUG9A524;
 				INFOPLIST_FILE = MancalaPrototype2/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;

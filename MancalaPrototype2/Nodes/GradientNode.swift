@@ -29,10 +29,11 @@ final class GradientNode {
                                 UIColor(red: 0.0 / 255.0, green: 153.0 / 255.0, blue: 76.0 / 255.0, alpha: 1.0)]
     
     static let sunsetPurples = [UIColor(red: 53.0 / 255.0, green: 92.0 / 255.0, blue: 125.0 / 255.0, alpha: 1.0),
-    UIColor(red: 108.0 / 255.0, green: 91.0 / 255.0, blue: 123.0 / 255.0, alpha: 1.0),
-    UIColor(red: 192.0 / 255.0, green: 108.0 / 255.0, blue: 132.0 / 255.0, alpha: 1.0)]
+                                UIColor(red: 108.0 / 255.0, green: 91.0 / 255.0, blue: 123.0 / 255.0, alpha: 1.0),
+                                UIColor(red: 192.0 / 255.0, green: 108.0 / 255.0, blue: 132.0 / 255.0, alpha: 1.0)]
     
-    static let orangePulse = [UIColor.yellow, UIColor.orange]
+    static let orangePulse = [UIColor(red: 255 / 255, green: 255 / 255, blue: 125 / 255, alpha: 1.0),
+                              UIColor(red: 255 / 255, green: 145 / 255, blue: 0, alpha: 1.0)]
     
     static let midnightSky = [UIColor.background, UIColor.sky]
     
