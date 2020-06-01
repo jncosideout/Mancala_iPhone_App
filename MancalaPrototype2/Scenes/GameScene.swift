@@ -151,8 +151,14 @@ class GameScene: SKScene {
         removeAllChildren()
         backgroundColor = .background
         if UserDefaults.backgroundAnimationType != .none {
-            GradientNode.makeLinearNode(with: self, view: view!, linearGradientColors: GradientNode.sunsetPurples, animate: true)
-            GradientNode.makeRadialNode(with: self, view: view!, colors: UserDefaults.backgroundAnimationType.getColorArray() ?? GradientNode.billiardFelt)
+            if let setup = UserDefaults.backgroundAnimationType.getColorArrays() {
+                if let linear_ = setup.linear {
+                    GradientNode.makeLinearNode(with: self, view: view!, linearGradientColors: linear_, animate: true)
+                } else {
+                    GradientNode.makeLinearNode(with: self, view: view!, linearGradientColors: GradientNode.billiardFelt, animate: false)
+                }
+                GradientNode.makeRadialNode(with: self, view: view!, colors:  setup.radial)
+            }
         } else {
             
             let billiardFelt = SKSpriteNode(imageNamed: "Mancala-billiard-felt-")
@@ -857,6 +863,8 @@ class GameScene: SKScene {
         configureAndRunActions()
     }
     
+    
+    /// The actions are run after a timer has been set to keep the user from interacting with the game board before the animations have finished
     func configureAndRunActions() {
         animationsFinished = false
         var timerScheduledInterval = animationTimeCounter * animationWait

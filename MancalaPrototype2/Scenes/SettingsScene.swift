@@ -136,12 +136,24 @@ class SettingsScene: MenuScene_2 {
              switch UserDefaults.backgroundAnimationType {
              case .none:
                 self.backGroundAnimationToggle.looksEnabled = true
-                UserDefaults.set(backgroundAnimationType: .billiardFelt)
-             case .billiardFelt:
+                UserDefaults.set(backgroundAnimationType: .greenPulse)
+             case .greenPulse:
                 UserDefaults.set(backgroundAnimationType: .midnightSky)
              case .midnightSky:
                 UserDefaults.set(backgroundAnimationType: .orangePulse)
              case .orangePulse:
+                UserDefaults.set(backgroundAnimationType: .greenPulseWithSunset)
+             case .greenPulseWithSunset:
+                UserDefaults.set(backgroundAnimationType: .midnightSkyWithSunset)
+             case .midnightSkyWithSunset:
+                UserDefaults.set(backgroundAnimationType: .orangePulseWithSunset)
+             case .orangePulseWithSunset:
+                UserDefaults.set(backgroundAnimationType: .greenPulseWithBilliard)
+             case .greenPulseWithBilliard:
+                UserDefaults.set(backgroundAnimationType: .midnightSkyWithBilliard)
+             case .midnightSkyWithBilliard:
+                UserDefaults.set(backgroundAnimationType: .orangePulseWithBilliard)
+             case .orangePulseWithBilliard:
                 UserDefaults.set(backgroundAnimationType: .none)
                 self.backGroundAnimationToggle.text = title
                 self.backGroundAnimationToggle.looksEnabled = false
@@ -373,20 +385,38 @@ struct ButtonBitmask: OptionSet {
 enum BackgroundAnimationType: Int {
     
     case none
-    case billiardFelt
+    case greenPulse
     case midnightSky
     case orangePulse
+    case greenPulseWithSunset
+    case midnightSkyWithSunset
+    case orangePulseWithSunset
+    case greenPulseWithBilliard
+    case midnightSkyWithBilliard
+    case orangePulseWithBilliard
     
-    func getColorArray() -> [UIColor]? {
+    func getColorArrays() -> (linear: [UIColor]?, radial: [UIColor])? {
         switch self {
         case .none:
             return nil
-        case .billiardFelt:
-            return GradientNode.billiardFelt
+        case .greenPulse:
+            return (nil, GradientNode.greenPulse)
         case .midnightSky:
-            return GradientNode.midnightSky
+            return (nil, GradientNode.midnightSky)
         case .orangePulse:
-            return GradientNode.orangePulse
+            return (nil, GradientNode.orangePulse)
+        case .greenPulseWithSunset:
+            return (GradientNode.sunsetPurples, GradientNode.greenPulse)
+        case .midnightSkyWithSunset:
+            return (GradientNode.sunsetPurples, GradientNode.midnightSky)
+        case .orangePulseWithSunset:
+            return (GradientNode.sunsetPurples, GradientNode.orangePulse)
+        case .greenPulseWithBilliard:
+            return (GradientNode.billiardFelt, GradientNode.greenPulse)
+        case .midnightSkyWithBilliard:
+            return (GradientNode.billiardFelt, GradientNode.midnightSky)
+        case .orangePulseWithBilliard:
+            return (GradientNode.billiardFelt, GradientNode.orangePulse)
         }
     }
 }

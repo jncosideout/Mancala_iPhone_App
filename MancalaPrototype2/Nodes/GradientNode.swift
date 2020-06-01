@@ -24,7 +24,7 @@ import SpriteKit
 /// https://augmentedcode.io/2017/11/12/drawing-gradients-in-spritekit/
 final class GradientNode {
     
-    static let billiardFelt = [UIColor(red: 0.0 / 255.0, green: 51.0 / 255.0, blue: 25.0 / 255.0, alpha: 1.0),
+    static let billiardFelt = [UIColor.background,
                                 UIColor(red: 0.0 / 255.0, green: 102.0 / 255.0, blue: 51.0 / 255.0, alpha: 1.0),
                                 UIColor(red: 0.0 / 255.0, green: 153.0 / 255.0, blue: 76.0 / 255.0, alpha: 1.0)]
     
@@ -32,10 +32,13 @@ final class GradientNode {
                                 UIColor(red: 108.0 / 255.0, green: 91.0 / 255.0, blue: 123.0 / 255.0, alpha: 1.0),
                                 UIColor(red: 192.0 / 255.0, green: 108.0 / 255.0, blue: 132.0 / 255.0, alpha: 1.0)]
     
-    static let orangePulse = [UIColor(red: 255 / 255, green: 255 / 255, blue: 125 / 255, alpha: 1.0),
-                              UIColor(red: 255 / 255, green: 145 / 255, blue: 0, alpha: 1.0)]
+    static let orangePulse = [UIColor(red: 255 / 255, green: 145 / 255, blue: 0 / 255,   alpha: 1.0),
+                              UIColor(red: 255 / 255, green: 255 / 255, blue: 125 / 255, alpha: 1.0)]
     
-    static let midnightSky = [UIColor.background, UIColor.sky]
+    static let midnightSky = [UIColor.sky, UIColor.background]
+    
+    static let greenPulse = [GradientNode.billiardFelt[2],
+                             GradientNode.billiardFelt[0]]
     
     static func makeLinearNode(with skscene: SKScene, view: SKView, linearGradientColors: [UIColor], animate: Bool) {
         
@@ -70,7 +73,7 @@ final class GradientNode {
         radialGradientNode.position = CGPoint(x: skscene.size.width/2, y: skscene.size.height/2)
         skscene.addChild(radialGradientNode)
 
-        let pulse = SKAction.sequence([SKAction.fadeIn(withDuration: 3.0), SKAction.fadeOut(withDuration: 1.0)])
+        let pulse = SKAction.sequence([SKAction.fadeIn(withDuration: 3.0), SKAction.fadeOut(withDuration: 3.0)])
         radialGradientNode.run(SKAction.repeatForever(pulse))
     }
 }

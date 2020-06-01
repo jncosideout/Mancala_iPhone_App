@@ -92,8 +92,14 @@ final class ReplayScene: GameScene {
         
         backgroundColor = .background
         if UserDefaults.backgroundAnimationType != .none {
-            GradientNode.makeLinearNode(with: self, view: view!, linearGradientColors: GradientNode.sunsetPurples, animate: true)
-            GradientNode.makeRadialNode(with: self, view: view!, colors: UserDefaults.backgroundAnimationType.getColorArray() ?? GradientNode.billiardFelt)            
+            if let setup = UserDefaults.backgroundAnimationType.getColorArrays() {
+                if let linear_ = setup.linear {
+                    GradientNode.makeLinearNode(with: self, view: view!, linearGradientColors: linear_, animate: true)
+                } else {
+                    GradientNode.makeLinearNode(with: self, view: view!, linearGradientColors: GradientNode.billiardFelt, animate: false)
+                }
+                GradientNode.makeRadialNode(with: self, view: view!, colors:  setup.radial)
+            }
         } else {
               let billiardFelt = SKSpriteNode(imageNamed: "Mancala-billiard-felt-")
               billiardFelt.size = CGSize(
@@ -185,7 +191,7 @@ final class ReplayScene: GameScene {
         
         addChild(returnButton)
         
-        // Same setup as init(model_:,_:), but call replay() after
+        // Same setup as init(model_:_:), but call replay() after
         let replayButton = ButtonNode("Replay", size: buttonSize)
         {
             [weak self, weak _actualModel = self.actualModel] in
