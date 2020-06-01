@@ -3,7 +3,9 @@ Last updated June 01, 2020
 
 
 
-Alexander S. Beaty built the Mancala Fantasy - Online app as a Free app. This SERVICE is provided by Alexander S. Beaty at no cost and is intended for use as is. I am committed to protecting your personal information and your right to privacy. If you have any questions or concerns about my notice, or my practices with regards to your personal information, please contact me at romeobeaty@gmail.com.
+Alexander S. Beaty built the Mancala Fantasy - Online app as a Free app. This SERVICE is provided by me, Alexander S. Beaty at no cost and is intended for use as is. If you choose to use my Service, then you agree to the collection and use of information in relation to this policy. The Personal Information that I collect is used for providing and improving the Service. I will not use or share your information with anyone except as described in this Privacy Policy
+
+I am committed to protecting your personal information and your right to privacy. If you have any questions or concerns about my notice, or my practices with regards to your personal information, please contact me at romeobeaty@gmail.com.
 
 When you visit my mobile application, and use my services, you trust me with your personal information. I take your privacy very seriously. In this privacy notice, I seek to explain to you in the clearest way possible what information I collect, how I use it and what rights you have in relation to it. I hope you take some time to read through it carefully, as it is important. If there are any terms in this privacy notice that you do not agree with, please discontinue use of my Apps and my services.
 
@@ -25,15 +27,19 @@ TABLE OF CONTENTS
 
 5. DO I COLLECT INFORMATION FROM MINORS?
 
-6. WHAT ARE YOUR PRIVACY RIGHTS?
+6. SECURITY
 
-7. CONTROLS FOR DO-NOT-TRACK FEATURES
+7. LINKS TO OTHER SITES
 
-8. DO CALIFORNIA RESIDENTS HAVE SPECIFIC PRIVACY RIGHTS?
+8. WHAT ARE YOUR PRIVACY RIGHTS?
 
-9. DO I MAKE UPDATES TO THIS POLICY?
+9. CONTROLS FOR DO-NOT-TRACK FEATURES
 
-10. HOW CAN YOU CONTACT ME ABOUT THIS POLICY?
+10. DO CALIFORNIA RESIDENTS HAVE SPECIFIC PRIVACY RIGHTS?
+
+11. DO I MAKE UPDATES TO THIS POLICY?
+
+12. HOW CAN YOU CONTACT ME ABOUT THIS POLICY?
 
 
 
@@ -109,8 +115,17 @@ In Short:  I do not knowingly collect data from or market to children under 18 y
 I do not knowingly solicit data from or market to children under 18 years of age. By using the Apps, you represent that you are at least 18 or that you are the parent or guardian of such a minor and consent to such minor dependent’s use of the Apps. If I learn that personal information from users less than 18 years of age has been collected, I will deactivate the account and take reasonable measures to promptly delete such data from my records. If you become aware of any data I have collected from children under age 18, please contact me at romeobeaty@gmail.com.
 
 
+6. SECURITY
 
-6. WHAT ARE YOUR PRIVACY RIGHTS?
+I value your trust in providing us your Personal Information, thus we are striving to use commercially acceptable means of protecting it. But remember that no method of transmission over the internet, or method of electronic storage is 100% secure and reliable, and I cannot guarantee its absolute security.
+
+
+7. LINKS TO OTHER SITES
+
+This Service may contain links to other sites. If you click on a third-party link, you will be directed to that site. Note that these external sites are not operated by me. Therefore, I strongly advise you to review the Privacy Policy of these websites. I have no control over and assume no responsibility for the content, privacy policies, or practices of any third-party sites or services.
+
+
+8. WHAT ARE YOUR PRIVACY RIGHTS?
 
 In Short:  You may review, change, or terminate your account at any time.
 
@@ -118,13 +133,13 @@ If you are resident in the European Economic Area and you believe I am unlawfull
 
 
 
-7. CONTROLS FOR DO-NOT-TRACK FEATURES
+9. CONTROLS FOR DO-NOT-TRACK FEATURES
 
 Most web browsers and some mobile operating systems and mobile applications include a Do-Not-Track (“DNT”) feature or setting you can activate to signal your privacy preference not to have data about your online browsing activities monitored and collected. No uniform technology standard for recognizing and implementing DNT signals has been finalized. As such, I do not currently respond to DNT browser signals or any other mechanism that automatically communicates your choice not to be tracked online. If a standard for online tracking is adopted that I must follow in the future, I will inform you about that practice in a revised version of this privacy notice.
 
 
 
-8. DO CALIFORNIA RESIDENTS HAVE SPECIFIC PRIVACY RIGHTS?
+10. DO CALIFORNIA RESIDENTS HAVE SPECIFIC PRIVACY RIGHTS?
 
 In Short:  Yes, if you are a resident of California, you are granted specific rights regarding access to your personal information.
 
@@ -134,7 +149,7 @@ If you are under 18 years of age, reside in California, and have a registered ac
 
 
 
-9. DO I MAKE UPDATES TO THIS POLICY?
+11. DO I MAKE UPDATES TO THIS POLICY?
 
 In Short:  Yes, I will update this policy as necessary to stay compliant with relevant laws.
 
@@ -142,7 +157,7 @@ I may update this privacy notice from time to time. The updated version will be 
 
 
 
-10. HOW CAN YOU CONTACT ME ABOUT THIS POLICY?
+12. HOW CAN YOU CONTACT ME ABOUT THIS POLICY?
 
 If you have questions or comments about this policy, you may email me at romeobeaty@gmail.com or by post to:
 
