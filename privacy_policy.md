@@ -89,7 +89,7 @@ Vendors, Consultants and Other Third-Party Service Providers. I may share your d
 
 Business Transfers. I may share or transfer your information in connection with, or during negotiations of, any merger, sale of company assets, financing, or acquisition of all or a portion of my business to another company.
 
-Third-Party Advertisers. I do not use third-party advertising companies to serve ads when you visit the Apps. I cannot guarantee that third party vendors, service providers, contractors or agents who perform services for me or on my behalf may use information about your visits to my Website(s) and other websites that are contained in web cookies and other tracking technologies will not use your information to provide advertisements about goods and services of interest to you outside of the Apps.
+Third-Party Advertisers. I do not use third-party advertising companies to serve ads when you visit the Apps. I cannot guarantee that third party vendors, service providers, contractors or agents who perform services for me or on my behalf will not use your information to provide advertisements about goods and services of interest to you outside of the Apps.
 
 
 4. HOW LONG DO I KEEP YOUR INFORMATION?
@@ -128,7 +128,7 @@ Most web browsers and some mobile operating systems and mobile applications incl
 
 In Short:  Yes, if you are a resident of California, you are granted specific rights regarding access to your personal information.
 
-California Civil Code Section 1798.83, also known as the “Shine The Light” law, permits my users who are California residents to request and obtain from us, once a year and free of charge, information about categories of personal information (if any) I disclosed to third parties for direct marketing purposes and the names and addresses of all third parties with which I shared personal information in the immediately preceding calendar year. If you are a California resident and would like to make such a request, please submit your request in writing to me using the contact information provided below.
+California Civil Code Section 1798.83, also known as the “Shine The Light” law, permits my users who are California residents to request and obtain from me, once a year and free of charge, information about categories of personal information (if any) I disclosed to third parties for direct marketing purposes and the names and addresses of all third parties with which I shared personal information in the immediately preceding calendar year. If you are a California resident and would like to make such a request, please submit your request in writing to me using the contact information provided below.
 
 If you are under 18 years of age, reside in California, and have a registered account with the Apps, you have the right to request removal of unwanted data that you publicly post on the Apps. To request removal of such data, please contact me using the contact information provided below, and include the email address associated with your account and a statement that you reside in California. I will make sure the data is not publicly displayed on the Apps, but please be aware that the data may not be completely or comprehensively removed from my systems.
 
@@ -146,7 +146,7 @@ I may update this privacy notice from time to time. The updated version will be 
 
 If you have questions or comments about this policy, you may email me at romeobeaty@gmail.com or by post to:
 
-Mancala Fantasy - Online 
+Alexander S. Beaty
 14307 Darstelle Ct.
 Houston, TX 77069
 United States
