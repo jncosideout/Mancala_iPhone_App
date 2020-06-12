@@ -197,6 +197,7 @@ class MenuScene_2: MenuScene {
         savedLocalButton.run(SKAction.fadeAlpha(to: value, duration: 1))
         newLocalButton.run(SKAction.fadeAlpha(to: value, duration: 1))
         backButton.run(SKAction.fadeAlpha(to: value, duration: 1))
+        gameTypeNode.run(SKAction.fadeAlpha(to: value, duration: 1))
     }
     
     // MARK: - Helpers

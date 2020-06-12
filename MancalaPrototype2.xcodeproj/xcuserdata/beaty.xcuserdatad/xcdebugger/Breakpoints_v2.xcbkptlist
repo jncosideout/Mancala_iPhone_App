@@ -260,8 +260,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "67"
             endingLineNumber = "67"
-            landmarkName = "loadAndDisplay(match:)"
-            landmarkType = "7">
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -324,8 +324,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "170"
             endingLineNumber = "170"
-            landmarkName = "presentSettings(_:)"
-            landmarkType = "7">
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -389,6 +389,180 @@
             startingLineNumber = "102"
             endingLineNumber = "102"
             landmarkName = "setUpScene(in:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B3DF2772-26BA-4AC2-970A-74F0234F9DBE"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MancalaPrototype2/Helpers/GameCenterHelper.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "58"
+            endingLineNumber = "58"
+            landmarkName = "GameCenterHelper"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "B3DF2772-26BA-4AC2-970A-74F0234F9DBE - 1237cd164b727542"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Mancala_Fantasy___Online.GameCenterHelper.currentMatchMakerVC.getter : Swift.Optional&lt;__C.GKTurnBasedMatchmakerViewController&gt;"
+                  moduleName = "Mancala Fantasy - Online"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/beaty/Desktop/playgrounds%20copy/Mancala/MancalaPrototype2/MancalaPrototype2/Helpers/GameCenterHelper.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "58"
+                  endingLineNumber = "58"
+                  offsetFromSymbolStart = "126">
+               </Location>
+               <Location
+                  uuid = "B3DF2772-26BA-4AC2-970A-74F0234F9DBE - 4fe27a985f97b576"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Mancala_Fantasy___Online.GameCenterHelper.currentMatchMakerVC.setter : Swift.Optional&lt;__C.GKTurnBasedMatchmakerViewController&gt;"
+                  moduleName = "Mancala Fantasy - Online"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/beaty/Desktop/playgrounds%20copy/Mancala/MancalaPrototype2/MancalaPrototype2/Helpers/GameCenterHelper.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "58"
+                  endingLineNumber = "58"
+                  offsetFromSymbolStart = "160">
+               </Location>
+               <Location
+                  uuid = "B3DF2772-26BA-4AC2-970A-74F0234F9DBE - bd112e1b1b87f547"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Mancala_Fantasy___Online.GameCenterHelper.currentMatchMakerVC.modify : Swift.Optional&lt;__C.GKTurnBasedMatchmakerViewController&gt;"
+                  moduleName = "Mancala Fantasy - Online"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/beaty/Desktop/playgrounds%20copy/Mancala/MancalaPrototype2/MancalaPrototype2/Helpers/GameCenterHelper.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "18">
+               </Location>
+               <Location
+                  uuid = "B3DF2772-26BA-4AC2-970A-74F0234F9DBE - 811dce8c1e671556"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Mancala_Fantasy___Online.GameCenterHelper.currentMatchMakerVC.modify : Swift.Optional&lt;__C.GKTurnBasedMatchmakerViewController&gt; with unmangled suffix &quot;.resume.0&quot;"
+                  moduleName = "Mancala Fantasy - Online"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/beaty/Desktop/playgrounds%20copy/Mancala/MancalaPrototype2/MancalaPrototype2/Helpers/GameCenterHelper.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "58"
+                  endingLineNumber = "58"
+                  offsetFromSymbolStart = "4">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "95AF883F-1BD1-4313-903A-50B5591F87A5"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MancalaPrototype2/Helpers/GameCenterHelper.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "97"
+            endingLineNumber = "97"
+            landmarkName = "init()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C56DC7E9-2E14-46A9-8ED1-BF43BCDDA373"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MancalaPrototype2/Helpers/GameCenterHelper.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "83"
+            endingLineNumber = "83"
+            landmarkName = "isAuthenticated"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "944B85E9-46C6-4E26-AE43-BC8EF53A7398"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MancalaPrototype2/Helpers/GameCenterHelper.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "119"
+            endingLineNumber = "119"
+            landmarkName = "presentMatchMaker()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7DC397C7-F5CF-4EE5-8AEB-A3ED1B9EDBBA"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MancalaPrototype2/Helpers/GameCenterHelper.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "94"
+            endingLineNumber = "94"
+            landmarkName = "init()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3A3F3C85-9490-408F-A9BE-43A079863EBE"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MancalaPrototype2/Nodes/TouchNode.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
+            landmarkName = "looksEnabled"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F76A87CD-53D4-4B4C-8FBE-203BC024D568"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MancalaPrototype2/Scenes/MenuScene.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "279"
+            endingLineNumber = "279"
+            landmarkName = "authenticationChanged(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
