@@ -1,4 +1,6 @@
 # Mancala_iPhone_App
+## [Now available on the App Store!](https://apps.apple.com/us/app/mancala-fantasy-online/id1476984859)
+
 Plays a game of Mancala. 
 
 	1)	Two-player local play (sharing one device)
