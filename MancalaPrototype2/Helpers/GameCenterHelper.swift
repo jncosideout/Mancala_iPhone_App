@@ -90,7 +90,12 @@ final class GameCenterHelper: NSObject, GKGameCenterControllerDelegate {
     override init() {
         super.init()
         
-        GKLocalPlayer.local.authenticateHandler = { gcAuthVC, error in
+        GKLocalPlayer.local.authenticateHandler = { [weak self] gcAuthVC, error in
+            guard let self = self else {
+                print("GameCenterHelper was deallocated before authenticateHandler called")
+                print("authenticateHandler error: \(error?.localizedDescription ?? "none")")
+                return
+            }
             NotificationCenter.default.post(name: .authenticationChanged, object: GKLocalPlayer.local.isAuthenticated)
             
             if GKLocalPlayer.local.isAuthenticated {
